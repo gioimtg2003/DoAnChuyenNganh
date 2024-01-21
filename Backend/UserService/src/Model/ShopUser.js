@@ -1,6 +1,6 @@
 let mongoose = require('../db/connect.db').mongoose;
 
-let ShopOwner = new mongoose.Schema({
+let ShopUser = new mongoose.Schema({
     Email: {
         type: String,
         required: true,
@@ -56,5 +56,5 @@ let ShopOwner = new mongoose.Schema({
 
 });
 module.exports = {
-    SchemaShopOwner: mongoose.model("shopOwners", ShopOwner)
+    SchemaShopUser: mongoose.model("shopusers", ShopUser)
 }
