@@ -1,0 +1,48 @@
+_format_version: "3.0"
+_transform: true
+
+consumers:
+  - custom_id: shipper
+    username: shipper
+  - custom_id: customer
+    username: customer
+  - custom_id: shopuser
+    username: shopuser
+  - custom_id: admin
+    username: admin
+
+
+jwt_secrets:
+- consumer: shipper
+  algorithm: HS256
+  key: KEY-DO-AN-CHUYEN-NGANH-shipper
+  secret: SECRET-DO-AN-CHUYEN-NGANH-shipper
+- consumer: shopuser
+  algorithm: HS256
+  key: KEY-DO-AN-CHUYEN-NGANH-shopuser
+  secret: SECRET-DO-AN-CHUYEN-NGANH-shopuser
+- consumer: admin
+  algorithm: HS256
+  key: KEY-DO-AN-CHUYEN-NGANH-admin
+  secret: SECRET-DO-AN-CHUYEN-NGANH-admin
+plugins:
+  - name: jwt
+    enabled: yes
+    config:
+      header_names: ["Authorization"]
+      key_claim_name: iss
+      claims_to_verify: 
+        - exp
+      #anonymous: customer
+      secret_is_base64: true
+
+services:
+  - host: 192.168.1.75
+    name: user
+    port: 3000
+    protocol: http
+    routes:
+      - name: route-user
+        paths:
+        - /user
+        strip_path: true
