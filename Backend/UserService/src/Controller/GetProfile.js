@@ -2,7 +2,7 @@ const {Read} = require('../Service/CURD.ShopOwner');
 const HTTP_CODE = require('../config/status.http');
 const API  = require('./res/Api.Response').res;
 module.exports = {
-    getProfile : (req, res) =>{
+    ShopOwner : (req, res) =>{
         const {id} = req.params;
         Read(id, (err, data) =>{
             if (err) {

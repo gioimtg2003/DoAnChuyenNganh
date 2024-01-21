@@ -19,14 +19,7 @@ services:
     ports:
       - "8080:15672"
       - "5672:5672"
-  user-service:
-    build: 
-      context: ./Backend/UserService
-      dockerfile: Dockerfile
-    networks:
-      - doanchuyennganh-network
-    ports:
-      - "3000:3000"
+  
 
       
 networks:

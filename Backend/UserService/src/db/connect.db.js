@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const configDB = require('../config/config.mongo');
 const log = require('../Controller/logs');
 
-const connect = async () => {
+let connect = async () => {
     try {
         console.log(configDB.DATABASE_NAME)
         await mongoose.connect(configDB.URI, { 

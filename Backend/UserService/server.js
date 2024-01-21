@@ -15,6 +15,6 @@ app.use ('/', (req, res, next) =>{
 });
 app.use('/api', routeShopOwner, routeVerify);
 
-app.listen(3000, () =>{
-    console.log('Running port 3000')
+app.listen(3000, () =>{  
+    console.log('Running port 3000') 
 })

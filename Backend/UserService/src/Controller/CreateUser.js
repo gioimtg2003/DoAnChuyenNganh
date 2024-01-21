@@ -3,9 +3,9 @@ const HTTPCODE = require('../config/status.http');
 const service = require('../Service/CURD.ShopOwner').Create;
 const hashPass = require('../utils/hashPassword')
 module.exports = {
-    CreateShopOwner : (req, res) =>{
+    ShopOwner : (req, res) =>{
         const {Email, Password, Name, Phone, Address, Scope, ShopName, ShopAddress, Role} = req.body;
-        const ShopOwner = {
+        let ShopOwner = {
             Email : Email,
             Password : hashPass.hash(Password),
             Name : Name,
@@ -27,7 +27,7 @@ module.exports = {
                 );
             }
 
-            let APIRes = new APIResponse(HTTPCODE.OK, 'Sucess', data, 'Server Error');
+            let APIRes = new APIResponse(HTTPCODE.OK, 'Sucess', data, 'Create Successfully');
             return res.status(HTTPCODE.OK).json(APIRes.APIReturn());
         }) 
     }
