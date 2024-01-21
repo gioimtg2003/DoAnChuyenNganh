@@ -1,4 +1,4 @@
-let mongoose = require('mongoose');
+let mongoose = require('../db/connect.db').mongoose;
 
 let ShopOwner = new mongoose.Schema({
     Email: {
@@ -42,8 +42,6 @@ let ShopOwner = new mongoose.Schema({
     },
     CodeVerify : {
         type : Number,
-        min : 6,
-        max : 6
     },
     URIVerify : {
         type: String,
@@ -58,5 +56,5 @@ let ShopOwner = new mongoose.Schema({
 
 });
 module.exports = {
-    Schema: mongoose.model("shopOwners", ShopOwner)
+    SchemaShopOwner: mongoose.model("shopOwners", ShopOwner)
 }

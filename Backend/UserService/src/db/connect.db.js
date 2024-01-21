@@ -1,16 +1,20 @@
 const mongoose = require("mongoose");
 const configDB = require('../config/config.mongo');
-const configDate = require('../config/config.date');
+const log = require('../Controller/logs');
 
 const connect = async () => {
     try {
-        await mongoose.connect(configDB.URI, { dbName: configDB.DATABASE_NAME });
-        console.log(`- Time: ${configDate.HOURS}:${configDate.MINUTES}:${configDate.SECONDS} ${configDate.DAY}-${configDate.MONTH}-${configDate.YEAR} [Connect Mongo] Status: Success`);
+        console.log(configDB.DATABASE_NAME)
+        await mongoose.connect(configDB.URI, { 
+            dbName: configDB.DATABASE_NAME,
+            user : 'root',
+            pass : 'conggioi123'
+         });
+        log.logConn(new Date(), 'Success', `[Connect MongoDB] Successfully - Database Name: ${configDB.DATABASE_NAME}`)
     } catch (err) {
-        console.log(`- Time: ${configDate.HOURS}:${configDate.MINUTES}:${configDate.SECONDS} ${configDate.DAY}-${configDate.MONTH}-${configDate.YEAR} [Connect Mongo] Status: Failed: ${err}`)
+        console.log(configDB.URI)
+        log.logConn(new Date(), 'Error', `[Connect MongoDB] ${err}`)}
     }
-}
-
 connect();
 
 module.exports = {
