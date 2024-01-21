@@ -15,7 +15,7 @@ module.exports = {
     },
     Read: async (id, callback) => {
         try {
-            let ShopOwner = await SchemaShopUser.findById(id).select({ CodeVerify: 0, ExpVerify: 0, URIVerify: 0 });
+            let ShopOwner = await SchemaShopUser.findById(id).select({ Password: 0, Role: 0, __v: 0, CodeVerify: 0, ExpVerify: 0, URIVerify: 0 });
             if (ShopOwner) {
                 log.logInfo(new Date(), "GET_PROFILE", "Success", `Get profile successfully ${ShopOwner.Name}`);
                 callback(null, ShopOwner);

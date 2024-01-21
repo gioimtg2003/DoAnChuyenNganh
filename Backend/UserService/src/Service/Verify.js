@@ -21,7 +21,7 @@ module.exports = {
                     Code : code
                 })
                 let RoutingKey = 'send.verify.code';
-                const rabbitmq = new RabbitMQ();
+                const rabbitmq = new RabbitMQ("send_email");
                 await rabbitmq.connectRabbit();
                 await rabbitmq.createChannel();
                 await rabbitmq.sentMess(RoutingKey, msg);
