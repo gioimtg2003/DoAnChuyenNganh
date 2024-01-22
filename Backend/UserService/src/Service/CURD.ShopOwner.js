@@ -1,12 +1,14 @@
 const { SchemaShopUser } = require('../Model/ShopUser');
 const log = require('../Controller/logs');
 const hashPassword = require('../utils/hashPassword');
+const { sendMessToAuthService } = require('./pubToAuthService');
 module.exports = {
     Create: async (ShopOwner, callback) => {
         try {
             let newShopOwner = new SchemaShopUser(ShopOwner)
             let save = await newShopOwner.save();
             log.logCreate(new Date, 'Success', save._id, 'Created new user')
+            sendMessToAuthService(save._id, save.Email, save.Password, save.Role);
             callback(null, save)
         } catch (err) {
             log.logCreate(new Date, 'Error', '', `Failed while create new user: ${err}`)

@@ -3,6 +3,7 @@ const { SchemaShopUser } = require('../Model/ShopUser');
 const log = require('../Controller/logs');
 const {RabbitMQ} = require ('../rabbitmq/RabbitMQ');
 const {v4 : uuidv4} = require ('uuid');
+const exchange = "send_mail";
 module.exports = {
     sendCode : async(email, callback) =>{
         // connect rabbitmq & send code and email
@@ -21,7 +22,7 @@ module.exports = {
                     Code : code
                 })
                 let RoutingKey = 'send.verify.code';
-                const rabbitmq = new RabbitMQ("send_email");
+                const rabbitmq = new RabbitMQ(exchange);
                 await rabbitmq.connectRabbit();
                 await rabbitmq.createChannel();
                 await rabbitmq.sentMess(RoutingKey, msg);

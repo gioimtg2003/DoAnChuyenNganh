@@ -16,7 +16,7 @@ module.exports =
                 rejectUnauthorized: false
             }
         });
-        var mailOptions = {
+        let mailOptions = {
             from: "Gioidz",
             to: email,
             subject: "[OTP] Mã xác nhận tài khoản của bạn",

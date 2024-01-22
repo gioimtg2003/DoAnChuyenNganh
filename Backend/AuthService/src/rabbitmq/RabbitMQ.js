@@ -24,9 +24,7 @@ module.exports = {
                 durable : false
             });
         }
-        async getMess() {
-            
-        }
+        
         async sendMess(RoutingKey, Message){
             await this.channel.publish(this.exchange, RoutingKey, Buffer.from(Message));
             await this.channel.close();

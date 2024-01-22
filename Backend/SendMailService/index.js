@@ -16,6 +16,9 @@ const App = async () => {
         sendMailVerify(message.Email, message.Code, msg.fields.routingKey);
     })
 }
+console.log("Running SendMail service");
+setTimeout(() => {
+    App();
+}, 3000);
 
-App();
 

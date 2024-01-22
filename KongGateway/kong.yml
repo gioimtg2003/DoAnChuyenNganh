@@ -34,7 +34,6 @@ plugins:
       claims_to_verify: 
         - exp
       #anonymous: customer
-      secret_is_base64: true
 
 services:
   - host: 192.168.1.75
