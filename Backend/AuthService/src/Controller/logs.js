@@ -1,5 +1,4 @@
-const getDate = require('../utils/getDate').getStringDate;
-
+const {getDate} = require('../utils');
 module.exports = {
     logCreate : (currentDate, status, id, message) =>{
         console.log(`- Time : ${getDate(currentDate)} Status: ${status} - id: ${id} - Message: ${message}`)

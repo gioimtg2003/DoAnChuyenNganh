@@ -1,4 +1,9 @@
 module.exports = {
-    SECRET_KEY: process.env.SECRET_KEY,
-    PORT : process.env.PORT || 3000
+    SECRET_KEY_SHIPPER: "SECRET-DO-AN-CHUYEN-NGANH-shipper",
+    KEY_SHIPPER: "KEY-DO-AN-CHUYEN-NGANH-shipper",
+    SECRET_KEY_SHOPUSER: "SECRET-DO-AN-CHUYEN-NGANH-shopuser",
+    KEY_SHOPUSER: "KEY-DO-AN-CHUYEN-NGANH-shopuser",
+    KEY : "KEY-DO-AN-CHUYEN-NGANH",
+    SECRET : "SECRET-DO-AN-CHUYEN-NGANH",
+    PORT : process.env.PORT || 3001
 }
