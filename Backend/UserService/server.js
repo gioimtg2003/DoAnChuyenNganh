@@ -14,7 +14,7 @@ app.use('/', (req, res, next) => {
     // console.log(req.headers)
     logAcess(req, new Date())
     next();
-}, rt);
+});
 app.use('/api', routeShopOwner, routeVerify);
 
 
