@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const { logAcess } = require('./src/Controller/logs');
+const { logAccess } = require('./src/Controller/logs');
 const cors = require("cors");
 const { PORT } = require('./src/config/config.sys');
 const app = express();
@@ -12,7 +12,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use('/', (req, res, next) => {
     // console.log(req.headers)
-    logAcess(req, new Date())
+    logAccess(req, new Date())
     next();
 });
 app.use('/api', routeShopOwner, routeVerify);
