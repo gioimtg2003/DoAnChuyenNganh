@@ -3,8 +3,8 @@ const Create = require('../Controller/CreateUser');
 const GetProfile = require('../Controller/GetProfile');
 const middle = require('../middleware/Check.Attribute');
 const Update = require('../Controller/UpdateUser');
-
-route.post('/shopowner/register', middle.REGISTER, Create.ShopOwner);
+const { ValidateInputRegister } = require("../middleware/Validate");
+route.post('/shopowner/register', middle.REGISTER, ValidateInputRegister, Create.ShopOwner);
 route.get('/shopowner/:id', GetProfile.ShopOwner);
 route.post("/shopowner/update/profile", Update.ProfileShopOwner);
 //Bug Update Password
@@ -12,7 +12,7 @@ route.post("/shopowner/update/profile", Update.ProfileShopOwner);
 
 
 module.exports = {
-    route : route
+    route: route
 }
 
 
