@@ -18,20 +18,22 @@ module.exports = {
             const message = JSON.parse(msg.content.toString());
             const routKey = msg.fields.routingKey;
             if (checkMessage(message)) {
-                if(msg.fields.routingKey === routKey) {
+                if (msg.fields.routingKey === routKey) {
                     AddUser(message, (err, data) => {
                         if (err) {
                             logInfo(new Date(), "RECEIVE_AUTH_MSG", "Error", `${err}`)
-                        }else {
+                        } else {
                             logInfo(new Date(), "RECEIVE_AUTH_MSG", "Success", `Add User Successfully :::${data}`)
                         }
                     });
-                }else {
+                } else {
                     logInfo(new Date(), "RECEIVE_AUTH_MSG", "Failed", `${routKey} invalid`)
                 }
             } else {
                 logInfo(new Date(), "RECEIVE_AUTH_MSG", "Failed", `${message} invalid`)
             }
+        }, {
+            noAck: true
         });
 
 
