@@ -1,9 +1,6 @@
-let getDate = (currentdate) => {
-    return `${currentdate.getHours()}:${currentdate.getMinutes()}:${currentdate.getSeconds()} ${currentdate.getDate()}-${currentdate.getMonth() + 1}-${currentdate.getUTCFullYear()}`
-}
-module.exports = {
-    getStringDate: (currentdate) => {
-        return `${currentdate.getHours()}:${currentdate.getMinutes()}:${currentdate.getSeconds()} ${currentdate.getDate()}-${currentdate.getMonth() + 1}-${currentdate.getUTCFullYear()}`
-    }
 
+module.exports = {
+    getStringDate: (currentDate) => {
+        return `${currentDate.getHours()}:${currentDate.getMinutes()}:${currentDate.getSeconds()} ${currentDate.getDate()}-${currentDate.getMonth() + 1}-${currentDate.getUTCFullYear()}`
+    }
 }
