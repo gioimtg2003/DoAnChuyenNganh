@@ -1,5 +1,5 @@
 module.exports = {
-    USER: process.env.USER_EMAIL,
-    PASSWORD: process.env.PASSWORD,
-    PORT: process.env.PORT
+    EMAIL_USER: process.env.EMAIL_USER,
+    EMAIL_PASSWORD: process.env.EMAIL_PASSWORD,
+    EMAIL_PORT: process.env.EMAIL_PORT
 }
