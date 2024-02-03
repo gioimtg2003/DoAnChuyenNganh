@@ -5,7 +5,6 @@ async function ServiceCreateShop(data, callback) {
     try {
         let newShopOwner = new SchemaShopUser(data)
         let save = await newShopOwner.save();
-        log.logCreate(new Date, 'Success', save._id, 'Created new user')
         let auth = {
             idUser: save._id,
             Email: save.Email,
@@ -16,7 +15,7 @@ async function ServiceCreateShop(data, callback) {
         logInfo(new Date, "Success", `Create a user: ${save._id}`, "Create User");
         callback(null, save)
     } catch (err) {
-        logError(new Date, `Create a user: ${save._id}`, "Create User");
+        logError(new Date, `Create a user Error: ${err}`, "Create User");
         callback(err, null)
     }
 }

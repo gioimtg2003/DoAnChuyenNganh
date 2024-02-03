@@ -1,4 +1,6 @@
+const hashPassword = require("../../../../Microservice/UserService/src/utils/hashPassword");
 const { OK, INTERNAL_ERROR, BAD_REQUEST } = require("../../Configs/HTTPCode");
+const { ServiceCreateShop } = require("../../Services/User/Shop/CURDShop");
 const { API } = require("../../Utils/formatApi");
 function CreateShop(req, res) {
     const requiredFields = ['Email', 'Password', 'Name', 'Phone', 'Address', 'Scope', 'ShopName', 'ShopAddress', 'Role'];
@@ -14,7 +16,7 @@ function CreateShop(req, res) {
 
     let data = {
         Email: Email,
-        Password: hashPass.hash(Password),
+        Password: hashPassword.hash(Password),
         Name: Name,
         Phone: Phone,
         Address: Address,
