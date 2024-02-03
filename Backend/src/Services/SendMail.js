@@ -1,7 +1,7 @@
 const nodemailer = require('nodemailer');
 const { EMAIL_PORT, EMAIL_USER, EMAIL_PASSWORD } = require('../Configs/email.config');
 const { logInfo, logError } = require('../Utils/logger');
-async function sendEmail(email, code) {
+async function SendEmail(email, code) {
     const transporter = nodemailer.createTransport({
         host: "smtp.gmail.com",
         port: EMAIL_PORT,
@@ -117,5 +117,5 @@ Vì mục đích bảo mật, bạn phải nhập mã dưới đây để xác m
 }
 module.exports =
 {
-    sendEmail
+    SendEmail
 }
