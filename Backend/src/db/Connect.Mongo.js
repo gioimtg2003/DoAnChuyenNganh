@@ -3,7 +3,7 @@ const { MONGO_URI, DATABASE_NAME, MONGO_USER, MONGO_PASSWORD } = require("../Con
 const { logInfo, logError } = require("../Utils/logger");
 let connect = async () => {
     try {
-        console.log(configDB.DATABASE_NAME)
+        console.log(DATABASE_NAME)
         await mongoose.connect(MONGO_URI, {
             dbName: DATABASE_NAME,
             user: MONGO_USER,
