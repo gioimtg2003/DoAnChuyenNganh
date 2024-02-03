@@ -1,4 +1,4 @@
-let mongoose = require('../../db/Connect.Mongo').mongoose;
+let mongoose = require('../db/Connect.Mongo').mongoose;
 
 let Auth = new mongoose.Schema({
     idUser: {

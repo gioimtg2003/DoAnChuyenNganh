@@ -1,8 +1,18 @@
-const { OK, INTERNAL_ERROR } = require("../../Configs/HTTPCode");
+const { OK, INTERNAL_ERROR, BAD_REQUEST } = require("../../Configs/HTTPCode");
 const { API } = require("../../Utils/formatApi");
 function CreateShop(req, res) {
-    const { Email, Password, Name, Phone, Address, Scope, ShopName, ShopAddress, Role } = req.body;
-    let ShopOwner = {
+    const requiredFields = ['Email', 'Password', 'Name', 'Phone', 'Address', 'Scope', 'ShopName', 'ShopAddress', 'Role'];
+    const { body } = req;
+    const { Email, Password, Name, Phone, Address, Scope, ShopName, ShopAddress, Role } = body;
+    let missingFields = requiredFields.filter(field => !body[field]);
+    if (missingFields.length > 0) {
+        let api = API(BAD_REQUEST, "failed", "Missing the fields", {}, new Date())
+        return res.status(BAD_REQUEST).json(
+            api
+        );
+    };
+
+    let data = {
         Email: Email,
         Password: hashPass.hash(Password),
         Name: Name,
@@ -15,7 +25,7 @@ function CreateShop(req, res) {
         Role: Role
     };
 
-    ServiceCreateShop(ShopOwner, async (err, data) => {
+    ServiceCreateShop(data, async (err, data) => {
         // lỗi từ server
         if (err) {
             let api = API(INTERNAL_ERROR, "error", `${err}`, {}, new Date())
@@ -23,7 +33,6 @@ function CreateShop(req, res) {
                 api
             );
         }
-
         let api = API(OK, "success", `Register Successfully`, data, new Date())
         return res.status(OK).json(api);
     })

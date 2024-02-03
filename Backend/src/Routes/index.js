@@ -3,7 +3,7 @@ const route = require("express").Router();
 
 //-----Route for user service-----//
 // Shop
-route.get("/user/shop");
+route.get("/user/shop/:id");
 route.post("/user/shop");
 route.put("/user/shop");
 route.delete("/user/shop");
