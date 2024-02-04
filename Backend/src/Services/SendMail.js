@@ -65,7 +65,7 @@ async function SendEmail(email, code) {
     <tr>
         <td>&nbsp;</td>
         <td style="color:#333333;font-family:'Segoe UI',Arial,sans-serif;font-size:14px;padding:12px 0px 14px 0px" bgcolor="#ffffff">
-Vì mục đích bảo mật, bạn phải nhập mã dưới đây để xác minh tài khoản. Mã sẽ chỉ hoạt động trong 5 phút và nếu bạn yêu cầu mã mới, mã này sẽ ngừng hoạt động.
+Vì mục đích bảo mật, bạn phải nhập mã dưới đây để xác minh tài khoản. Mã sẽ chỉ hoạt động trong 15 phút và nếu bạn yêu cầu mã mới, mã này sẽ ngừng hoạt động.
         </td>
     </tr>
     <tr>

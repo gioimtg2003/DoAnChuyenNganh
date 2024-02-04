@@ -1,4 +1,5 @@
 const { CreateShop } = require("../Controllers/User/CURDShop");
+const { SendCode } = require("../Controllers/User/Verify");
 
 const route = require("express").Router();
 
@@ -14,7 +15,8 @@ route.get("/user/shipper");
 route.post("/user/shipper");
 route.put("/user/shipper");
 route.delete("/user/shipper");
-
+// verify
+route.post("/user/verify", SendCode);
 
 
 
