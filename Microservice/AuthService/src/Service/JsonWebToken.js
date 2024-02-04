@@ -4,10 +4,10 @@ const { logInfo } = require('../Controller/logs');
 module.exports = {
     SignAccessToken : async (iss, exp, secret) => {
         let payload = {
-            "iss" : iss,
-            "exp" : exp
+            iss : "abcxyz",
+            sub : "31931293djasd",
         }
-        return jwt.sign(payload, secret, { algorithm: 'HS256', noTimestamp: true});
+        return jwt.sign(payload, secret, { algorithm: 'HS256', expiresIn : 20});
     },
     SignRefreshToken : async (idUser, secret) => {
         let payload = {

@@ -8,4 +8,4 @@ module.exports = {
     logError: (timeNow, msg, service) => {
         console.error(`[${formatDate(timeNow)}] Status: Error - ${msg} - Service: ${service}`);
     },
-} 
+}

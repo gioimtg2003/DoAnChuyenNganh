@@ -4,6 +4,7 @@ module.exports = {
     REDIRECT: 301, // redirect url
     BAD_REQUEST: 400, // miss or upload failed
     UNAUTHORIZED: 401, // unauthenticated and unauthorized
+    REQUEST_REJECT: 403,
     NOT_FOUND: 404,
     INTERNAL_ERROR: 500,
     // NOT_IMPLEMENTED : 401 // khum bíc
