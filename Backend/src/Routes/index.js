@@ -1,7 +1,7 @@
 const { GrantAccessToken, Login } = require("../Controllers/Auth");
 const { CreateShop } = require("../Controllers/User/CURDShop");
 const { VerifyCode, SendCode } = require("../Controllers/User/Verify");
-
+const { VerifyToken } = require("../MiddleWare/VerifyToken");
 const route = require("express").Router();
 
 
@@ -23,5 +23,10 @@ route.put("/user/verify", VerifyCode);
 //auth
 route.post("/auth/login", Login);
 route.post("/auth/token", GrantAccessToken);
+
+route.get("/test", VerifyToken, (req, res) => {
+    console.log(req.user);
+    return res.json({ ok: true })
+})
 
 module.exports = { route };
