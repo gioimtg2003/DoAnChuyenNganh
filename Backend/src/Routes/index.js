@@ -1,5 +1,5 @@
 const { CreateShop } = require("../Controllers/User/CURDShop");
-const { SendCode } = require("../Controllers/User/Verify");
+const { VerifyCode, SendCode } = require("../Controllers/User/Verify");
 
 const route = require("express").Router();
 
@@ -17,7 +17,7 @@ route.put("/user/shipper");
 route.delete("/user/shipper");
 // verify
 route.post("/user/verify", SendCode);
-
+route.put("/user/verify", VerifyCode);
 
 
 module.exports = { route };
