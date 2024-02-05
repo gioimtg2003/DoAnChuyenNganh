@@ -40,9 +40,15 @@ let HandleToken = token => {
                     data.err = true;
                     data.msg = err.message;
                 } else {
-                    data.err = false;
-                    data.id = decoded.id;
-                    data.role = decoded.role;
+                    if (decoded.refresh) {
+                        data.err = false;
+                        data.id = decoded.id;
+                        data.role = decoded.role;
+                    } else {
+                        data.err = true;
+                        data.msg = "signature invalid";
+                    }
+
                 }
                 resolve(data);
             });
@@ -59,14 +65,19 @@ async function HandleLogin(data, callback) {
         if (user) {
             let check = await bcrypt.compareSync(data.password, user.Password);
             if (check) {
-                let payload = {
+                let payloadAccessToken = {
                     id: user.idUser,
                     role: user.Role
                 };
+                let payloadRefreshToken = {
+                    id: user.idUser,
+                    role: user.Role,
+                    refresh: true
+                };
                 let timeAccessToken = 60 * 30;
                 let timeRefreshToken = 60 * 60 * 24;
-                let accessToken = await SignToken(payload, timeAccessToken);
-                let refreshToken = await SignToken(payload, timeRefreshToken);
+                let accessToken = await SignToken(payloadAccessToken, timeAccessToken);
+                let refreshToken = await SignToken(payloadRefreshToken, timeRefreshToken);
                 let _data = {
                     accessToken: accessToken,
                     refreshToken: refreshToken
