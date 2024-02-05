@@ -1,4 +1,4 @@
-const { OK, INTERNAL_ERROR, BAD_REQUEST, REQUEST_REJECT } = require("../../Configs/HTTPCode");
+const { OK, INTERNAL_ERROR, BAD_REQUEST, REQUEST_REJECT, UNAUTHORIZED } = require("../../Configs/HTTPCode");
 const { API } = require("../../Utils/formatApi");
 const Service = require("../../Services/User/Verify")
 function SendCode(req, res) {
@@ -22,6 +22,27 @@ function SendCode(req, res) {
 
     })
 }
+
+function VerifyCode(req, res) {
+    const { id, code } = req.body;
+    if (!(id && code)) {
+        let api = API(BAD_REQUEST, "failed", "Missing the fields", {}, new Date());
+        return res.status(BAD_REQUEST).json(api);
+    }
+    Service.VerifyCode(req.body, (err, data, verify) => {
+        if (err) {
+            let api = API(INTERNAL_ERROR, "error", err, {}, new Date());
+            return res.status(INTERNAL_ERROR).json(api);
+        } else if (!verify) {
+            let api = API(UNAUTHORIZED, "failed", data, {}, new Date());
+            return res.status(UNAUTHORIZED).json(api);
+        } else if (verify) {
+            let api = API(OK, "success", "verify success", data, new Date());
+            return res.status(OK).json(api)
+        }
+    })
+}
 module.exports = {
-    SendCode: SendCode
+    SendCode: SendCode,
+    VerifyCode: VerifyCode
 }
