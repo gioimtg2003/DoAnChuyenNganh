@@ -31,6 +31,28 @@ let CheckEmail = email => {
     });
 }
 
+let HandleToken = token => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let data = {}
+            jwt.verify(token, SECRET_KEY, (err, decoded) => {
+                if (err) {
+                    data.err = true;
+                    data.msg = err.message;
+                } else {
+                    data.err = false;
+                    data.id = decoded.id;
+                    data.role = decoded.role;
+                }
+                resolve(data);
+            });
+        } catch (err) {
+            reject(err)
+        }
+
+    });
+}
+
 async function HandleLogin(data, callback) {
     try {
         let user = await CheckEmail(data.email);
@@ -65,6 +87,31 @@ async function HandleLogin(data, callback) {
     }
 }
 
+async function GrantAccessToken(data, callback) {
+    try {
+        let check = await HandleToken(data);
+        if (check.err) {
+            logInfo(new Date(), "failed", check.msg, "Grant Access Token");
+            callback(null, check.msg, false);
+        } else if (!check.err) {
+            let timeAccessToken = 60 * 30;
+            let payload = {
+                id: check.id,
+                role: check.role
+            };
+            let token = await SignToken(payload, timeAccessToken);
+            let _data = {
+                accessToken: token
+            }
+            logInfo(new Date(), "success", "Grant access token successfully", "Grant Access Token");
+            callback(null, _data, true);
+        }
+    } catch (err) {
+        logError(new Date(), err, "Grant Access Token");
+        callback(err, null, null);
+    }
+}
+
 module.exports = {
-    HandleLogin
+    HandleLogin, GrantAccessToken
 }

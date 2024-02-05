@@ -1,4 +1,4 @@
-const { GrantRefreshToken, Login } = require("../Controllers/Auth");
+const { GrantAccessToken, Login } = require("../Controllers/Auth");
 const { CreateShop } = require("../Controllers/User/CURDShop");
 const { VerifyCode, SendCode } = require("../Controllers/User/Verify");
 
@@ -22,6 +22,6 @@ route.put("/user/verify", VerifyCode);
 
 //auth
 route.post("/auth/login", Login);
-route.post("/auth/token", GrantRefreshToken);
+route.post("/auth/token", GrantAccessToken);
 
 module.exports = { route };
