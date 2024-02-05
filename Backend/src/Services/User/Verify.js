@@ -24,9 +24,8 @@ async function SendCode(data, callback) {
                 logInfo(new Date(), "success", `Code verify user: ${user._id}`, "Send Code Verify");
                 callback(null, {
                     uri_redirect: `/user/verify?k=${uri}`,
-                }, true)
+                }, true);
             }
-
         } else {
             logInfo(new Date(), "failed", `User NotFound: ${data}`, "Send Code Verify")
             callback("User NotFound", null)
@@ -37,6 +36,32 @@ async function SendCode(data, callback) {
     }
 }
 
+
+async function VerifyCode(data, callback) {
+    try {
+        let user = await SchemaShopUser.findById(data.id);
+        console.log(typeof callback)
+        console.log(`${data} && ${data?.id} && ${data?.code}`)
+        if (user && user.CodeVerify == data.code) {
+            let now = Date.now();
+            if (now > user.ExpVerify) {
+                logInfo(new Date(), "failed", `User: ${user._id}: Code verify has expired`, "Verify code");
+                return callback(null, "Code verify has expired", false);
+            } else {
+                logInfo(new Date(), "success", `User: ${user._id}: Code verify is successfully`, "Verify code");
+                return callback(null, { verify: true }, true);
+            }
+        } else {
+            logInfo(new Date(), "failed", ` wrong code`, "Verify code");
+            return callback(null, "wrong code", false);
+        }
+    } catch (err) {
+        logError(new Date(), err, "Verify code");
+        return callback(err, null, null);
+    }
+
+}
 module.exports = {
-    SendCode: SendCode
+    SendCode: SendCode,
+    VerifyCode: VerifyCode
 }
