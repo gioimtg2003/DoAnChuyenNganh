@@ -1,0 +1,22 @@
+.navbar {
+    position: fixed;
+    background-color: #000000;
+    margin: 0;
+    
+    .nav {    
+        .nav-link{ 
+        }
+        a {
+            color: #ffffff;
+            
+            // -webkit-text-decoration-skip: objects;
+        }
+        a:hover {
+            opacity: 0.5;
+        }
+    }
+}
+
+.container-sm {
+    max-width: none;
+}

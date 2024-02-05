@@ -1,0 +1,37 @@
+// .login-content{
+//     margin-top:60px ;
+//     .log{
+//         text-align: center;
+//         padding: 50px;
+//     }
+//         .form-login{
+//             justify-content: center;
+            
+//         }
+// }
+.login-container {
+    width: 430px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-top: 140px;
+    .row{  
+        box-shadow: 0 0 5px rgba(0 , 0, 0, 0.5);
+        border-radius: 10px;
+        .form-login {
+            padding: 24px 12px;
+            margin-top: 120px;
+            width: 400px;
+            .btn-primary {
+                width: 100%;
+            }
+            
+            .forgot-pass{
+                font-size: 12px;
+                text-decoration:  none;
+            }
+    }
+}
+}
+
+
+
