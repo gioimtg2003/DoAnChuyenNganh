@@ -1,3 +1,4 @@
+const { GrantRefreshToken, Login } = require("../Controllers/Auth");
 const { CreateShop } = require("../Controllers/User/CURDShop");
 const { VerifyCode, SendCode } = require("../Controllers/User/Verify");
 
@@ -19,5 +20,8 @@ route.delete("/user/shipper");
 route.post("/user/verify", SendCode);
 route.put("/user/verify", VerifyCode);
 
+//auth
+route.post("/auth/login", Login);
+route.post("/auth/token", GrantRefreshToken);
 
 module.exports = { route };
