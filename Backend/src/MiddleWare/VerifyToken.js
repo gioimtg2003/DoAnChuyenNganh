@@ -3,7 +3,7 @@ const { SECRET_KEY } = require('../Configs/security.config');
 const jwt = require("jsonwebtoken");
 const { API } = require('../Utils/formatApi');
 const HandleToken = token => {
-    return new Promise(async (resolve, reject) => {
+    return new Promise((resolve, reject) => {
         try {
             let data = {}
             jwt.verify(token, SECRET_KEY, (err, decoded) => {

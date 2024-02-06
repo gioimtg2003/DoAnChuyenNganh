@@ -5,9 +5,8 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 let SignToken = (payload, time) => {
-    return new Promise(async (resolve, reject) => {
+    return new Promise((resolve, reject) => {
         try {
-            console.log(SECRET_KEY);
             let token = jwt.sign(payload, SECRET_KEY, { algorithm: "HS256", expiresIn: time });
             resolve(token);
         } catch (err) {
@@ -17,9 +16,9 @@ let SignToken = (payload, time) => {
 }
 
 let CheckEmail = email => {
-    return new Promise(async (resolve, reject) => {
+    return new Promise((resolve, reject) => {
         try {
-            let user = await SchemaAuth.findOne({ Email: email });
+            let user = SchemaAuth.findOne({ Email: email });
             if (user) {
                 resolve(user);
             } else {
@@ -32,7 +31,7 @@ let CheckEmail = email => {
 }
 
 let HandleToken = token => {
-    return new Promise(async (resolve, reject) => {
+    return new Promise((resolve, reject) => {
         try {
             let data = {}
             jwt.verify(token, SECRET_KEY, (err, decoded) => {
