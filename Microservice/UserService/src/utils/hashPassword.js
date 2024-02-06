@@ -1,11 +1,11 @@
-let bcrypt = require('bcryptjs');
+let bcrypt = require('bcrypt');
 module.exports = {
-    hash :  (password) =>{
+    hash: (password) => {
         let salt = bcrypt.genSaltSync(10); // tạo muối random
         let hash = bcrypt.hashSync(password, salt); // hash password
         return hash;
     },
-    compare : (Password, hash) =>{
+    compare: (Password, hash) => {
         return bcrypt.compareSync(Password, hash); // check password
     }
 } 
