@@ -1,5 +1,5 @@
-const hashPassword = require("../../../../Microservice/UserService/src/utils/hashPassword");
-const { InputValidate } = require("../../../../Microservice/UserService/src/utils/validateInput");
+const hashPassword = require("../../Utils/hashPassword");
+const { InputValidate } = require("../../Utils/validateInput");
 const { OK, INTERNAL_ERROR, BAD_REQUEST } = require("../../Configs/HTTPCode");
 const { ServiceCreateShop } = require("../../Services/User/Shop/CURDShop");
 const { API } = require("../../Utils/formatApi");
@@ -20,7 +20,7 @@ function CreateShop(req, res) {
         return res.status(BAD_REQUEST).json(
             api
         );
-    };
+    }
 
     let data = {
         Email: Email,

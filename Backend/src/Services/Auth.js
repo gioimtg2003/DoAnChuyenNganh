@@ -1,7 +1,7 @@
 const { SchemaAuth } = require("../Models/Auth");
 const { logError, logInfo } = require("../Utils/logger");
 const { SECRET_KEY } = require('../Configs/security.config');
-const bcrypt = require('bcryptjs');
+const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 let SignToken = (payload, time) => {

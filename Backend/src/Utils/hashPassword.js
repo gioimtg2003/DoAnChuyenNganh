@@ -1,4 +1,4 @@
-let bcrypt = require('bcryptjs');
+let bcrypt = require('bcrypt');
 module.exports = {
     hash: (password) => {
         let salt = bcrypt.genSaltSync(10); // tạo muối random
