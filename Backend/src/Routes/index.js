@@ -1,5 +1,5 @@
 const { GrantAccessToken, Login } = require("../Controllers/Auth");
-const { CreateShop } = require("../Controllers/User/CURDShop");
+const { CreateShop, UpdateShop } = require("../Controllers/User/CURDShop");
 const { VerifyCode, SendCode } = require("../Controllers/User/Verify");
 const { VerifyToken } = require("../MiddleWare/VerifyToken");
 const route = require("express").Router();
@@ -9,7 +9,7 @@ const route = require("express").Router();
 // Shop
 route.get("/user/shop/:id");
 route.post("/user/shop", CreateShop);
-route.put("/user/shop");
+route.put("/user/shop", UpdateShop);
 route.delete("/user/shop");
 //Shipper
 route.get("/user/shipper");

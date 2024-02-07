@@ -7,6 +7,12 @@ const regexPatterns = {
     Role: /[1-3]/
 };
 
+/**
+ * This function input validation
+ * @param {*} type `Email`,`Phone`,`Password` ,...
+ * @param {*} value `Input needs validation`
+ * @returns `true` or `false`
+ */
 function InputValidate(type, value) {
     const regex = regexPatterns[type];
     return regex.test(value);
