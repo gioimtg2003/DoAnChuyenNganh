@@ -18,12 +18,10 @@ let SignToken = (payload, time) => {
 let CheckEmail = email => {
     return new Promise((resolve, reject) => {
         try {
-            let user = SchemaAuth.findOne({ Email: email });
-            if (user) {
-                resolve(user);
-            } else {
-                resolve(false)
-            }
+            SchemaAuth.findOne({ Email: email })
+                .then(data => data ? resolve(data) : resolve(false))
+                .catch(err => reject(err));
+
         } catch (err) {
             reject(err)
         }
@@ -38,16 +36,13 @@ let HandleToken = token => {
                 if (err) {
                     data.err = true;
                     data.msg = err.message;
-                } else {
-                    if (decoded.refresh) {
-                        data.err = false;
-                        data.id = decoded.id;
-                        data.role = decoded.role;
-                    } else {
-                        data.err = true;
-                        data.msg = "signature invalid";
-                    }
-
+                } else if (decoded.refresh) {
+                    data.err = false;
+                    data.id = decoded.id;
+                    data.role = decoded.role;
+                } else if (!decoded.refresh) {
+                    data.err = true;
+                    data.msg = "signature invalid";
                 }
                 resolve(data);
             });
