@@ -1,6 +1,9 @@
 let mongoose = require('../../db/Connect.Mongo').mongoose;
-
 let Shipper = new mongoose.Schema({
+    ShopId: {
+        type: mongoose.Types.ObjectId,
+        required: true
+    },
     Email: {
         type: String,
         required: true,
