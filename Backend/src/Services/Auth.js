@@ -79,7 +79,8 @@ async function HandleLogin(data, callback) {
                 let refreshToken = await SignToken(payloadRefreshToken, timeRefreshToken);
                 let _data = {
                     accessToken: accessToken,
-                    refreshToken: refreshToken
+                    refreshToken: refreshToken,
+                    exp: Math.floor(Date.now() + timeAccessToken * 1000 - 4000),
                 }
                 logInfo(new Date(), "success", "Login Success", "Handle Login");
                 callback(null, _data, true);
