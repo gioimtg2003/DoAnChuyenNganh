@@ -1,4 +1,5 @@
 const { GrantAccessToken, Login } = require("../Controllers/Auth");
+const { CreateShipper } = require("../Controllers/User/CURDShipper");
 const { CreateShop, UpdateShop } = require("../Controllers/User/CURDShop");
 const { VerifyCode, SendCode } = require("../Controllers/User/Verify");
 const { VerifyToken } = require("../MiddleWare/VerifyToken");
@@ -13,7 +14,7 @@ route.put("/user/shop", UpdateShop);
 route.delete("/user/shop");
 //Shipper
 route.get("/user/shipper");
-route.post("/user/shipper");
+route.post("/user/shipper", CreateShipper);
 route.put("/user/shipper");
 route.delete("/user/shipper");
 // verify
