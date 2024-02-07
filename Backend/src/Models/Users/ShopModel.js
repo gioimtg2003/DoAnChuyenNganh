@@ -10,6 +10,8 @@ let ShopUser = new mongoose.Schema({
     },
     Password: {
         type: String,
+        min: 6,
+        max: 100,
         required: true
     },
     Name: {
@@ -18,6 +20,7 @@ let ShopUser = new mongoose.Schema({
     },
     Phone: {
         type: String,
+        max: 10,
         required: true
     },
     Address: {
@@ -52,6 +55,10 @@ let ShopUser = new mongoose.Schema({
     Role: {
         type: Number,
         required: true
+    },
+    Delete: {
+        type: Boolean,
+        default: false,
     }
 
 });
