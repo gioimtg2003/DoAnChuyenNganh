@@ -1,28 +1,12 @@
 const { SchemaAuth } = require("../../Models/Auth");
 const { SchemaShipper } = require("../../Models/Users/ShipperModel");
-const { SchemaShopUser } = require("../../Models/Users/ShopModel");
+const checkStore = require("../../Utils/checkStore");
 const { logInfo, logError } = require("../../Utils/logger");
-/**
- * This function checks whether the store exist or not
- * @param {*} id 
- * @returns `true` or `false`
- */
-let CheckStore = id => {
-    return new Promise((res, rej) => {
-        try {
-            SchemaShopUser.findById(id)
-                .then(data => !data ? res(false) : res(true))
-                .catch(err => rej(err));
 
-        } catch (err) {
-            rej(err);
-        }
-    })
-}
 
 async function ServiceCreateShipper(data, callback) {
     try {
-        let check = await CheckStore(data.ShopId);
+        let check = await checkStore(data.ShopId);
         if (!check) {
             return callback(null, false);
         }
