@@ -11,7 +11,7 @@ function CreateShipper(req, res) {
     const isValidEmail = InputValidate("Email", Email);
     const isValidPhone = InputValidate("Phone", Phone);
     const isValidRole = InputValidate("Role", Role);
-    if (!(isValidEmail && isValidPhone && isValidRole)) {
+    if (!(isValidPhone && isValidRole)) {
         let api = API(BAD_REQUEST, "failed", `Input valid fields: ${!isValidEmail ? "Email " : ""}${!isValidPhone ? "Phone " : ""}${!isValidRole ? "Role " : ""}Invalid Input`, {}, new Date());
         return res.status(BAD_REQUEST).json(api);
     }

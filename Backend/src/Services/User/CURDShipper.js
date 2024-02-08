@@ -1,12 +1,12 @@
 const { SchemaAuth } = require("../../Models/Auth");
 const { SchemaShipper } = require("../../Models/Users/ShipperModel");
-const checkStore = require("../../Utils/checkStore");
+const { CheckStore } = require("../../Utils/checkStore");
 const { logInfo, logError } = require("../../Utils/logger");
 
 
 async function ServiceCreateShipper(data, callback) {
     try {
-        let check = await checkStore(data.ShopId);
+        let check = await CheckStore(data.ShopId);
         if (!check) {
             return callback(null, false);
         }
