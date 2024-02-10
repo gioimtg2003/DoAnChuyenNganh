@@ -1,3 +1,5 @@
+"use client";
+import { isLogin } from "../lib/util/isLogin";
 import HomeLayout from "../ui/layout/Home";
 
 export default function AuthLayout({
@@ -5,5 +7,5 @@ export default function AuthLayout({
 }: {
   children: React.ReactNode;
 }): JSX.Element {
-  return <HomeLayout>{children}</HomeLayout>;
+  return isLogin() ? <p>Dashboard</p> : <HomeLayout>{children}</HomeLayout>;
 }
