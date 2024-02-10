@@ -1,12 +1,9 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Checkbox, Form, Input, message } from "antd";
 import Link from "next/link";
-import { Axios } from "@/app/lib/util/axios";
-import { setToken } from "@/app/lib/hook/useToken";
 import { useRouter } from "next/navigation";
-
-const axios = new Axios().getInstance();
+import { Login } from "@/app/lib/service/auth";
 
 const onFinishFailed = (errorInfo: any) => {
   console.log("Failed:", errorInfo);
@@ -18,40 +15,31 @@ type FieldType = {
   remember?: string;
 };
 
-function Login(): JSX.Element {
+function LoginPage(): JSX.Element {
   const router = useRouter();
-
-  const onFinish = (values: FieldType) => {
+  const [messageApi, contextHolder] = message.useMessage();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const onFinish = async (values: FieldType) => {
     const { email, password, remember } = values;
-    axios
-      .post("/auth/login", {
-        email: email,
-        password: password,
-      })
-      .then((res: any) => {
-        let data = {
-          accessToken: res.data.data.accessToken,
-          refreshToken: res.data.data.refreshToken,
-          exp: res.data.data.exp,
-        };
-
-        setToken(data);
-        messageApi.success("Login success!");
-        setTimeout(() => {
-          router.push("/dashboard");
-        }, 500);
-      })
-      .catch((err: any) => {
-        console.log(err.response);
-        messageApi.open({
-          type: "error",
-          content: err.response.data?.message || "Login failed!",
-          duration: 3,
-        });
-      });
+    const data = {
+      email: email,
+      password: password,
+    };
+    try {
+      setIsLoading(true);
+      const res = await Login(data, messageApi);
+      if (res) {
+        router.push("/dashboard");
+      } else {
+        setIsLoading(false);
+      }
+      console.log(res);
+    } catch (error) {
+      console.log(error);
+      setIsLoading(false);
+    }
   };
 
-  const [messageApi, contextHolder] = message.useMessage();
   useEffect(() => {
     document.title = "Login";
     localStorage.clear();
@@ -108,6 +96,7 @@ function Login(): JSX.Element {
               type="primary"
               htmlType="submit"
               className="bg-blue-500 w-32 mr-2"
+              loading={isLoading}
             >
               Submit
             </Button>
@@ -124,4 +113,4 @@ function Login(): JSX.Element {
   );
 }
 
-export default Login;
+export default LoginPage;
