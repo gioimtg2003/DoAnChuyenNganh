@@ -4,14 +4,14 @@ const { OK, INTERNAL_ERROR, BAD_REQUEST, REQUEST_REJECT } = require("../../Confi
 const { ServiceCreateShop, ServiceUpdateShop } = require("../../Services/User/Shop/CURDShop");
 const { API } = require("../../Utils/formatApi");
 function CreateShop(req, res) {
-    const requiredFields = ['Email', 'Password', 'Name', 'Phone', 'Address', 'Scope', 'ShopName', 'ShopAddress', 'Role'];
+    const requiredFields = ['Email', 'Password', 'Name', 'Phone', 'Address', 'Scope', 'ShopName', 'ShopAddress'];
     const { body } = req;
-    const { Email, Password, Name, Phone, Address, Scope, ShopName, ShopAddress, Role } = body;
+    const { Email, Password, Name, Phone, Address, Scope, ShopName, ShopAddress } = body;
     const isValidEmail = InputValidate("Email", Email);
     const isValidPhone = InputValidate("Phone", Phone);
-    const isValidRole = InputValidate("Role", Role);
-    if (!(isValidEmail && isValidPhone && isValidRole)) {
-        let api = API(BAD_REQUEST, "failed", `Input valid fields: ${!isValidEmail ? "Email " : ""}${!isValidPhone ? "Phone " : ""}${!isValidRole ? "Role " : ""}Invalid Input`, {}, new Date());
+    let Role = 2;
+    if (!(isValidEmail && isValidPhone)) {
+        let api = API(BAD_REQUEST, "failed", `Input valid fields: ${!isValidEmail ? "Email " : ""}${!isValidPhone ? "Phone " : ""}Invalid Input`, {}, new Date());
         return res.status(BAD_REQUEST).json(api);
     }
 
