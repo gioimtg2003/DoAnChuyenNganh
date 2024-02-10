@@ -1,9 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import Image from "next/image";
 import "./globals.css";
-import HomeLayout from "./ui/layout/Home";
-
 const inter = Inter({ subsets: ["vietnamese"] });
 
 export const metadata: Metadata = {

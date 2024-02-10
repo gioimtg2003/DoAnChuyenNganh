@@ -4,6 +4,7 @@ import { Button, Checkbox, Form, Input, message } from "antd";
 import Link from "next/link";
 import { Axios } from "@/app/lib/util/axios";
 import { setToken } from "@/app/lib/hook/useToken";
+import { useRouter } from "next/navigation";
 
 const axios = new Axios().getInstance();
 
@@ -18,6 +19,8 @@ type FieldType = {
 };
 
 function Login(): JSX.Element {
+  const router = useRouter();
+
   const onFinish = (values: FieldType) => {
     const { email, password, remember } = values;
     axios
@@ -31,8 +34,12 @@ function Login(): JSX.Element {
           refreshToken: res.data.data.refreshToken,
           exp: res.data.data.exp,
         };
+
         setToken(data);
         messageApi.success("Login success!");
+        setTimeout(() => {
+          router.push("/dashboard");
+        }, 500);
       })
       .catch((err: any) => {
         console.log(err.response);
@@ -47,7 +54,9 @@ function Login(): JSX.Element {
   const [messageApi, contextHolder] = message.useMessage();
   useEffect(() => {
     document.title = "Login";
+    localStorage.clear();
   }, []);
+
   return (
     <>
       {contextHolder}
