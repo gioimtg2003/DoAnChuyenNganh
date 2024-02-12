@@ -13,12 +13,9 @@ export default function AuthLayout({
   }, []);
 
   return (
-    <>
-      <NavLinkProvider>
-        <NavWeb />
-      </NavLinkProvider>
-      <h1 className="text-2xl">Title</h1>
-      {children}
-    </>
+    <NavLinkProvider>
+      <NavWeb />
+      <div className="w-4">{children}</div>
+    </NavLinkProvider>
   );
 }

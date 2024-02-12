@@ -43,7 +43,7 @@ const tailFormItemLayout = {
   },
 };
 
-const App: React.FC = () => {
+const RegisterPage: React.FC = () => {
   const [form] = Form.useForm();
 
   const onFinish = (values: any) => {
@@ -58,15 +58,6 @@ const App: React.FC = () => {
     </Form.Item>
   );
 
-  // const suffixSelector = (
-  //   <Form.Item name="suffix" noStyle>
-  //     <Select style={{ width: 70 }}>
-  //       <Option value="USD">$</Option>
-  //       <Option value="CNY">¥</Option>
-  //     </Select>
-  //   </Form.Item>
-  // );
-
   return (
     <>
       <div className="flex w-full justify-center items-center md:ml-10">
@@ -79,6 +70,7 @@ const App: React.FC = () => {
         onFinish={onFinish}
         initialValues={{
           prefix: "84",
+          scope: 1,
         }}
         style={{ maxWidth: 600 }}
         scrollToFirstError
@@ -171,15 +163,6 @@ const App: React.FC = () => {
         >
           <Input addonBefore={prefixSelector} style={{ width: "100%" }} />
         </Form.Item>
-
-        {/* <Form.Item
-        name="donation"
-        label="Donation"
-        rules={[{ required: true, message: "Please input donation amount!" }]}
-      >
-        <InputNumber addonAfter={suffixSelector} style={{ width: "100%" }} />
-      </Form.Item> */}
-
         <Form.Item
           name="shopName"
           label="Shop Name"
@@ -207,7 +190,7 @@ const App: React.FC = () => {
         <Form.Item
           wrapperCol={{ xs: { offset: 0 }, sm: { offset: 8 } }}
           name="scope"
-          rules={[{ required: true, message: "Please input Intro" }]}
+          rules={[{ required: true, message: "Please input Scope" }]}
         >
           <Radio.Group
             name="radiogroup"
@@ -239,7 +222,6 @@ const App: React.FC = () => {
           <Select placeholder="select your gender">
             <Option value="male">Male</Option>
             <Option value="female">Female</Option>
-            <Option value="other">Other</Option>
           </Select>
         </Form.Item>
         <Form.Item
@@ -282,4 +264,4 @@ const App: React.FC = () => {
   );
 };
 
-export default App;
+export default RegisterPage;

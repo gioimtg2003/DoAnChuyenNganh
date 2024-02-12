@@ -1,7 +1,9 @@
 "use client";
 
-import { useReducer } from "react";
+import { useContext, useEffect, useReducer } from "react";
 import { NavWeb } from "../ui/components/nav/NavWeb";
+import { NavLinkContext } from "../lib/context/LinkContext";
+import { selectedPage } from "../lib/util/selectedPage";
 
 // Định nghĩa kiểu cho state
 type StateType = {
@@ -23,6 +25,11 @@ export default function Dashboard(): JSX.Element {
   const [state, dispatch] = useReducer(_dispatch, {
     data: "",
   });
+  const [stateLink, dispatchLink] = useContext(NavLinkContext);
+  useEffect(() => {
+    console.log(stateLink);
+    selectedPage(dispatchLink, 0);
+  }, []);
 
   return (
     <div>

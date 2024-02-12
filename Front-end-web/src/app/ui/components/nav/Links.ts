@@ -1,28 +1,41 @@
-interface Link {
-  icon: string;
+import { IconType } from "react-icons";
+import { TbFileInvoice } from "react-icons/tb";
+import { FiCodesandbox } from "react-icons/fi";
+import { FaPeopleGroup } from "react-icons/fa6";
+import { LuBarChart3 } from "react-icons/lu";
+import { RiDashboardLine } from "react-icons/ri";
+
+export type Link = {
+  icon: IconType;
   name: string;
   url: string;
-}
+  selected?: boolean | undefined;
+};
 
 export const Links: Link[] = [
   {
-    icon: "fe-regular fa-house",
-    name: "Home",
-    url: "/",
+    icon: RiDashboardLine,
+    name: "Dashboard",
+    url: "/dashboard",
   },
   {
-    icon: "fe-regular fa-user",
+    icon: FaPeopleGroup,
     name: "Employee",
-    url: "/employee",
+    url: "/dashboard/employee",
   },
   {
-    icon: "fe-regular fa-box-open",
+    icon: FiCodesandbox,
     name: "Product",
-    url: "/product",
+    url: "/dashboard/product",
   },
   {
-    icon: "fe-regular fa-receipt",
+    icon: TbFileInvoice,
     name: "Order",
-    url: "/order",
+    url: "/dashboard/order",
+  },
+  {
+    icon: LuBarChart3,
+    name: "Report",
+    url: "/dashboard/report",
   },
 ];

@@ -3,6 +3,7 @@ import { useRouter } from "next/navigation";
 import { IsLogin } from "../lib/util/isLogin";
 import HomeLayout from "../ui/layout/Home";
 import { message } from "antd";
+import { useEffect } from "react";
 export default function AuthLayout({
   children,
 }: {
@@ -10,19 +11,17 @@ export default function AuthLayout({
 }): JSX.Element | void {
   const [messageApi, contextHolder] = message.useMessage();
   const router = useRouter();
-  const handleRedirect = (): void => {
-    router.push("/dashboard");
-    messageApi.open({
-      type: "info",
-      content: "You are already logged in!",
-      duration: 3,
-    });
-  };
+  const isLogin = IsLogin();
+  useEffect((): void => {
+    if (isLogin) {
+      router.push("/dashboard");
+    }
+  }, [router, isLogin]);
 
   return (
     <>
       {contextHolder}
-      {IsLogin() ? handleRedirect() : <HomeLayout>{children}</HomeLayout>}
+      {<HomeLayout>{children}</HomeLayout>}
     </>
   );
 }

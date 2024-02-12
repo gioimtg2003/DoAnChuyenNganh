@@ -15,7 +15,12 @@ const config: Config = {
       },
       colors: {
         "primary-color": "#E9EEF8",
+        "primary-1-color": "#37A4E2",
+        "primary-2-color": "#7DCBF7",
         "seconds-color": "#CDDDF1",
+      },
+      transitionProperty: {
+        border: "border-bottom-width, border-color",
       },
     },
   },

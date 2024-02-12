@@ -42,7 +42,6 @@ function LoginPage(): JSX.Element {
 
   useEffect(() => {
     document.title = "Login";
-    localStorage.clear();
   }, []);
 
   return (
