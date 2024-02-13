@@ -26,7 +26,7 @@ export function NavWeb(): JSX.Element {
   const [stateLink, dispatchLink] = useContext(NavLinkContext);
 
   return (
-    <header className="relative w-full h-20 p-0 m-0 border-b-2 border-gray-100 z-0">
+    <header className="fixed top-0 left-0 bg-white w-full h-20 p-0 m-0 border-b-2 border-gray-100 z-0">
       <div className="flex flex-row  justify-center items-center h-full">
         <div className="w-2/12">
           <div className="w-full flex flex-row justify-center items-center">
@@ -48,6 +48,9 @@ export function NavWeb(): JSX.Element {
         </div>
         <nav className="w-6/12 max-md:hidden flex flex-row h-full">
           {stateLink.map((link: TypeLink, key: number) => {
+            let isBorderBottom: string = link.selected
+              ? " border-b-2 border-primary-1-color"
+              : "";
             return (
               <Link
                 key={key}
@@ -55,7 +58,10 @@ export function NavWeb(): JSX.Element {
                 onClick={() => {
                   dispatchLink({ type: ActionType.SELECT, index: key });
                 }}
-                className="transition-border duration-150 ease-linear relative z-10  w-1/5 h-full hover:cursor-pointer hover:text-primary-1-color hover:border-b-2 hover:border-primary-2-color"
+                className={
+                  isBorderBottom +
+                  " transition-border duration-150 ease-linear relative z-10  w-1/5 h-full hover:cursor-pointer hover:text-primary-1-color hover:border-b-2 hover:border-primary-2-color"
+                }
               >
                 <div className="w-full h-full flex justify-center items-center">
                   {
