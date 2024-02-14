@@ -1,4 +1,4 @@
-import { LineChart, BarChart } from "./Chart";
+import { LineChart, BarChart } from "../Chart";
 
 interface CardProps {
   title: string;
