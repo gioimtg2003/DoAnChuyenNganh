@@ -1,7 +1,7 @@
 "use client";
 
 import { Link, Links } from "@/app/ui/components/nav/Links";
-import { createContext, useReducer } from "react";
+import { createContext, useMemo, useReducer } from "react";
 
 type StateType = typeof Links;
 
@@ -40,8 +40,13 @@ export const NavLinkProvider = ({
   children: React.ReactNode;
 }): JSX.Element => {
   const [stateLink, dispatchLink] = useReducer(reducer, initState);
+  const NavLinkContextProviderValue = useMemo(
+    () => ({ stateLink, dispatchLink }),
+    [stateLink, dispatchLink]
+  );
+
   return (
-    <NavLinkContext.Provider value={[stateLink, dispatchLink]}>
+    <NavLinkContext.Provider value={NavLinkContextProviderValue}>
       {children}
     </NavLinkContext.Provider>
   );

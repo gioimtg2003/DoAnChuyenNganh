@@ -28,7 +28,7 @@ export default function Dashboard(): JSX.Element {
   const [state, dispatch] = useReducer(_dispatch, {
     data: "",
   });
-  const [stateLink, dispatchLink] = useContext(NavLinkContext);
+  const { stateLink, dispatchLink } = useContext(NavLinkContext);
   useEffect(() => {
     console.log(stateLink);
     selectedPage(dispatchLink, 0);

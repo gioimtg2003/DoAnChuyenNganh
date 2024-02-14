@@ -23,7 +23,7 @@ const theme = createTheme({
 });
 
 export function NavWeb(): JSX.Element {
-  const [stateLink, dispatchLink] = useContext(NavLinkContext);
+  const { stateLink, dispatchLink } = useContext(NavLinkContext);
 
   return (
     <header className="fixed top-0 left-0 bg-white w-full h-20 p-0 m-0 border-b-2 border-gray-100 z-0">
