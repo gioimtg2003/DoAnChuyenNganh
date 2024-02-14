@@ -30,6 +30,8 @@ async function ServiceUpdateShop(data, callback) {
         const { id } = data;
         const info = data.data;
         let user = await SchemaShopUser.findOneAndUpdate({ _id: id }, info, { new: true });
+        //Update email in auth service database
+        await SchemaAuth.findOneAndUpdate({ idUser: id }, { Email: info.Email }, { new: true });
         if (user) {
             logInfo(new Date, "Success", `Update a user: ${user._id}`, "Update User");
             callback(null, data);
