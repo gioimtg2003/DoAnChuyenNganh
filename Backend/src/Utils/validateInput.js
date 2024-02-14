@@ -1,6 +1,6 @@
 
 const regexPatterns = {
-    Email: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g,
+    Email: /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/g,
     Phone: /^(0|\+84)[1-9]\d{8}$/,
     UserName: /^[a-zA-Z0-9]+$/,
     Password: /.*/,

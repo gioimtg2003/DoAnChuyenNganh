@@ -4,18 +4,19 @@ const { OK, INTERNAL_ERROR, BAD_REQUEST, REQUEST_REJECT } = require("../../Confi
 const { ServiceCreateShop, ServiceUpdateShop } = require("../../Services/User/Shop/CURDShop");
 const { API } = require("../../Utils/formatApi");
 function CreateShop(req, res) {
+    console.log(req.body)
     const requiredFields = ['Email', 'Password', 'Name', 'Phone', 'Address', 'Scope', 'ShopName', 'ShopAddress'];
     const { body } = req;
     const { Email, Password, Name, Phone, Address, Scope, ShopName, ShopAddress } = body;
-    const isValidEmail = InputValidate("Email", Email);
+    //const isValidEmail = InputValidate("Email", Email);
     const isValidPhone = InputValidate("Phone", Phone);
     let Role = 2;
-    if (!(isValidEmail && isValidPhone)) {
-        let api = API(BAD_REQUEST, "failed", `Input valid fields: ${!isValidEmail ? "Email " : ""}${!isValidPhone ? "Phone " : ""}Invalid Input`, {}, new Date());
+    if (!(isValidPhone)) {
+        let api = API(BAD_REQUEST, "failed", `Input valid fields: ${!isValidPhone ? "Phone " : ""}Invalid Input`, {}, new Date());
         return res.status(BAD_REQUEST).json(api);
     }
 
-    let missingFields = requiredFields.filter(field => !body[field]);
+    let missingFields = requiredFields.filter(field => body[field] === undefined || body[field] === null);
     if (missingFields.length > 0) {
         let api = API(BAD_REQUEST, "failed", "Missing the fields", {}, new Date())
         return res.status(BAD_REQUEST).json(
