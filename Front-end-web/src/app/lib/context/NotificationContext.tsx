@@ -1,8 +1,6 @@
 import React, { useMemo } from "react";
 import { notification } from "antd";
 
-type NotificationType = "success" | "info" | "warning" | "error";
-
 export const NotificationContext = React.createContext(null as any);
 
 export function NotificationProvider({

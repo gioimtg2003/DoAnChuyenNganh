@@ -5,11 +5,9 @@ import {
   LinearScale,
   PointElement,
   LineElement,
-  Title,
   Tooltip,
   Filler,
   Legend,
-  scales,
   BarElement,
 } from "chart.js";
 import { Line, Bar } from "react-chartjs-2";
