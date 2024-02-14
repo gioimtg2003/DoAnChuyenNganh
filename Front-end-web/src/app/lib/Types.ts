@@ -25,4 +25,13 @@ export interface OptionsDatagridView {
   };
 }
 
+export interface AddEmployeeFieldType {
+  firstName: string;
+  lastName: string;
+  position: string;
+  Phone: string;
+  Email: string;
+  Address: string;
+}
+
 export interface ShopUser extends User {}

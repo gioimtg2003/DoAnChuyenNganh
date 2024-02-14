@@ -2,14 +2,14 @@
 import { useRouter } from "next/navigation";
 import { IsLogin } from "../lib/util/isLogin";
 import HomeLayout from "../ui/layout/Home";
-import { message } from "antd";
 import { useEffect } from "react";
+import { NotificationProvider } from "@/app/lib/context/NotificationContext";
+
 export default function AuthLayout({
   children,
 }: {
   children: React.ReactNode;
 }): JSX.Element | void {
-  const [messageApi, contextHolder] = message.useMessage();
   const router = useRouter();
   const isLogin = IsLogin();
   useEffect((): void => {
@@ -19,9 +19,8 @@ export default function AuthLayout({
   }, [router, isLogin]);
 
   return (
-    <>
-      {contextHolder}
+    <NotificationProvider>
       {<HomeLayout>{children}</HomeLayout>}
-    </>
+    </NotificationProvider>
   );
 }

@@ -26,7 +26,7 @@ export function NavWeb(): JSX.Element {
   const { stateLink, dispatchLink } = useContext(NavLinkContext);
 
   return (
-    <header className="fixed top-0 left-0 bg-white w-full h-20 p-0 m-0 border-b-2 border-gray-100 z-0">
+    <header className="fixed z-50 top-0 left-0 bg-white w-full h-20 p-0 m-0 border-b-2 border-gray-100 ">
       <div className="flex flex-row  justify-center items-center h-full">
         <div className="w-2/12">
           <div className="w-full flex flex-row justify-center items-center">

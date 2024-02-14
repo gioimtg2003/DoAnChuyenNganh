@@ -1,20 +1,6 @@
 "use client";
-import React, { useState } from "react";
-import type { CascaderProps } from "antd";
-import {
-  AutoComplete,
-  Button,
-  Card,
-  Cascader,
-  Checkbox,
-  Col,
-  Form,
-  Input,
-  InputNumber,
-  Radio,
-  Row,
-  Select,
-} from "antd";
+import React from "react";
+import { Button, Card, Checkbox, Form, Input, Radio, Select } from "antd";
 import Link from "next/link";
 
 const { Option } = Select;
@@ -194,7 +180,6 @@ const RegisterPage: React.FC = () => {
         >
           <Radio.Group
             name="radiogroup"
-            defaultValue={1}
             className="flex w-full justify-around "
           >
             <Card
