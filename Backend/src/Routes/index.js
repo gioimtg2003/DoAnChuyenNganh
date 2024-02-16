@@ -1,6 +1,7 @@
 const { GrantAccessToken, Login } = require("../Controllers/Auth");
 const { CreateShipper } = require("../Controllers/User/CURDShipper");
 const { CreateShop, UpdateShop, ReadShop } = require("../Controllers/User/CURDShop");
+const { GetAllEmployee } = require("../Controllers/User/ShopStaff");
 const { VerifyCode, SendCode } = require("../Controllers/User/Verify");
 const { ShopPermission } = require("../MiddleWare/CheckPermission");
 const { VerifyToken } = require("../MiddleWare/VerifyToken");
@@ -13,6 +14,9 @@ route.get("/user/shop/", VerifyToken, ShopPermission, ReadShop);
 route.post("/user/shop", CreateShop);
 route.put("/user/shop", UpdateShop);
 route.delete("/user/shop");
+// Employee of Shop
+route.get("/user/shop/employee", VerifyToken, ShopPermission, GetAllEmployee);
+
 //Shipper
 route.get("/user/shipper");
 route.post("/user/shipper", CreateShipper);
