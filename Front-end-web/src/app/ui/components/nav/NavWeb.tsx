@@ -10,6 +10,8 @@ import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
 import { Badge, ThemeProvider } from "@mui/material";
 import { createTheme } from "@mui/material/styles";
 import { FaStore } from "react-icons/fa";
+import { LoginContext } from "@/app/lib/context/LoginContext";
+import { LoginActionType } from "@/app/lib/Types";
 
 const theme = createTheme({
   palette: {
@@ -24,7 +26,7 @@ const theme = createTheme({
 
 export function NavWeb(): JSX.Element {
   const { stateLink, dispatchLink } = useContext(NavLinkContext);
-
+  const { stateLogin, dispatchLogin } = useContext(LoginContext);
   return (
     <header className="fixed z-50 top-0 left-0 bg-white w-full h-20 p-0 m-0 border-b-2 border-gray-100 ">
       <div className="flex flex-row  justify-center items-center h-full">
@@ -94,7 +96,12 @@ export function NavWeb(): JSX.Element {
                 </Badge>
               </ThemeProvider>
             </div>
-            <div className="w-2/5 hover:cursor-pointer flex flex-row justify-center items-center">
+            <div
+              className="w-2/5 hover:cursor-pointer flex flex-row justify-center items-center"
+              onClick={() => {
+                dispatchLogin({ type: LoginActionType.LOGOUT });
+              }}
+            >
               <p>Logout</p>
               <IoLogOutOutline className="size-6 ml-4" />
             </div>

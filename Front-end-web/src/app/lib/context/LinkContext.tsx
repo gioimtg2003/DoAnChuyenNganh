@@ -1,7 +1,7 @@
 "use client";
 
 import { Link, Links } from "@/app/ui/components/nav/Links";
-import { createContext, useMemo, useReducer } from "react";
+import { createContext, useEffect, useMemo, useReducer } from "react";
 
 type StateType = typeof Links;
 
@@ -17,6 +17,7 @@ type ReducerAction = {
 const reducer = (state: StateType, action: ReducerAction): StateType => {
   switch (action.type) {
     case ActionType.SELECT:
+      console.log(`reducer selected page...`);
       state.map((link: Link, key: number) => {
         if (key === action.index) {
           link.selected = true;

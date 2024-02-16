@@ -1,11 +1,7 @@
 "use client";
 
-import React from "react";
+import React, { useContext, useEffect } from "react";
 
 export default function Page(): JSX.Element {
-  return (
-    <>
-      <p>Page</p>
-    </>
-  );
+  return <></>;
 }

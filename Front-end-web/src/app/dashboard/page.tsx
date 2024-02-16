@@ -1,6 +1,12 @@
 "use client";
 
-import { Fragment, useContext, useEffect, useReducer } from "react";
+import {
+  Fragment,
+  useCallback,
+  useContext,
+  useEffect,
+  useReducer,
+} from "react";
 import { NavWeb } from "../ui/components/nav/NavWeb";
 import { NavLinkContext } from "../lib/context/LinkContext";
 import { selectedPage } from "../lib/util/selectedPage";
@@ -8,34 +14,18 @@ import { Title } from "../ui/components/dashboard/Title";
 import { Card } from "../ui/components/dashboard/Card";
 import Link from "next/link";
 
-// Định nghĩa kiểu cho state
-type StateType = {
-  data: string;
-};
-
-const _dispatch = (state: StateType, data: any): StateType => {
-  switch (data.type) {
-    case "FETCH_DATA":
-      return data.payload;
-    case "SET_DATA":
-      return { ...state, data: data.payload };
-    default:
-      return state;
-  }
-};
-
 export default function Dashboard(): JSX.Element {
-  const [state, dispatch] = useReducer(_dispatch, {
-    data: "",
-  });
   const { stateLink, dispatchLink } = useContext(NavLinkContext);
+  const selected = useCallback((index: number): void => {
+    selectedPage(dispatchLink, index);
+  }, []);
+
   useEffect(() => {
-    console.log(stateLink);
-    selectedPage(dispatchLink, 0);
+    selected(0);
   }, []);
 
   return (
-    <Fragment>
+    <>
       <div className="ml-4 mt-4">
         <Title title="Overview" />
         <div className="text-sm text-gray-500">
@@ -103,6 +93,6 @@ export default function Dashboard(): JSX.Element {
           }
         </div>
       </div>
-    </Fragment>
+    </>
   );
 }

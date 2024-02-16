@@ -11,8 +11,9 @@ function CreateShop(req, res) {
     //const isValidEmail = InputValidate("Email", Email);
     const isValidPhone = InputValidate("Phone", Phone);
     let Role = 2;
+
     if (!(isValidPhone)) {
-        let api = API(BAD_REQUEST, "failed", `Input valid fields: ${!isValidPhone ? "Phone " : ""}Invalid Input`, {}, new Date());
+        let api = API(BAD_REQUEST, "failed", `Input valid fields: Phone Invalid Input`, {}, new Date());
         return res.status(BAD_REQUEST).json(api);
     }
 

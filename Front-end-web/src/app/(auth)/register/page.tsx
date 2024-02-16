@@ -1,7 +1,10 @@
 "use client";
-import React from "react";
+import React, { useContext } from "react";
 import { Button, Card, Checkbox, Form, Input, Radio, Select } from "antd";
 import Link from "next/link";
+import { Register } from "@/app/lib/service/user";
+import { NotificationContext } from "@/app/lib/context/NotificationContext";
+import { useRouter } from "next/navigation";
 
 const { Option } = Select;
 
@@ -31,10 +34,7 @@ const tailFormItemLayout = {
 
 const RegisterPage: React.FC = () => {
   const [form] = Form.useForm();
-
-  const onFinish = (values: any) => {
-    console.log("Received values of form: ", values);
-  };
+  const router = useRouter();
 
   const prefixSelector = (
     <Form.Item name="prefix" noStyle>
@@ -43,9 +43,34 @@ const RegisterPage: React.FC = () => {
       </Select>
     </Form.Item>
   );
+  const { apiNotification, contextHolder } = useContext(NotificationContext);
 
+  async function onFinish(values: any) {
+    console.log("Received values of form: ", values);
+    try {
+      let isRegister = await Register(values);
+      if (isRegister.code === 200) {
+        apiNotification.success({
+          message: "Register success!",
+          description: "You have successfully registered!",
+        });
+        router.push("/login");
+      } else {
+        apiNotification.error({
+          message: "Register failed!",
+          description: "Có lỗi xảy ra, vui lòng thử lại sau!",
+        });
+      }
+    } catch (err: any) {
+      apiNotification.error({
+        message: "Register failed!",
+        description: err?.message,
+      });
+    }
+  }
   return (
     <>
+      {contextHolder}
       <div className="flex w-full justify-center items-center md:ml-10">
         <h1 className="text-4xl mb-8 font-sans">Register</h1>
       </div>
