@@ -107,7 +107,8 @@ async function GrantAccessToken(data, callback) {
             };
             let token = await SignToken(payload, timeAccessToken);
             let _data = {
-                accessToken: token
+                accessToken: token,
+                exp: Math.floor(Date.now() + timeAccessToken * 1000 - 4000),
             }
             logInfo(new Date(), "success", "Grant access token successfully", "Grant Access Token");
             callback(null, _data, true);
