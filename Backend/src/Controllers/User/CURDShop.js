@@ -1,7 +1,7 @@
 const hashPassword = require("../../Utils/hashPassword");
 const { InputValidate } = require("../../Utils/validateInput");
 const { OK, INTERNAL_ERROR, BAD_REQUEST, REQUEST_REJECT } = require("../../Configs/HTTPCode");
-const { ServiceCreateShop, ServiceUpdateShop } = require("../../Services/User/Shop/CURDShop");
+const { ServiceCreateShop, ServiceUpdateShop, ServiceReadShop } = require("../../Services/User/Shop/CURDShop");
 const { API } = require("../../Utils/formatApi");
 function CreateShop(req, res) {
     console.log(req.body)
@@ -86,7 +86,21 @@ function UpdateShop(req, res) {
     });
 }
 
+function ReadShop(req, res) {
+    const { id } = req.user;
+    if (!id) {
+        return res.status(BAD_REQUEST).json(API(BAD_REQUEST, "failed", "Missing the input argument", null, new Date()));
+    }
+    ServiceReadShop(id, (err, data) => {
+        if (err) {
+            return res.status(INTERNAL_ERROR).json(API(INTERNAL_ERROR, "error", `${err}`, {}, new Date()));
+        }
+        return res.status(OK).json(API(OK, "success", `Get profile successfully`, data, new Date()));
+    });
+}
+
 module.exports = {
     CreateShop: CreateShop,
-    UpdateShop: UpdateShop
+    UpdateShop: UpdateShop,
+    ReadShop: ReadShop
 }

@@ -1,14 +1,15 @@
 const { GrantAccessToken, Login } = require("../Controllers/Auth");
 const { CreateShipper } = require("../Controllers/User/CURDShipper");
-const { CreateShop, UpdateShop } = require("../Controllers/User/CURDShop");
+const { CreateShop, UpdateShop, ReadShop } = require("../Controllers/User/CURDShop");
 const { VerifyCode, SendCode } = require("../Controllers/User/Verify");
+const { ShopPermission } = require("../MiddleWare/CheckPermission");
 const { VerifyToken } = require("../MiddleWare/VerifyToken");
 const route = require("express").Router();
 
 
 //-----Route for user service-----//
 // Shop
-route.get("/user/shop/:id");
+route.get("/user/shop/", VerifyToken, ShopPermission, ReadShop);
 route.post("/user/shop", CreateShop);
 route.put("/user/shop", UpdateShop);
 route.delete("/user/shop");
@@ -25,7 +26,7 @@ route.put("/user/verify", VerifyCode);
 route.post("/auth/login", Login);
 route.post("/auth/token", GrantAccessToken);
 
-route.get("/test", VerifyToken, (req, res) => {
+route.get("/test", VerifyToken, ShopPermission, (req, res) => {
     console.log(req.user);
     return res.json({ ok: true })
 })
