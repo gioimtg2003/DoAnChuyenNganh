@@ -15,7 +15,6 @@ let Shipper = new mongoose.Schema({
         type: String,
         min: 6,
         max: 100,
-        required: true
     },
     Name: {
         type: String,
@@ -27,6 +26,10 @@ let Shipper = new mongoose.Schema({
         required: true
     },
     Address: {
+        type: String,
+        required: true
+    },
+    Position: {
         type: String,
         required: true
     },
@@ -50,6 +53,10 @@ let Shipper = new mongoose.Schema({
     Delete: {
         type: Boolean,
         default: false,
+    },
+    CreateAt: {
+        type: Date,
+        default: Date.now
     }
 });
 

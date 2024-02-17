@@ -29,6 +29,7 @@ function CreateShipper(req, res) {
         Password: hashPassword.hash(Password),
         Name: Name,
         Phone: Phone,
+        Position: "Shipper",
         Address: Address,
         Verify: false,
         Role: 1
