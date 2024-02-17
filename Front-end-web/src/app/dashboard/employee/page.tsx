@@ -1,15 +1,18 @@
 "use client";
 
 import { selectedPage } from "@/app/lib/util/selectedPage";
-import { useContext, useEffect, useState } from "react";
+import { use, useCallback, useContext, useEffect, useState } from "react";
 import { NavLinkContext } from "@/app/lib/context/LinkContext";
 import { NotificationContext } from "@/app/lib/context/NotificationContext";
 import { DataGridView } from "@/components/dataGridView/DataGridView";
-import { columns, employeeData } from "@/app/lib/data";
+import { columns } from "@/app/lib/data";
 import { ModalPopUp } from "@/app/ui/components/ModalPopUp";
 import { Button, Form, Input, Select } from "antd";
 import { Option } from "antd/es/mentions";
-import type { AddEmployeeFieldType } from "@/app/lib/Types";
+import type { AddEmployeeFieldType, Employee } from "@/app/lib/Types";
+import { useStaff } from "@/app/lib/context/StaffContext";
+import { AddEmployee } from "@/app/lib/service/user";
+import { useFetch } from "@/app/lib/hook/fetch";
 
 const optionDataGridView = {
   gridType: "employee",
@@ -22,28 +25,48 @@ export default function EmployeePage(): JSX.Element {
   const { stateLink, dispatchLink } = useContext(NavLinkContext);
   const { apiNotification, contextHolder } = useContext(NotificationContext);
   const [isOpenPopUp, setIsOpenPopUp] = useState(false);
+  const { state, GetEmployee } = useStaff();
+  const [input, setInput] = useState<string>("");
+  const [reLoad, setReLoad] = useState<boolean | null>(null);
+  const { data: employeeSource } = useFetch("/user/shop/employee", {}, reLoad);
 
   useEffect(() => {
+    window.document.title = "Employee";
     selectedPage(dispatchLink, 1);
-  }, []);
+    GetEmployee(employeeSource as Employee[]);
+  }, [employeeSource, dispatchLink, GetEmployee]);
 
-  const onFinish = (values: any) => {
-    console.log("Success:", values);
+  const onFinish = async (values: AddEmployeeFieldType) => {
+    try {
+      let data = await AddEmployee(values);
+      setIsOpenPopUp(!isOpenPopUp);
+      setReLoad(!reLoad);
+      apiNotification.success({
+        message: "Success",
+        description: data?.message ?? "Success",
+      });
+    } catch (err: any) {
+      apiNotification.error({
+        message: "Error",
+        description: err?.message ?? "Error",
+      });
+    }
   };
 
   const onFinishFailed = (errorInfo: any) => {
     console.log("Failed:", errorInfo);
   };
-  const OnClosePopUp = (): void => {
+  const OnClosePopUp = useCallback(() => {
+    setInput("");
     setIsOpenPopUp(!isOpenPopUp);
-  };
+  }, [isOpenPopUp]);
 
   return (
     <>
       {contextHolder}
       <ModalPopUp open={isOpenPopUp} onClose={OnClosePopUp}>
         <div className="w-full flex justify-center items-center mb-2 text-xl">
-          <p>Thêm mới nhân viên</p>
+          <p>Thêm mới nhân viên {input}</p>
         </div>
 
         <Form
@@ -64,7 +87,12 @@ export default function EmployeePage(): JSX.Element {
                 { required: true, message: "Please input your username!" },
               ]}
             >
-              <Input />
+              <Input
+                value={input}
+                onChange={(e) => {
+                  setInput(e.target.value);
+                }}
+              />
             </Form.Item>
 
             <Form.Item<AddEmployeeFieldType>
@@ -128,7 +156,6 @@ export default function EmployeePage(): JSX.Element {
             rules={[
               {
                 required: true,
-                type: "email",
                 message: "Please input Email!",
               },
             ]}
@@ -166,7 +193,7 @@ export default function EmployeePage(): JSX.Element {
             </div>
             <DataGridView
               columns={columns}
-              dataSources={employeeData}
+              dataSources={state}
               options={optionDataGridView}
             />
           </div>
