@@ -9,17 +9,25 @@ const ParseFile = async (req) => {
             allowEmptyFiles: false,
         }
         const form = new formidable.IncomingForm(options);
-
-        form.parse(req, (err, fields, files) => { });
+        let parserFields = {};
+        form.parse(req, (err, fields) => {
+            parserFields = fields;
+        });
         form.on('error', (err) => {
-            // console.error("Error", err);
-            rej(err);
+            rej(err.message);
         });
 
         form.on('data', data => {
             // console.log("data", data);
             if (data.error === 0) {
-                res(data.value);
+                res({
+                    name: parserFields?.name[0],
+                    price: parserFields?.price[0],
+                    stock: parserFields?.stock[0],
+                    category: parserFields?.category[0],
+                    description: parserFields?.description[0],
+                    image: data.value
+                });
             }
         });
 
@@ -45,6 +53,7 @@ const ParseFile = async (req) => {
                     form.emit('data', { error: 1, value: "failed" });
                 }
             }
+
         });
     })
 };

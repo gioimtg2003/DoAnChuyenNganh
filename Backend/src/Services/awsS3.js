@@ -10,6 +10,7 @@ const client = new S3Client({
         secretAccessKey: secretAccessKey
     }
 });
+// config endpoint access S3: tuong lai
 async function UploadS3(stream, key) {
 
     try {
