@@ -47,7 +47,7 @@ const useStaffContext = (initState: Employee[]) => {
         CreatedAt: dateFormat(item.CreateAt),
       });
     });
-    console.log(staffTemp);
+    // console.log(staffTemp);
     dispatch({ type: EmployeeActionType.GET_EMPLOYEE, payload: staffTemp });
   }, []);
 
