@@ -1,21 +1,10 @@
 const { SchemaAuth } = require("../Models/Auth");
 const { logError, logInfo } = require("../Utils/logger");
-const { SECRET_KEY } = require('../Configs/security.config');
 const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
+const { SchemaShopUser } = require("../Models/Users/ShopModel");
+const { SignToken, payload, HandleToken } = require("./jwt");
 
-let SignToken = (payload, time) => {
-    return new Promise((resolve, reject) => {
-        try {
-            let token = jwt.sign(payload, SECRET_KEY, { algorithm: "HS256", expiresIn: time });
-            resolve(token);
-        } catch (err) {
-            reject(err);
-        }
-    });
-}
-
-let CheckEmail = email => {
+let CheckEmailAuth = email => {
     return new Promise((resolve, reject) => {
         try {
             SchemaAuth.findOne({ Email: email })
@@ -28,55 +17,46 @@ let CheckEmail = email => {
     });
 }
 
-let HandleToken = token => {
+let CheckEmailStore = email => {
+
     return new Promise((resolve, reject) => {
         try {
-            let data = {}
-            jwt.verify(token, SECRET_KEY, (err, decoded) => {
-                if (err) {
-                    data.err = true;
-                    data.msg = err.message;
-                } else if (decoded.refresh) {
-                    data.err = false;
-                    data.id = decoded.id;
-                    data.role = decoded.role;
-                } else if (!decoded.refresh) {
-                    data.err = true;
-                    data.msg = "signature invalid";
-                }
-                resolve(data);
-            });
+            SchemaShopUser.findOne({ Email: email })
+                .then(data => {
+                    if (data && (data.CredentialType === "google" || data.CredentialType === "facebook")) {
+                        resolve(data)
+                    } else {
+                        resolve(false)
+                    }
+                })
+                .catch(err => reject(err));
         } catch (err) {
             reject(err)
         }
-
     });
+}
+
+let CreateToken = async (user) => {
+
+    let timeAccessToken = 60 * 30;
+    let timeRefreshToken = 60 * 60 * 24;
+    let accessToken = await SignToken(payload(user, false), timeAccessToken);
+    let refreshToken = await SignToken(payload(user, false), timeRefreshToken);
+    return {
+        accessToken: accessToken,
+        refreshToken: refreshToken,
+        exp: Math.floor(Date.now() + timeAccessToken * 1000 - 4000),
+    }
 }
 
 async function HandleLogin(data, callback) {
     try {
-        let user = await CheckEmail(data.email);
+        let user = await CheckEmailAuth(data.email);
         if (user) {
             let check = await bcrypt.compareSync(data.password, user.Password);
             if (check) {
-                let payloadAccessToken = {
-                    id: user.idUser,
-                    role: user.Role
-                };
-                let payloadRefreshToken = {
-                    id: user.idUser,
-                    role: user.Role,
-                    refresh: true
-                };
-                let timeAccessToken = 60 * 30;
-                let timeRefreshToken = 60 * 60 * 24;
-                let accessToken = await SignToken(payloadAccessToken, timeAccessToken);
-                let refreshToken = await SignToken(payloadRefreshToken, timeRefreshToken);
-                let _data = {
-                    accessToken: accessToken,
-                    refreshToken: refreshToken,
-                    exp: Math.floor(Date.now() + timeAccessToken * 1000 - 4000),
-                }
+
+                let _data = await CreateToken(user);
                 logInfo(new Date(), "success", "Login Success", "Handle Login");
                 callback(null, _data, true);
             } else {
@@ -119,6 +99,28 @@ async function GrantAccessToken(data, callback) {
     }
 }
 
+
+async function ServiceOauthLogin(data, callback) {
+    try {
+        let user = await CheckEmailStore(data.Email);
+        if (user) {
+            let token = await CreateToken(user);
+            logInfo(new Date, "Success", `User existed: ${user._id}`, "Login Oauth");
+            return callback(null, token);
+        } else {
+            let newShopOwner = new SchemaShopUser(data)
+            let user = await newShopOwner.save();
+            let token = await CreateToken(user);
+            logInfo(new Date, "Success", `Create a user: ${user._id}`, "Login Oauth");
+            return callback(null, token)
+        }
+
+    } catch (err) {
+        logError(new Date, `Create a user Error: ${err}`, "Login Oauth");
+        return callback(err, null)
+    }
+}
+
 module.exports = {
-    HandleLogin, GrantAccessToken
+    HandleLogin, GrantAccessToken, ServiceOauthLogin
 }
