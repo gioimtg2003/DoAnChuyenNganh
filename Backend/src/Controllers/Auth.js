@@ -35,6 +35,15 @@ function GrantAccessToken(req, res) {
     })
 }
 
+function OAuth(req, res) {
+    Service.OAuth(req, (err, data) => {
+        if (err) {
+            return res.status(INTERNAL_ERROR).json(API(INTERNAL_ERROR, "error", err, null, new Date()));
+        }
+        return res.status(OK).json(API(OK, "success", "Login success", data, new Date()));
+    })
+}
+
 module.exports = {
-    Login, GrantAccessToken
+    Login, GrantAccessToken, OAuth
 }
