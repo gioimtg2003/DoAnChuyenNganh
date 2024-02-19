@@ -1,4 +1,5 @@
 const { SchemaShipper } = require("../../Models/Users/ShipperModel");
+const { SchemaShopUser } = require("../../Models/Users/ShopModel");
 const { CheckStore } = require("../../Utils/checkStore");
 const { logInfo, logError } = require("../../Utils/logger");
 
@@ -6,7 +7,12 @@ function CheckEmail(email) {
     return new Promise((res, rej) => {
         try {
             SchemaShipper.findOne({ Email: email })
-                .then(data => !data ? res(false) : res(true))
+                .then(data => {
+                    if (data) {
+                        res(true);
+                    }
+                    SchemaShopUser.findOne({ Email: email }).then(data => !data ? res(false) : res(true)).catch(err => rej(err));
+                })
                 .catch(err => rej(err));
         } catch (err) {
             rej(err);

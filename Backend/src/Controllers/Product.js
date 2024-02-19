@@ -1,6 +1,6 @@
 const { BAD_REQUEST, INTERNAL_ERROR, OK, CREATED } = require("../Configs/HTTPCode");
 const { ParseFile } = require("../MiddleWare/ParseFile");
-const { CreateProductService, ReadAllProductService } = require("../Services/Product");
+const { CreateProductService, ReadAllProductService } = require("../Services/product.service");
 const { API } = require("../Utils/formatApi");
 
 function CreateProduct(req, res) {
@@ -42,14 +42,11 @@ function CreateProduct(req, res) {
 function ReadAllProduct(req, res) {
     const { id } = req.user;
     const { page, limit } = req.query;
-    if (!page || !limit) {
-        return res.status(BAD_REQUEST).json(API(BAD_REQUEST, 'failed', "Missing required fields", null, new Date()));
-    }
 
     let data = {
         idUser: id,
-        page: page,
-        limit: limit
+        page: page || 1,
+        limit: limit || 10
     }
 
     ReadAllProductService(data, (err, data) => {

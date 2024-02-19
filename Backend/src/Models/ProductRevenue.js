@@ -4,13 +4,6 @@ let ProductRevenue = new mongoose.Schema({
     idUser: {
         type: mongoose.Types.ObjectId,
         required: true,
-        unique: true
-    },
-    idProduct: {
-        type: mongoose.Types.ObjectId,
-        required: true,
-        unique: true,
-        ref: 'products'
     },
     Sold: {
         type: Number,

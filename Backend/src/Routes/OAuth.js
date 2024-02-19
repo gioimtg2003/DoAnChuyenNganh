@@ -1,7 +1,7 @@
 
 const passport = require("passport");
 const { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, GOOGLE_CALLBACK_URL } = require("../Configs/oauth.config");
-const { ServiceOauthLogin } = require("../Services/Auth");
+const { ServiceOauthLogin } = require("../Services/auth.service");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const router = require("express").Router();
 passport.use(

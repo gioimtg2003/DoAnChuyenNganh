@@ -1,4 +1,4 @@
-const { UploadS3 } = require('../Services/awsS3');
+const { UploadS3 } = require('../Services/aws.service');
 const formidable = require('formidable');
 const Transform = require('stream').Transform;
 

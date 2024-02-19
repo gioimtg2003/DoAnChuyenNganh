@@ -14,7 +14,6 @@ let Product = new mongoose.Schema({
     Name: {
         type: String,
         required: true,
-        unique: true
     },
     Price: {
         type: Number,

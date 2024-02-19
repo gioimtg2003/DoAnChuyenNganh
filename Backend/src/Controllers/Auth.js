@@ -1,6 +1,6 @@
 const { BAD_REQUEST, INTERNAL_ERROR, UNAUTHORIZED, OK } = require("../Configs/HTTPCode");
 const { API } = require("../Utils/formatApi");
-const Service = require("../Services/Auth");
+const Service = require("../Services/auth.service");
 
 function Login(req, res) {
     const { email, password } = req.body;

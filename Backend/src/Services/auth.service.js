@@ -2,7 +2,7 @@ const { SchemaAuth } = require("../Models/Auth");
 const { logError, logInfo } = require("../Utils/logger");
 const bcrypt = require('bcryptjs');
 const { SchemaShopUser } = require("../Models/Users/ShopModel");
-const { SignToken, payload, HandleToken } = require("./jwt");
+const { SignToken, payload, HandleToken } = require("./jwt.service");
 
 let CheckEmailAuth = email => {
     return new Promise((resolve, reject) => {
@@ -36,6 +36,11 @@ let CheckEmailStore = email => {
     });
 }
 
+/**
+ * hàm này tạo token và trả về token mới gồm access token và refresh token
+ * @param {*} user user data
+ * @returns 
+ */
 let CreateToken = async (user) => {
 
     let timeAccessToken = 60 * 30;
@@ -72,7 +77,11 @@ async function HandleLogin(data, callback) {
         callback(err, null, null);
     }
 }
-
+/**
+ * Hàm này tạo lại access token và trả về thông qua callback
+ * @param {*} data 
+ * @param {*} callback 
+ */
 async function GrantAccessToken(data, callback) {
     try {
         let check = await HandleToken(data);
@@ -99,7 +108,13 @@ async function GrantAccessToken(data, callback) {
     }
 }
 
-
+/**
+ * Nếu user đã tồn tại thì tạo token và trả về.
+ * Ngược lại tạo user mới và trả về token
+ * @param {*} data user data
+ * @param {*} callback callback function
+ * @returns 
+ */
 async function ServiceOauthLogin(data, callback) {
     try {
         let user = await CheckEmailStore(data.Email);

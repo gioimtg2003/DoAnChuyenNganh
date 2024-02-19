@@ -54,10 +54,10 @@ function CreateShop(req, res) {
 function UpdateShop(req, res) {
     const requiredFields = ['Email', 'Name', 'Phone', 'Address', 'Scope', 'ShopName', 'ShopAddress'];
     const { data } = req.body;
-    const { id } = req.body
+    console.log(req.user)
+    const { id } = req.user
     let missingFields = requiredFields.filter(field => !data[field]);
-    console.log(!id && missingFields.length > 0)
-    if (!id || missingFields.length > 0) {
+    if (missingFields.length > 0) {
         return res.status(BAD_REQUEST).json(API(BAD_REQUEST, "failed", "Missing the input argument", null, new Date()));
     }
     //

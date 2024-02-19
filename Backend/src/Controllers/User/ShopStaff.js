@@ -1,4 +1,4 @@
-const { OK, INTERNAL_ERROR, REQUEST_REJECT, BAD_REQUEST } = require("../../Configs/HTTPCode");
+const { OK, INTERNAL_ERROR, REQUEST_REJECT, BAD_REQUEST, CREATED } = require("../../Configs/HTTPCode");
 const { API } = require("../../Utils/formatApi");
 const { GetAllEmployee: ServiceGetAllEmployee, AddEmployee: ServiceAddEmployee } = require("../../Services/User/ShopStaff");
 function GetAllEmployee(req, res) {
@@ -61,8 +61,8 @@ function AddEmployee(req, res) {
                 api
             );
         }
-        let api = API(OK, "success", `Add employee successfully`, data, new Date())
-        return res.status(OK).json(api);
+        let api = API(CREATED, "success", `Add employee successfully`, data, new Date())
+        return res.status(CREATED).json(api);
     });
 }
 
