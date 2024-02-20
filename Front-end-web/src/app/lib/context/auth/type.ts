@@ -4,6 +4,7 @@ import type { ShopUser } from "../../Types";
 export interface AuthState {
   isAuthenticated?: boolean;
   user: ShopUser | null;
+  isLoading?: boolean;
 }
 
 export enum AuthActionType {

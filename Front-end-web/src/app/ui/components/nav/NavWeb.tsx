@@ -1,7 +1,7 @@
 "use client";
 
 import { NavLinkContext, ActionType } from "@/app/lib/context/LinkContext";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { Link as TypeLink } from "./Links";
 import Link from "next/link";
 import Image from "next/image";
@@ -13,6 +13,7 @@ import { FaStore } from "react-icons/fa";
 import { LoginContext } from "@/app/lib/context/LoginContext";
 import { LoginActionType } from "@/app/lib/Types";
 import { useUser } from "@/app/lib/context/UserContext";
+import { useAuth } from "@/app/lib/context/auth/authContext";
 
 const theme = createTheme({
   palette: {

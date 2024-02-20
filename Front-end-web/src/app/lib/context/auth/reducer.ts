@@ -22,6 +22,7 @@ export const reducerAuthHandler = (
       return {
         isAuthenticated: action.payload?.isAuthenticated ?? false,
         user: action.payload?.user ?? null,
+        isLoading: action.payload?.isLoading,
       };
 
     default:
