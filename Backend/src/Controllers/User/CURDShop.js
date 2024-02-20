@@ -1,21 +1,23 @@
 const hashPassword = require("../../Utils/hashPassword");
 const { InputValidate } = require("../../Utils/validateInput");
 const { OK, INTERNAL_ERROR, BAD_REQUEST, REQUEST_REJECT } = require("../../Configs/HTTPCode");
-const { ServiceCreateShop, ServiceUpdateShop } = require("../../Services/User/Shop/CURDShop");
+const { ServiceCreateShop, ServiceUpdateShop, ServiceReadShop } = require("../../Services/User/Shop/CURDShop");
 const { API } = require("../../Utils/formatApi");
 function CreateShop(req, res) {
-    const requiredFields = ['Email', 'Password', 'Name', 'Phone', 'Address', 'Scope', 'ShopName', 'ShopAddress', 'Role'];
+    console.log(req.body)
+    const requiredFields = ['Email', 'Password', 'Name', 'Phone', 'Address', 'Scope', 'ShopName', 'ShopAddress'];
     const { body } = req;
-    const { Email, Password, Name, Phone, Address, Scope, ShopName, ShopAddress, Role } = body;
-    const isValidEmail = InputValidate("Email", Email);
+    const { Email, Password, Name, Phone, Address, Scope, ShopName, ShopAddress } = body;
+    //const isValidEmail = InputValidate("Email", Email);
     const isValidPhone = InputValidate("Phone", Phone);
-    const isValidRole = InputValidate("Role", Role);
-    if (!(isValidEmail && isValidPhone && isValidRole)) {
-        let api = API(BAD_REQUEST, "failed", `Input valid fields: ${!isValidEmail ? "Email " : ""}${!isValidPhone ? "Phone " : ""}${!isValidRole ? "Role " : ""}Invalid Input`, {}, new Date());
+    let Role = 2;
+
+    if (!(isValidPhone)) {
+        let api = API(BAD_REQUEST, "failed", `Input valid fields: Phone Invalid Input`, {}, new Date());
         return res.status(BAD_REQUEST).json(api);
     }
 
-    let missingFields = requiredFields.filter(field => !body[field]);
+    let missingFields = requiredFields.filter(field => body[field] === undefined || body[field] === null);
     if (missingFields.length > 0) {
         let api = API(BAD_REQUEST, "failed", "Missing the fields", {}, new Date())
         return res.status(BAD_REQUEST).json(
@@ -52,10 +54,10 @@ function CreateShop(req, res) {
 function UpdateShop(req, res) {
     const requiredFields = ['Email', 'Name', 'Phone', 'Address', 'Scope', 'ShopName', 'ShopAddress'];
     const { data } = req.body;
-    const { id } = req.body
+    console.log(req.user)
+    const { id } = req.user
     let missingFields = requiredFields.filter(field => !data[field]);
-    console.log(!id && missingFields.length > 0)
-    if (!id || missingFields.length > 0) {
+    if (missingFields.length > 0) {
         return res.status(BAD_REQUEST).json(API(BAD_REQUEST, "failed", "Missing the input argument", null, new Date()));
     }
     //
@@ -85,7 +87,21 @@ function UpdateShop(req, res) {
     });
 }
 
+function ReadShop(req, res) {
+    const { id } = req.user;
+    if (!id) {
+        return res.status(BAD_REQUEST).json(API(BAD_REQUEST, "failed", "Missing the input argument", null, new Date()));
+    }
+    ServiceReadShop(id, (err, data) => {
+        if (err) {
+            return res.status(INTERNAL_ERROR).json(API(INTERNAL_ERROR, "error", `${err}`, {}, new Date()));
+        }
+        return res.status(OK).json(API(OK, "success", `Get profile successfully`, data, new Date()));
+    });
+}
+
 module.exports = {
     CreateShop: CreateShop,
-    UpdateShop: UpdateShop
+    UpdateShop: UpdateShop,
+    ReadShop: ReadShop
 }

@@ -43,6 +43,18 @@ let ShopUser = new mongoose.Schema({
         type: Boolean,
         required: true
     },
+
+    GoogleId: {
+        type: String,
+    },
+    CredentialType: {
+        type: String,
+    },
+    CheckUpdateInfo: {
+        type: Boolean,
+        default: false
+    }
+    ,
     CodeVerify: {
         type: Number,
     },

@@ -1,6 +1,7 @@
 const { SchemaShopUser } = require("../../../Models/Users/ShopModel");
 const { SchemaAuth } = require("../../../Models/Auth");
 const { logInfo, logError } = require("../../../Utils/logger")
+
 async function ServiceCreateShop(data, callback) {
     try {
         let newShopOwner = new SchemaShopUser(data)
@@ -30,6 +31,8 @@ async function ServiceUpdateShop(data, callback) {
         const { id } = data;
         const info = data.data;
         let user = await SchemaShopUser.findOneAndUpdate({ _id: id }, info, { new: true });
+        //Update email in auth service database
+        await SchemaAuth.findOneAndUpdate({ idUser: id }, { Email: info.Email }, { new: true });
         if (user) {
             logInfo(new Date, "Success", `Update a user: ${user._id}`, "Update User");
             callback(null, data);
@@ -43,11 +46,28 @@ async function ServiceUpdateShop(data, callback) {
         callback(err, null);
 
     }
+}
 
+async function ServiceReadShop(data, callback) {
+    try {
+        let user = await SchemaShopUser.findById(data).select({ Password: 0, __v: 0, Delete: 0, Role: 0, Verify: 0, CodeVerify: 0, URIVerify: 0, ExpVerify: 0, Scope: 0 });
+        if (user) {
+            logInfo(new Date, "Success", `Get Profile: ${user._id}`, "Get User");
+            callback(null, user);
+        } else {
+            logInfo(new Date, "Failed", `Get Profile`, "Get User");
+            callback(null, false);
+        }
 
+    }
+    catch (err) {
+        logError(new Date, `Get Profile error: ${err}`, "Get User");
+        callback(err, null);
+    }
 }
 
 module.exports = {
     ServiceCreateShop: ServiceCreateShop,
-    ServiceUpdateShop: ServiceUpdateShop
+    ServiceUpdateShop: ServiceUpdateShop,
+    ServiceReadShop: ServiceReadShop
 }

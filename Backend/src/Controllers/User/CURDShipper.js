@@ -5,14 +5,13 @@ const { API } = require("../../Utils/formatApi");
 const { ServiceCreateShipper } = require("../../Services/User/CURDShipper");
 
 function CreateShipper(req, res) {
-    const requiredFields = ['ShopId', 'Email', 'Password', 'Name', 'Phone', 'Address', 'Role'];
+    const requiredFields = ['ShopId', 'Email', 'Password', 'Name', 'Phone', 'Address'];
     const { body } = req;
-    const { ShopId, Email, Password, Name, Phone, Address, Role } = body;
+    const { ShopId, Email, Password, Name, Phone, Address } = body;
     const isValidEmail = InputValidate("Email", Email);
     const isValidPhone = InputValidate("Phone", Phone);
-    const isValidRole = InputValidate("Role", Role);
-    if (!(isValidPhone && isValidRole)) {
-        let api = API(BAD_REQUEST, "failed", `Input valid fields: ${!isValidEmail ? "Email " : ""}${!isValidPhone ? "Phone " : ""}${!isValidRole ? "Role " : ""}Invalid Input`, {}, new Date());
+    if (!(isValidPhone)) {
+        let api = API(BAD_REQUEST, "failed", `Input valid fields: ${!isValidEmail ? "Email " : ""}${!isValidPhone ? "Phone " : ""}Invalid Input`, {}, new Date());
         return res.status(BAD_REQUEST).json(api);
     }
 
@@ -30,9 +29,10 @@ function CreateShipper(req, res) {
         Password: hashPassword.hash(Password),
         Name: Name,
         Phone: Phone,
+        Position: "Shipper",
         Address: Address,
         Verify: false,
-        Role: Role
+        Role: 1
     };
 
     ServiceCreateShipper(data, (err, data) => {
