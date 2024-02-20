@@ -6,6 +6,7 @@ import { NavWeb } from "../ui/components/nav/NavWeb";
 import { NotificationProvider } from "../lib/context/NotificationContext";
 import { LoginProvider } from "../lib/context/LoginContext";
 import { UserProvider } from "../lib/context/UserContext";
+import { AuthProvider } from "../lib/context/auth/authContext";
 export default function AuthLayout({
   children,
 }: Readonly<{
@@ -16,15 +17,17 @@ export default function AuthLayout({
   }, []);
 
   return (
-    <UserProvider>
-      <NavLinkProvider>
+    <NavLinkProvider>
+      <AuthProvider>
         <LoginProvider>
-          <NotificationProvider>
-            <NavWeb />
-            <div className="pt-20">{children}</div>
-          </NotificationProvider>
+          <UserProvider>
+            <NotificationProvider>
+              <NavWeb />
+              <div className="pt-20">{children}</div>
+            </NotificationProvider>
+          </UserProvider>
         </LoginProvider>
-      </NavLinkProvider>
-    </UserProvider>
+      </AuthProvider>
+    </NavLinkProvider>
   );
 }

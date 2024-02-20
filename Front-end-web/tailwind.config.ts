@@ -18,9 +18,11 @@ const config: Config = {
         "primary-1-color": "#37A4E2",
         "primary-2-color": "#7DCBF7",
         "seconds-color": "#CDDDF1",
+        "background-product": "#f5fafc",
       },
       transitionProperty: {
         border: "border-bottom-width, border-color",
+        with: "width",
       },
     },
   },

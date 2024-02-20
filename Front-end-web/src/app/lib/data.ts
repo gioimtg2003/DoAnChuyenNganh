@@ -7,7 +7,7 @@ export const employeeData = [
     Address: "Quận 9, Thành Phố Thủ Đức",
     Position: "Shipper",
     CreatedAt: "2021-07-01",
-    Status: "Active",
+    Status: "Online",
   },
   {
     Id: "343434",
@@ -17,7 +17,7 @@ export const employeeData = [
     Address: "Quận 9, Thành Phố Thủ Đức",
     Position: "Shipper",
     CreatedAt: "2021-07-01",
-    Status: "Active",
+    Status: "Online",
   },
   {
     Id: "343434",
@@ -27,7 +27,7 @@ export const employeeData = [
     Address: "Quận 9, Thành Phố Thủ Đức",
     Position: "Shipper",
     CreatedAt: "2021-07-01",
-    Status: "Offline",
+    Status: "Online",
   },
   {
     Id: "343434",
@@ -37,7 +37,7 @@ export const employeeData = [
     Address: "Quận 9, Thành Phố Thủ Đức",
     Position: "Shipper",
     CreatedAt: "2021-07-01",
-    Status: "Active",
+    Status: "Online",
   },
   {
     Id: "343434",
@@ -47,7 +47,7 @@ export const employeeData = [
     Address: "Quận 9, Thành Phố Thủ Đức",
     Position: "Shipper",
     CreatedAt: "2021-07-01",
-    Status: "Active",
+    Status: "Online",
   },
 ];
 export const columns = [

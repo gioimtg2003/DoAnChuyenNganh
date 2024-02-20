@@ -176,7 +176,7 @@ export default function EmployeePage(): JSX.Element {
         </Form>
       </ModalPopUp>
       <div className="w-full flex flex-row justify-center items-center">
-        <div className="w-3/4 shadow-xl rounded-md my-8 border-2 border-gray-200 hover:shadow-2xl">
+        <div className="w-4/5 shadow-xl rounded-md my-8 border-2 border-gray-200 hover:shadow-2xl">
           <div className="p-8">
             <div className="w-full flex flex-row items-center justify-between pb-2 border-b-2 border-primary-2-color">
               <div className="text-2xl font-normal">

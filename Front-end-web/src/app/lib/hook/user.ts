@@ -33,4 +33,16 @@ export const useUserSource = () => {
   return user;
 };
 
-export const useUser = () => useContext(UserContext);
+export const useFetchUser = <T>(url: string) => {
+  const [data, setData] = useState<T | null>(null);
+  useEffect(() => {
+    axiosInstance()
+      .get(url)
+      .then((res) => {
+        setData(res.data.data);
+        console.log(res.data.data);
+      })
+      .catch((error) => new Error("Failed to fetch user data"));
+  }, [url]);
+  return data;
+};

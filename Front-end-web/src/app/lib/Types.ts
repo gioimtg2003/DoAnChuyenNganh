@@ -9,9 +9,8 @@ export interface Employee extends User {
   Id: string;
   Position: string;
   income?: number | 0;
-  Status: string | "Offline";
+  Status?: "Online" | "Offline" | string;
   CreatedAt: string;
-  getDetail?: () => void;
 }
 
 export interface OptionsDatagridView {
@@ -21,8 +20,13 @@ export interface OptionsDatagridView {
      * Height of row
      * 14-16-20-24
      */
-    height: number;
+    height?: number;
+    max?: number;
   };
+  pagination?: {
+    pageSize: number;
+  };
+  borderRadius?: number;
 }
 
 export interface AddEmployeeFieldType {
@@ -39,6 +43,12 @@ export interface ShopUser extends User {
   Id: string;
   ShopName: string;
   ShopAddress: string;
+}
+
+export interface DatagridViewColumn {
+  title: string;
+  dataIndex: string;
+  key: string;
 }
 
 export interface ResponseSuccess {
@@ -68,6 +78,13 @@ export type ReducerAction<T, V> = {
   type: T;
   payload: V;
 };
+
+export enum EmployeeActionType {
+  GET_EMPLOYEE,
+  ADD_EMPLOYEE,
+  UPDATE_EMPLOYEE,
+  DELETE_EMPLOYEE,
+}
 
 export enum UserActionType {
   GET_PROFILE,

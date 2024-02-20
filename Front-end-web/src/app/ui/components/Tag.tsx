@@ -11,10 +11,10 @@ import { Tag } from "antd";
 
 export const EmployeeStatus = (status: string): JSX.Element => {
   switch (status) {
-    case "Active":
+    case "Online":
       return (
         <Tag icon={<CheckCircleOutlined />} color="success">
-          Active
+          Online
         </Tag>
       );
     case "Offline":

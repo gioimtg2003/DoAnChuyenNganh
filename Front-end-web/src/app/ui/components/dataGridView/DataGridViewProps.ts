@@ -1,9 +1,24 @@
-import type { Employee, OptionsDatagridView } from "@/app/lib/Types";
+import type {
+  DatagridViewColumn,
+  Employee,
+  OptionsDatagridView,
+} from "@/app/lib/Types";
 
-export interface DataGridViewProps<U extends Employee, V extends any[]> {
-  dataSources: U[];
-  readonly columns: V;
+/**
+ * Props of DataGridView
+ * @param options Options of table
+ * @example
+ * let options: OptionsDatagridView = {
+ *  gridType: "employee",
+ *  pagination: {
+ *   pageSize: 10,
+ *  },
+ * };
+ */
+export interface DataGridViewProps<U extends Employee> {
+  dataSources: U[] | null;
+  readonly columns: DatagridViewColumn[];
   options: OptionsDatagridView;
   onRowClick?: (row: U) => void;
-  onCellClick?: (row: U, column: V) => void;
+  onCellClick?: (row: U, column: DatagridViewColumn) => void;
 }

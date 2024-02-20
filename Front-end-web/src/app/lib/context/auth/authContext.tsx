@@ -56,6 +56,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
           ...user.data.data,
           Id: user.data.data._id,
         };
+        delete userData._id;
+
         dispatchAuth({
           type: AuthActionType.INITIALIZE,
           payload: { user: userData, isAuthenticated: true },

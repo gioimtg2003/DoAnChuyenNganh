@@ -7,19 +7,19 @@ import axios, {
 import { useToken } from "../hook/useToken";
 
 export class Axios {
-  getInstance(): AxiosInstance {
+  getInstance(file?: boolean): AxiosInstance {
     return axios.create({
       baseURL: "http://localhost:3000/api",
-      timeout: 3000,
+      timeout: 10000,
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": file ? "multipart/form-data" : "application/json",
       },
     });
   }
 }
 
-export const axiosInstance = (): AxiosInstance => {
-  let axiosInit = new Axios().getInstance();
+export const axiosInstance = (file?: boolean): AxiosInstance => {
+  let axiosInit = new Axios().getInstance(file ?? false);
   axiosInit.interceptors.request.use(async (config) => {
     const { accessToken, exp } = useToken();
     if (accessToken) {
@@ -34,7 +34,7 @@ export const grantAccessToken = async () => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const { refreshToken, setToken } = useToken();
   try {
-    let data = await new Axios().getInstance().post("/auth/token", {
+    let data = await new Axios().getInstance(false).post("/auth/token", {
       token: refreshToken,
     });
     setToken({

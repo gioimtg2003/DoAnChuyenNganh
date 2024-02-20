@@ -15,7 +15,7 @@ const { routerOauth } = require('./src/Routes/oauth');
 app.use(cors());
 app.use(
     session({
-        secret: "your-secret-key",
+        secret: "my-secret-key",
         resave: true,
         saveUninitialized: true,
     })

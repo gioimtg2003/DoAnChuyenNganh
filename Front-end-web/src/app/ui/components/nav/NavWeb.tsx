@@ -12,6 +12,7 @@ import { createTheme } from "@mui/material/styles";
 import { FaStore } from "react-icons/fa";
 import { LoginContext } from "@/app/lib/context/LoginContext";
 import { LoginActionType } from "@/app/lib/Types";
+import { useUser } from "@/app/lib/context/UserContext";
 
 const theme = createTheme({
   palette: {
@@ -27,6 +28,7 @@ const theme = createTheme({
 export function NavWeb(): JSX.Element {
   const { stateLink, dispatchLink } = useContext(NavLinkContext);
   const { stateLogin, dispatchLogin } = useContext(LoginContext);
+  const { data: user } = useUser();
   return (
     <header className="fixed z-50 top-0 left-0 bg-white w-full h-20 p-0 m-0 border-b-2 border-gray-100 ">
       <div className="flex flex-row  justify-center items-center h-full">
@@ -86,7 +88,7 @@ export function NavWeb(): JSX.Element {
             <div className="w-2/5 flex flex-row justify-center items-center hover:cursor-pointer">
               <FaStore className="size-6 text-primary-1-color" />
               <div className="text-sm ml-2">
-                <p>Shop Thái Công</p>
+                <p>{`Shop ${user?.ShopName}`}</p>
               </div>
             </div>
             <div className="w-1/5 hover:cursor-pointer">
