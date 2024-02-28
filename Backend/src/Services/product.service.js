@@ -1,3 +1,4 @@
+const { SchemaCategory } = require("../Models/Category");
 const { SchemaProduct } = require("../Models/Product");
 const { SchemaProductRevenue } = require("../Models/ProductRevenue");
 const { CheckStore } = require("../Utils/checkStore");
@@ -42,11 +43,11 @@ async function ReadAllProductService(data, callback) {
         if (!check) {
             return callback("You don't have any store", null);
         }
-        let page = parseInt(data.page);
-        let limit = parseInt(data.limit);
-        let skip = (page - 1) * limit;
+        // let page = parseInt(data.page);
+        // let limit = parseInt(data.limit);
+        // let skip = (page - 1) * limit;
 
-        let result = await SchemaProduct
+        let resultProduct = await SchemaProduct
             .aggregate([
                 {
                     $match: { 'idUser': new mongoose.Types.ObjectId(data.idUser) }
@@ -61,7 +62,18 @@ async function ReadAllProductService(data, callback) {
                     }
                 },
                 {
+                    $lookup: {
+                        from: "categories",
+                        localField: "CategoryId",
+                        foreignField: "_id",
+                        as: "CategoryId"
+                    }
+                },
+                {
                     $unwind: "$Revenue"
+                },
+                {
+                    $unwind: "$CategoryId"
                 },
                 {
                     $project: {
@@ -71,25 +83,39 @@ async function ReadAllProductService(data, callback) {
                         "Stock": 1,
                         "Description": 1,
                         "createdAt": 1,
-                        "Revenue": "$Revenue.Revenue"
+                        "Revenue": "$Revenue.Revenue",
+                        "Category": "$CategoryId.Name",
+                        "CategoryId": "$CategoryId._id",
                     }
                 },
+
                 {
                     $sort: { "createdAt": -1 }
                 },
-                {
-                    $skip: skip
-                },
-                {
-                    $limit: limit
-                }
             ])
             .exec();
 
-        await Promise.all(result.map(async (item) => {
+        await Promise.all(resultProduct.map(async (item) => {
             item.ImageUrl = await GetSignedUrl(item.ImageUrl);
         }));
-        return callback(null, result);
+        let resultCategories = await SchemaCategory.aggregate([
+            {
+                $match: { 'idUser': new mongoose.Types.ObjectId(data.idUser) }
+            },
+            {
+                $project: {
+                    "Name": 1,
+                    "_id": 1
+                }
+            }
+        ]);
+        // match with frontend
+        let returnData = {
+            items: resultProduct,
+            total: resultProduct.length,
+            categories: resultCategories
+        }
+        return callback(null, returnData);
 
     }
     catch (err) {

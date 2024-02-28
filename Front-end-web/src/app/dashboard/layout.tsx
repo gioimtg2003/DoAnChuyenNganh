@@ -7,6 +7,8 @@ import { NotificationProvider } from "../lib/context/NotificationContext";
 import { LoginProvider } from "../lib/context/LoginContext";
 import { UserProvider } from "../lib/context/UserContext";
 import { AuthProvider } from "../lib/context/auth/authContext";
+import { ProtectProvider } from "../lib/context/Protect";
+
 export default function AuthLayout({
   children,
 }: Readonly<{
@@ -19,14 +21,16 @@ export default function AuthLayout({
   return (
     <NavLinkProvider>
       <AuthProvider>
-        <LoginProvider>
-          <UserProvider>
-            <NotificationProvider>
-              <NavWeb />
-              <div className="pt-20">{children}</div>
-            </NotificationProvider>
-          </UserProvider>
-        </LoginProvider>
+        <ProtectProvider>
+          <LoginProvider>
+            <UserProvider>
+              <NotificationProvider>
+                <NavWeb />
+                <div className="pt-20">{children}</div>
+              </NotificationProvider>
+            </UserProvider>
+          </LoginProvider>
+        </ProtectProvider>
       </AuthProvider>
     </NavLinkProvider>
   );

@@ -46,7 +46,7 @@ let CreateToken = async (user) => {
     let timeAccessToken = 60 * 30;
     let timeRefreshToken = 60 * 60 * 24;
     let accessToken = await SignToken(payload(user, false), timeAccessToken);
-    let refreshToken = await SignToken(payload(user, false), timeRefreshToken);
+    let refreshToken = await SignToken(payload(user, true), timeRefreshToken);
     return {
         accessToken: accessToken,
         refreshToken: refreshToken,

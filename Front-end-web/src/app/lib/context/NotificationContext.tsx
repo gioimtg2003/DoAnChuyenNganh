@@ -7,7 +7,6 @@ export function NotificationProvider({
   children,
 }: Readonly<{ children: React.ReactNode }>): JSX.Element {
   const [apiNotification, contextHolder] = notification.useNotification();
-
   const NotificationContextProviderValue = useMemo(
     () => ({ apiNotification, contextHolder }),
     [apiNotification, contextHolder]

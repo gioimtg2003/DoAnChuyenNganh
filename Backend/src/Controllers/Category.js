@@ -4,12 +4,12 @@ const { API } = require("../Utils/formatApi");
 
 function CreateCategory(req, res) {
     const { id } = req.user;
-    const { name, description } = req.body;
-    if (!name) return res.json(API(BAD_REQUEST, "failed", "missing the fields", null, new Date()));
+    const { Name, Description } = req.body;
+    if (!Name) return res.status(BAD_REQUEST).json(API(BAD_REQUEST, "failed", "missing the fields", null, new Date()));
     let data = {
         idUser: id,
-        Name: name,
-        Description: description ?? ""
+        Name: Name,
+        Description: Description ?? ""
     }
 
     CreateCategoryService(data, (err, data) => {

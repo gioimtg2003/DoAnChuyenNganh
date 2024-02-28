@@ -2,6 +2,7 @@ import type {
   DatagridViewColumn,
   Employee,
   OptionsDatagridView,
+  Product,
 } from "@/app/lib/Types";
 
 /**
@@ -16,7 +17,7 @@ import type {
  * };
  */
 export interface DataGridViewProps<U extends Employee> {
-  dataSources: U[] | null;
+  dataSources: U[] | null | any;
   readonly columns: DatagridViewColumn[];
   options: OptionsDatagridView;
   onRowClick?: (row: U) => void;

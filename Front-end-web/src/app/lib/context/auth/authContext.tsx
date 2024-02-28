@@ -15,6 +15,7 @@ import { axiosInstance } from "../../util/axios";
 const initialState: AuthState = {
   isAuthenticated: false,
   user: null,
+  isLoading: true,
 };
 
 const authContext = createContext<AuthContextType>({
@@ -38,7 +39,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const handleInitialize = useCallback(() => {
     dispatchAuth({
       type: AuthActionType.INITIALIZE,
-      payload: { isAuthenticated: false, user: null },
+      payload: { isAuthenticated: false, user: null, isLoading: false },
     });
   }, []);
 
@@ -57,10 +58,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
           Id: user.data.data._id,
         };
         delete userData._id;
-
         dispatchAuth({
           type: AuthActionType.INITIALIZE,
-          payload: { user: userData, isAuthenticated: true },
+          payload: { user: userData, isAuthenticated: true, isLoading: false },
         });
       } catch {
         handleInitialize();

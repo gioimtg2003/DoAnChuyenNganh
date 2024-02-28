@@ -26,6 +26,16 @@ export interface OptionsDatagridView {
   pagination?: {
     pageSize: number;
   };
+  style?: {
+    header?: {
+      textHeaderColor?: string;
+      bgColor?: string;
+      height?: number;
+    };
+    column?: {
+      width?: boolean;
+    };
+  };
   borderRadius?: number;
 }
 
@@ -36,6 +46,13 @@ export interface AddEmployeeFieldType {
   Phone: string;
   Email: string;
   Address: string;
+}
+export interface AddProductFieldType {
+  Name: string;
+  Price: number;
+  Stock: number;
+  Category: string;
+  Image: any;
 }
 
 export interface ShopUser extends User {
@@ -49,6 +66,9 @@ export interface DatagridViewColumn {
   title: string;
   dataIndex: string;
   key: string;
+  style?: {
+    width?: string;
+  };
 }
 
 export interface ResponseSuccess {
@@ -105,4 +125,18 @@ export enum UserActionType {
   UPDATE_CATEGORY,
   DELETE_CATEGORY,
   GET_CATEGORY,
+}
+
+export interface Product {
+  Id?: string;
+  _id: string;
+  Name: any;
+  Price: number;
+  Stock: number;
+  Description: string;
+  Category: string;
+  CategoryId: string;
+  ImageUrl: string;
+  createdAt: string;
+  Revenue: number;
 }

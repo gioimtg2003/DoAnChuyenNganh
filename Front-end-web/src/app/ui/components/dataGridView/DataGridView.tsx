@@ -1,5 +1,5 @@
 import { DataGridViewProps } from "./DataGridViewProps";
-import type { Employee } from "@/app/lib/Types";
+import type { DatagridViewColumn, Employee } from "@/app/lib/Types";
 import { EmployeeStatus, OrderStatus } from "@/components/Tag";
 
 export function DataGridView({
@@ -9,17 +9,25 @@ export function DataGridView({
 }: Readonly<DataGridViewProps<Employee>>): JSX.Element {
   return (
     <table
-      className={` w-full table-auto border-separate border-spacing-0 max-md:border-spacing-1 mt-6`}
+      className={` w-full table-auto border-separate border-spacing-0 max-md:border-spacing-1 mt-6 rounded-md`}
     >
-      <thead>
-        <tr>
-          <th className="text-center">STT</th>
-          {columns.map((column: any, index: number) => (
-            <th key={index}>{column["title"]}</th>
+      <thead className={`${options?.style?.header?.bgColor} `}>
+        <tr
+          className={`${options?.style?.header?.textHeaderColor} h-${options?.style?.header?.height}`}
+        >
+          <th
+            className={`text-center ${options.style?.column?.width && "w-1/12"}`}
+          >
+            STT
+          </th>
+          {columns.map((column: DatagridViewColumn, index: number) => (
+            <th key={index} className={`${column?.style?.width ?? ""}`}>
+              {column["title"]}
+            </th>
           ))}
         </tr>
       </thead>
-      <tbody>
+      <tbody className="bg-white">
         {dataSources?.map((dataSource: any, index: number) => {
           let tag: any;
           return (

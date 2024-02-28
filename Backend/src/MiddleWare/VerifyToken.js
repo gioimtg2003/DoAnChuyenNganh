@@ -26,7 +26,6 @@ const HandleToken = token => {
 
 async function VerifyToken(req, res, next) {
     const nonSecure = ["/", "/auth/login", "/user/shop", "/auth/token"]
-
     if (nonSecure.includes(req.path) && req.method === "POST") {
         return next();
     }

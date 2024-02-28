@@ -1,5 +1,5 @@
 import { CloseCircleOutlined } from "@ant-design/icons";
-
+import style from "./styles.module.css";
 export function ModalPopUp({
   open,
   children,
@@ -11,11 +11,11 @@ export function ModalPopUp({
 }>): JSX.Element {
   return (
     <div
-      className={`transition-opacity fixed flex inset-0 justify-center items-center bg-black/15 ${open ? "" : "hidden"} z-50`}
+      className={`transition-opacity fixed flex flex-row inset-0 justify-center items-center bg-black/15 ${open ? "" : "hidden"} z-50 `}
       onClick={onClose}
     >
       <div
-        className="bg-white p-6 rounded-md shadow-xl"
+        className={`bg-white p-6 rounded-md shadow-xl ${style.AnimationPopUpOpen}`}
         onClick={(e) => {
           e.stopPropagation();
         }}

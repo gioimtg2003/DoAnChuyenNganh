@@ -1,12 +1,12 @@
 "use client";
 
 import { selectedPage } from "@/app/lib/util/selectedPage";
-import { use, useCallback, useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { NavLinkContext } from "@/app/lib/context/LinkContext";
 import { NotificationContext } from "@/app/lib/context/NotificationContext";
 import { DataGridView } from "@/components/dataGridView/DataGridView";
 import { columns } from "@/app/lib/data";
-import { ModalPopUp } from "@/app/ui/components/ModalPopUp";
+import { ModalPopUp } from "@/app/ui/components/modal/ModalPopUp";
 import { Button, Form, Input, Select } from "antd";
 import { Option } from "antd/es/mentions";
 import type { AddEmployeeFieldType, Employee } from "@/app/lib/Types";
@@ -22,13 +22,13 @@ const optionDataGridView = {
 };
 
 export default function EmployeePage(): JSX.Element {
-  const { stateLink, dispatchLink } = useContext(NavLinkContext);
   const { apiNotification, contextHolder } = useContext(NotificationContext);
   const [isOpenPopUp, setIsOpenPopUp] = useState(false);
   const { state, GetEmployee } = useStaff();
-  const [input, setInput] = useState<string>("");
   const [reLoad, setReLoad] = useState<boolean | null>(null);
   const { data: employeeSource } = useFetch("/user/shop/employee", {}, reLoad);
+  const { stateLink, dispatchLink } = useContext(NavLinkContext);
+  const [form] = Form.useForm();
 
   useEffect(() => {
     window.document.title = "Employee";
@@ -39,6 +39,7 @@ export default function EmployeePage(): JSX.Element {
   const onFinish = async (values: AddEmployeeFieldType) => {
     try {
       let data = await AddEmployee(values);
+      form.resetFields();
       setIsOpenPopUp(!isOpenPopUp);
       setReLoad(!reLoad);
       apiNotification.success({
@@ -57,7 +58,6 @@ export default function EmployeePage(): JSX.Element {
     console.log("Failed:", errorInfo);
   };
   const OnClosePopUp = useCallback(() => {
-    setInput("");
     setIsOpenPopUp(!isOpenPopUp);
   }, [isOpenPopUp]);
 
@@ -66,10 +66,11 @@ export default function EmployeePage(): JSX.Element {
       {contextHolder}
       <ModalPopUp open={isOpenPopUp} onClose={OnClosePopUp}>
         <div className="w-full flex justify-center items-center mb-2 text-xl">
-          <p>Thêm mới nhân viên {input}</p>
+          <p>Thêm mới nhân viên </p>
         </div>
 
         <Form
+          form={form}
           name="basic"
           style={{ maxWidth: 500 }}
           initialValues={{ position: "shipper" }}
@@ -87,12 +88,7 @@ export default function EmployeePage(): JSX.Element {
                 { required: true, message: "Please input your username!" },
               ]}
             >
-              <Input
-                value={input}
-                onChange={(e) => {
-                  setInput(e.target.value);
-                }}
-              />
+              <Input />
             </Form.Item>
 
             <Form.Item<AddEmployeeFieldType>

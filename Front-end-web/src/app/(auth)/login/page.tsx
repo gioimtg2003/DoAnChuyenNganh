@@ -4,6 +4,7 @@ import { Button, Checkbox, Form, Input, message } from "antd";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Login } from "@/app/lib/service/auth";
+import Image from "next/image";
 
 const onFinishFailed = (errorInfo: any) => {
   console.log("Failed:", errorInfo);
@@ -101,6 +102,30 @@ function LoginPage(): JSX.Element {
             </Button>
           </div>
         </Form.Item>
+        <Form.Item
+          wrapperCol={{
+            sm: {
+              offset: 8,
+              span: 16,
+            },
+          }}
+        >
+          <div className="sm:flex w-full items-center justify-center">
+            <Link
+              href="http://localhost:3000/oauth/login/google"
+              className="w-full flex justify-center items-center p-3 shadow-lg hover:cursor-pointer hover:text-gray-700 font-semibold border-2 border-gray-200 text-md"
+            >
+              <Image
+                src="/images/icon-google.png"
+                alt="google"
+                width={20}
+                height={20}
+              />
+              <button className="ml-4">Đăng nhập với google</button>
+            </Link>
+          </div>
+        </Form.Item>
+
         <p className="text-center">
           Bạn chưa có tài khoản?{" "}
           <Link href="/register" className="text-blue-600">
