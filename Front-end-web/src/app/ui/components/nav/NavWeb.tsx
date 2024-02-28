@@ -36,8 +36,8 @@ export function NavWeb(): JSX.Element {
     <>
       {contextHolder}
       <header className="fixed z-50 top-0 left-0 bg-white w-full h-20 p-0 m-0 border-b-2 border-gray-100 ">
-        <div className="flex flex-row  justify-center items-center h-full">
-          <div className="w-2/12">
+        <div className="flex flex-row  justify-center items-center h-full max-sm:justify-between max-sm:px-1">
+          <div className="md:w-2/12">
             <div className="w-full flex flex-row justify-center items-center">
               <div className="w-4/12">
                 <Image
@@ -49,7 +49,7 @@ export function NavWeb(): JSX.Element {
                 />
               </div>
               <div className="w-8/12">
-                <h1 className="text-lg font-bold text-primary-1-color hover:cursor-pointer">
+                <h1 className="text-lg font-bold text-primary-1-color hover:cursor-pointer max-sm:text-sm">
                   Quản lý giao hàng
                 </h1>
               </div>
@@ -88,7 +88,7 @@ export function NavWeb(): JSX.Element {
               );
             })}
           </nav>
-          <div className="w-4/12">
+          <div className="md:w-4/12">
             <div className="w-full flex flex-row justify-between items-center p-4">
               <div className="w-2/5 flex flex-row justify-center items-center hover:cursor-pointer">
                 <FaStore className="size-6 text-primary-1-color" />
