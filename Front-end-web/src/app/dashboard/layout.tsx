@@ -8,6 +8,7 @@ import { LoginProvider } from "../lib/context/LoginContext";
 import { UserProvider } from "../lib/context/UserContext";
 import { AuthProvider } from "../lib/context/auth/authContext";
 import { ProtectProvider } from "../lib/context/Protect";
+
 export default function AuthLayout({
   children,
 }: Readonly<{

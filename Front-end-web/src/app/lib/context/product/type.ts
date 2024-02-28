@@ -19,6 +19,7 @@ export enum ProductActionType {
   SET_PRODUCT,
   SEARCH_PRODUCT,
   FILTER,
+  RELOAD,
 }
 
 export interface ProductAction {

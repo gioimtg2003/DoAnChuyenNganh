@@ -29,6 +29,11 @@ export const ReducerProduct = (
         ...state,
         filter: action.payload?.filter || null,
       };
+    case ProductActionType.RELOAD:
+      return {
+        ...state,
+        reload: !state.reload,
+      };
     default:
       return state;
   }

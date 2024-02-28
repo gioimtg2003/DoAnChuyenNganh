@@ -41,19 +41,27 @@ function useProductSource() {
         });
       });
   }, [state.reload]);
-
-  const setFilter = useCallback((type: filterType, value: string) => {
-    let payload: any = {
-      filter: {
-        type: type,
-        value: value,
-      },
-    };
+  const reload = useCallback(() => {
     dispatch({
-      type: ProductActionType.FILTER,
-      payload: payload,
+      type: ProductActionType.RELOAD,
     });
   }, []);
+
+  const setFilter = useCallback(
+    (type: filterType, value: string) => {
+      let payload: any = {
+        filter: {
+          type: type,
+          value: value,
+        },
+      };
+      dispatch({
+        type: ProductActionType.FILTER,
+        payload: payload,
+      });
+    },
+    [state.filter]
+  );
 
   const ProductState = useMemo(() => {
     if (state.filter?.type === "category" && state.filter?.value) {
@@ -61,14 +69,18 @@ function useProductSource() {
         item.CategoryId.includes(state.filter?.value ?? "")
       );
     } else if (state.filter?.type === "revenue") {
-      return state.items?.sort((a, b) => b.Revenue - a.Revenue);
+      return state.filter?.value === "MAX_TO_MIN"
+        ? state.items?.sort((a, b) => b.Revenue - a.Revenue)
+        : state.items?.sort((a, b) => a.Revenue - b.Revenue);
     } else if (state.filter?.type === "price") {
-      return state.items?.sort((a, b) => a.Price - b.Price);
+      return state.filter?.value === "MAX_TO_MIN"
+        ? state.items?.sort((a, b) => b.Price - a.Price)
+        : state.items?.sort((a, b) => a.Price - b.Price);
     }
     return state.items;
   }, [state.items, state.filter]);
 
-  return { ProductState, setFilter, Categories: state.categories };
+  return { ProductState, setFilter, Categories: state.categories, reload };
 }
 
 type ProductContextType = ReturnType<typeof useProductSource>;

@@ -1,0 +1,12 @@
+button,
+[type="button"],
+[type="reset"],
+[type="submit"] {
+  -webkit-appearance: button; /* 1 */
+  background-color: #1890ff;
+  background-image: none; /* 2 */
+}
+
+.ant-btn-primary {
+  color: #fff;
+}

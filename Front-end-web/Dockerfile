@@ -9,7 +9,8 @@ WORKDIR /app
 COPY package.json package-lock.json*  ./
 # Omit --production flag for TypeScript devDependencies
 RUN \
-  if [ -f package-lock.json ]; then npm ci; 
+  if [ -f package-lock.json ]; then npm ci; \
+  fi
 
 COPY src ./src
 COPY public ./public
@@ -17,7 +18,7 @@ COPY next.config.mjs .
 COPY tsconfig.json .
 COPY postcss.config.js .
 COPY tailwind.config.ts .
-COPY perttier.config.js .
+# COPY perttier.config.js .
 # Environment variables must be present at build time
 # https://github.com/vercel/next.js/discussions/14030
 ARG ENV_VARIABLE
@@ -30,15 +31,13 @@ ENV NEXT_PUBLIC_ENV_VARIABLE=${NEXT_PUBLIC_ENV_VARIABLE}
 # ENV NEXT_TELEMETRY_DISABLED 1
 
 # Build Next.js based on the preferred package manager
-RUN \
-  if [ -f package-lock.json ]; then npm run build; \
-  else npm run build; \
-  fi
+RUN if [ -f package-lock.json ]; then npm ci; fi
 
+RUN npm run build
 # Note: It is not necessary to add an intermediate step that does a full copy of `node_modules` here
 
 # Step 2. Production image, copy all the files and run next
-FROM base AS runner
+FROM base AS runnerrr
 
 WORKDIR /app
 
