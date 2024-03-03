@@ -1,4 +1,3 @@
-const { SchemaCustomer } = require("../../Models/Customer");
 const { SchemaOrder } = require("../../Models/Order");
 const { CheckStore } = require("../../Utils/checkStore");
 const { logError, logInfo } = require("../../Utils/logger");
@@ -11,11 +10,7 @@ async function CreateOrderService(data, callback) {
             return callback("Store not found", null);
         }
 
-        let customer = new SchemaCustomer(data.customer);
-        let newCustomer = await customer.save();
-
-        data.order.CustomerId = newCustomer._id;
-        let order = new SchemaOrder(data.order);
+        let order = new SchemaOrder(data);
         let newOrder = await order.save();
         logInfo(new Date(), "success", "Create order successfully", "CreateOrderService");
         return callback(null, newOrder);
