@@ -1,7 +1,7 @@
 const { GrantAccessToken, Login } = require("../Controllers/Auth");
 const { CreateCategory } = require("../Controllers/Category");
 const { CreateOrder } = require("../Controllers/Order");
-const { CreateProduct, ReadAllProduct } = require("../Controllers/Product");
+const { CreateProduct, ReadAllProduct, DeleteProduct } = require("../Controllers/Product");
 const { CreateShipper } = require("../Controllers/User/CURDShipper");
 const { CreateShop, UpdateShop, ReadShop } = require("../Controllers/User/CURDShop");
 const { GetAllEmployee, AddEmployee } = require("../Controllers/User/ShopStaff");
@@ -36,7 +36,7 @@ route.post("/auth/token", GrantAccessToken);
 route.get("/product", ShopPermission, ReadAllProduct);
 route.post("/product", ShopPermission, CreateProduct,);
 route.put("/product");
-route.delete("/product");
+route.delete("/product", ShopPermission, DeleteProduct);
 
 //-----Route for category service-----//
 route.get("/category");

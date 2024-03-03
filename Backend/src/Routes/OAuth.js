@@ -55,7 +55,7 @@ passport.deserializeUser((user, callback) => {
 
 router.get("/oauth/login/google", passport.authenticate("google", { scope: ['profile', 'email'] }));
 router.get("/oauth/login/failure", (req, res) => {
-    return res.status(401).send("<h1>Login Failure</h1>");
+    return res.status(401).send("<h1>Login google Failure</h1>");
 });
 router.get("/oauth/google/callback", passport.authenticate("google", {
     failureMessage: "Cannot login google",

@@ -1,6 +1,6 @@
 const { BAD_REQUEST, INTERNAL_ERROR, OK, CREATED } = require("../Configs/HTTPCode");
 const { ParseFile } = require("../MiddleWare/ParseFile");
-const { CreateProductService, ReadAllProductService } = require("../Services/product.service");
+const { CreateProductService, ReadAllProductService, DeleteProductService } = require("../Services/product.service");
 const { API } = require("../Utils/formatApi");
 
 function CreateProduct(req, res) {
@@ -58,4 +58,23 @@ function ReadAllProduct(req, res) {
 
 }
 
-module.exports = { CreateProduct, ReadAllProduct }
+function DeleteProduct(req, res) {
+
+    const { id } = req.user;
+    const { idProduct } = req.body;
+    if (!idProduct) {
+        return res.status(BAD_REQUEST).json(API(BAD_REQUEST, 'failed', "Missing required fields", null, new Date()));
+    }
+    let data = {
+        idUser: id,
+        idProduct: idProduct
+    }
+
+    DeleteProductService(data, (err, result) => {
+        if (err) {
+            return res.status(INTERNAL_ERROR).json(API(INTERNAL_ERROR, 'failed', err, null, new Date()));
+        }
+        return res.status(OK).json(API(OK, 'success', 'Delete product successfully', result, new Date()));
+    })
+}
+module.exports = { CreateProduct, ReadAllProduct, DeleteProduct }

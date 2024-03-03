@@ -29,7 +29,7 @@ let Order = new mongoose.Schema({
         type: Number,
         required: true
     },
-    AmountReduced: {
+    ReducedAmount: {
         type: Number,
         required: true
     },
