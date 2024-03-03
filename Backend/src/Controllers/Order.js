@@ -9,24 +9,22 @@ function CreateOrder(req, res) {
     if (requiredFields.includes(undefined)) return res.json(API(BAD_REQUEST, "failed", "missing the fields", null, new Date()));
     // remember validate the fields
     let data = {
-        customer: {
-            idUser: id,
+        idUser: id,
+        ProductId,
+        Customer: {
             Name,
             Phone,
             Address
         },
-        order: {
-            idUser: id,
-            ProductId,
-            AmountReduced,
-            ShippingAmount,
-            Quantity,
-            Price,
-            AmountTotal: (Price * Quantity) - AmountReduced + ShippingAmount,
-            Status: "Pending",
-            PaymentMethod: "Cash",
-            Description: Description ?? ""
-        }
+        AmountReduced,
+        ShippingAmount,
+        Quantity,
+        Price,
+        AmountTotal: (Price * Quantity) - AmountReduced + ShippingAmount,
+        Status: "Pending",
+        PaymentMethod: "Cash",
+        Description: Description ?? ""
+
     }
 
     CreateOrderService(data, (err, data) => {

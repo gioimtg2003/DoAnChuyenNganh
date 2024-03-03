@@ -11,10 +11,19 @@ let Order = new mongoose.Schema({
         required: true,
         ref: 'products'
     },
-    CustomerId: {
-        type: mongoose.Types.ObjectId,
-        required: true,
-        ref: 'customers'
+    Customer: {
+        Name: {
+            type: String,
+            required: true
+        },
+        Phone: {
+            type: String,
+            required: true
+        },
+        Address: {
+            type: String,
+            required: true
+        }
     },
     Price: {
         type: Number,
@@ -49,6 +58,24 @@ let Order = new mongoose.Schema({
     Description: {
         type: String,
         required: true
+    },
+    Date: {
+        DeliveryDate: {
+            type: Date,
+            required: true
+        },
+        OrderDate: {
+            type: Date,
+            default: Date.now
+        },
+        CompletedDate: {
+            type: Date,
+            default: null
+        },
+        CancelDate: {
+            type: Date,
+            default: null
+        },
     }
 });
 

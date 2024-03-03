@@ -15,6 +15,7 @@ export default function Dashboard(): JSX.Element {
   }, []);
 
   useEffect(() => {
+    document.title = "Dashboard";
     selected(0);
   }, []);
 

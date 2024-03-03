@@ -1,5 +1,4 @@
 "use client";
-import { useEffect } from "react";
 import { useAuth } from "./auth/authContext";
 
 export const ProtectProvider: React.FC<{ children: React.ReactNode }> = ({
@@ -7,7 +6,7 @@ export const ProtectProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const { isAuthenticated, isLoading } = useAuth();
   if (isAuthenticated === false && isLoading === false) {
-    console.log("protectttt success", isAuthenticated);
+    //console.log("protectttt success", isAuthenticated);
     window.location.href = "/login";
   }
 

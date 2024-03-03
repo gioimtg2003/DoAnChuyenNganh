@@ -1,7 +1,7 @@
 "use client";
 
 import { NavLinkContext, ActionType } from "@/app/lib/context/LinkContext";
-import { useContext, useEffect } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { Link as TypeLink } from "./Links";
 import Link from "next/link";
 import Image from "next/image";
@@ -15,6 +15,9 @@ import { LoginActionType } from "@/app/lib/Types";
 import { useUser } from "@/app/lib/context/UserContext";
 import { useAuth } from "@/app/lib/context/auth/authContext";
 import { NotificationContext } from "@/app/lib/context/NotificationContext";
+import { FaBars } from "react-icons/fa";
+import { SideBar } from "../sidebar/SideBar";
+
 const theme = createTheme({
   palette: {
     primary: {
@@ -31,13 +34,19 @@ export function NavWeb(): JSX.Element {
   const { stateLogin, dispatchLogin } = useContext(LoginContext);
   const { apiNotification, contextHolder } = useContext(NotificationContext);
   const { data: user } = useUser();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const handleSideBar = useCallback(() => {
+    setSidebarOpen(!sidebarOpen);
+  }, [sidebarOpen]);
 
   return (
     <>
       {contextHolder}
       <header className="fixed z-50 top-0 left-0 bg-white w-full h-20 p-0 m-0 border-b-2 border-gray-100 ">
-        <div className="flex flex-row  justify-center items-center h-full">
-          <div className="w-2/12">
+        <div
+          className={`flex flex-row  justify-center items-center h-full max-sm:justify-between max-sm:px-1 ${sidebarOpen && "hidden"}`}
+        >
+          <div className="md:w-2/12">
             <div className="w-full flex flex-row justify-center items-center">
               <div className="w-4/12">
                 <Image
@@ -49,7 +58,7 @@ export function NavWeb(): JSX.Element {
                 />
               </div>
               <div className="w-8/12">
-                <h1 className="text-lg font-bold text-primary-1-color hover:cursor-pointer">
+                <h1 className="text-lg font-bold text-primary-1-color hover:cursor-pointer max-sm:text-sm">
                   Quản lý giao hàng
                 </h1>
               </div>
@@ -88,15 +97,15 @@ export function NavWeb(): JSX.Element {
               );
             })}
           </nav>
-          <div className="w-4/12">
+          <div className="sm:w-4/12">
             <div className="w-full flex flex-row justify-between items-center p-4">
-              <div className="w-2/5 flex flex-row justify-center items-center hover:cursor-pointer">
+              <div className="sm:w-2/5 flex flex-row justify-center items-center hover:cursor-pointer">
                 <FaStore className="size-6 text-primary-1-color" />
                 <div className="text-sm ml-2">
                   <p>{`${user?.Name}`}</p>
                 </div>
               </div>
-              <div className="w-1/5 hover:cursor-pointer">
+              <div className="w-1/5 hover:cursor-pointer max-sm:hidden">
                 <ThemeProvider theme={theme}>
                   <Badge color="primary" badgeContent={10} max={9}>
                     <NotificationsActiveIcon className="size-6 text-gray-600" />
@@ -104,7 +113,7 @@ export function NavWeb(): JSX.Element {
                 </ThemeProvider>
               </div>
               <div
-                className="w-2/5 hover:cursor-pointer flex flex-row justify-center items-center"
+                className="w-2/5 hover:cursor-pointer flex flex-row justify-center items-center max-sm:hidden"
                 onClick={() => {
                   dispatchLogin({ type: LoginActionType.LOGOUT });
                 }}
@@ -112,8 +121,18 @@ export function NavWeb(): JSX.Element {
                 <p>Logout</p>
                 <IoLogOutOutline className="size-6 ml-4" />
               </div>
+              <div className="ml-4 text-primary-1-color hover:cursor-pointer sm:hidden">
+                <FaBars
+                  onClick={() => {
+                    handleSideBar();
+                  }}
+                />
+              </div>
             </div>
           </div>
+        </div>
+        <div className="block sm:hidden">
+          <SideBar open={sidebarOpen} onClose={handleSideBar} />
         </div>
       </header>
     </>
