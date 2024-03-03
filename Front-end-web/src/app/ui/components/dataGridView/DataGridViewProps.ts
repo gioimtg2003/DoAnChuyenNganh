@@ -16,8 +16,8 @@ import type {
  *  },
  * };
  */
-export interface DataGridViewProps<U extends Employee> {
-  dataSources: U[] | null | any;
+export interface DataGridViewProps<U> {
+  dataSources: any[] | undefined;
   readonly columns: DatagridViewColumn[];
   options: OptionsDatagridView;
   onRowClick?: (row: U) => void;

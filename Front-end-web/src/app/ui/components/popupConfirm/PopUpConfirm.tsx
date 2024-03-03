@@ -8,6 +8,7 @@ const PopUpConfirm: React.FC<props> = ({
   title,
   children,
   message,
+  data,
   onConfirm,
 }) => {
   const [open, setOpen] = useState(false);
@@ -23,15 +24,12 @@ const PopUpConfirm: React.FC<props> = ({
     setOpen(true);
   }, []);
 
-  const onConfirmAndClose = useCallback(
-    (e: any) => {
-      if (e && onConfirm) {
-        onConfirm(e);
-      }
-      onClose();
-    },
-    [onConfirm, onClose]
-  );
+  const onConfirmAndClose = useCallback(() => {
+    if (data && onConfirm) {
+      onConfirm(data);
+    }
+    onClose();
+  }, [onConfirm, onClose, data]);
 
   const handleClickOutside = useCallback(
     (e: MouseEvent) => {

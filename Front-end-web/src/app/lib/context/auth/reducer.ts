@@ -18,7 +18,6 @@ export const reducerAuthHandler = (
       };
 
     case AuthActionType.INITIALIZE:
-      console.log(action.payload);
       return {
         isAuthenticated: action.payload?.isAuthenticated ?? false,
         user: action.payload?.user ?? null,

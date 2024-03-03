@@ -1,3 +1,5 @@
+import { AiOutlineCloudUpload } from "react-icons/ai";
+
 interface UploadFileProps {
   setFile: any;
   url?: any;
@@ -9,9 +11,10 @@ const UploadFile: React.FC<UploadFileProps> = ({ setFile, url }) => {
       <div className="w-10/12">
         <label
           htmlFor="file-input"
-          className="w-1/4 text-white py-2 px-4 rounded-md bg-blue-500 hover:cursor-pointer hover:bg-blue-600 hover:shadow-lg transition-all duration-300 ease-in-out"
+          className="w-2/6 text-white py-2 px-4 rounded-md bg-blue-500 hover:cursor-pointer hover:bg-blue-600 hover:shadow-lg transition-all duration-300 ease-in-out flex justify-center items-center"
         >
-          Upload Image
+          <AiOutlineCloudUpload size={30} />
+          <span className="ml-2">Upload</span>
         </label>
       </div>
       <input

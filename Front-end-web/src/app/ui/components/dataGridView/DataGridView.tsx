@@ -16,7 +16,7 @@ export function DataGridView({
           className={`${options?.style?.header?.textHeaderColor} h-${options?.style?.header?.height}`}
         >
           <th
-            className={`text-center ${options.style?.column?.width && "w-1/12"}`}
+            className={`text-center ${options?.style?.column?.width && "w-1/12"}`}
           >
             STT
           </th>

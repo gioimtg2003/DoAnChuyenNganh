@@ -14,9 +14,7 @@ export default function AuthLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>): JSX.Element | void {
-  useEffect((): void => {
-    document.title = "Dashboard";
-  }, []);
+  useEffect((): void => {}, []);
 
   return (
     <NavLinkProvider>
