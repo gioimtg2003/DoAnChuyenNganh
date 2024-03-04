@@ -19,7 +19,6 @@ import { VscListSelection } from "react-icons/vsc";
 import { AiOutlineExport } from "react-icons/ai";
 import { StatusOptions, optionsFilter } from "@/app/lib/constant/options";
 import { styleVertical } from "@/app/lib/constant/styleFrom";
-import { ProductOptions } from "@/app/lib/data";
 import { IoPricetagsOutline } from "react-icons/io5";
 import { onNumericInputChange } from "@/app/lib/util/handleNumber";
 import {
@@ -28,6 +27,8 @@ import {
   MdOutlineSettingsPhone,
 } from "react-icons/md";
 import { FaSortAmountDownAlt } from "react-icons/fa";
+import { ProductProvider, useProduct } from "@/app/lib/context/product/Context";
+import { createOrder } from "@/app/lib/service/order";
 
 const options: OptionsDatagridView = {
   gridType: "order",
@@ -100,38 +101,71 @@ const filterOption = (
   option?: { label: string; value: string }
 ) => (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
 
-const onChangeProduct = (value: string) => {
-  console.log("Product:", value);
-};
-const FormOrder = (): JSX.Element => {
+const FormOrder = ({
+  onCloseModal,
+  notification,
+}: {
+  onCloseModal: () => void;
+  notification: any;
+}): JSX.Element => {
   const [form] = Form.useForm();
   const [valueQuantity, setValueQuantity] = useState<number>(1);
   const [totalAmount, setTotalAmount] = useState<number>(0);
+  const [valuePrice, setValuePrice] = useState<number>(0);
+  const { ProductState } = useProduct();
 
-  const onFinish = (values: CreateOrderType) => {
-    console.log(values);
-    form.resetFields();
+  const ProductOptions = useMemo(
+    () =>
+      ProductState?.map((item) => ({
+        label: item.Name,
+        value: item._id,
+      })),
+    [ProductState]
+  );
+
+  const onChangeProduct = useCallback((value: string) => {
+    const product = ProductState?.find((item) => item._id === value);
+    if (product) {
+      setValuePrice(product.Price);
+      form.setFieldsValue({ Price: product.Price });
+    }
+  }, []);
+  const onFinish = async (values: CreateOrderType) => {
+    try {
+      let res = await createOrder(values);
+      notification.success({
+        message: "Success",
+        description: res || "Create order success",
+      });
+      form.resetFields();
+      onCloseModal();
+    } catch (err: any) {
+      notification.error({
+        message: "Error",
+        description: err.message || "Create order error",
+      });
+    }
   };
 
   const increaseQuantity = useCallback(() => {
     setValueQuantity((number) => number + 1);
-    let total =
-      valueQuantity * form.getFieldValue("ProductPrice") -
-      form.getFieldValue("ReducedAmount") +
-      form.getFieldValue("ShippingAmount");
-    setTotalAmount(total);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [valueQuantity]);
 
   const decreaseQuantity = useCallback(() => {
     if (valueQuantity > 1) {
       setValueQuantity((number) => number - 1);
-      let total =
-        valueQuantity * form.getFieldValue("ProductPrice") -
-        form.getFieldValue("ReducedAmount") +
-        form.getFieldValue("ShippingAmount");
-      setTotalAmount(total);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [valueQuantity]);
+
+  useEffect(() => {
+    let total =
+      valueQuantity * form.getFieldValue("Price") -
+      form.getFieldValue("ReducedAmount") +
+      form.getFieldValue("ShippingAmount");
+    setTotalAmount(total);
+  }, [valueQuantity, form]);
 
   return (
     <ConfigProvider
@@ -147,6 +181,7 @@ const FormOrder = (): JSX.Element => {
         fields={[
           { name: "Quantity", value: valueQuantity },
           { name: "TotalAmount", value: totalAmount },
+          { name: "Price", value: valuePrice },
         ]}
         form={form}
         style={{ maxWidth: "800px" }}
@@ -157,7 +192,7 @@ const FormOrder = (): JSX.Element => {
           ReducedAmount: 0,
           TotalAmount: 0,
           ShippingAmount: 0,
-          ProductPrice: 1000,
+          Price: 1000,
         }}
         {...styleVertical}
         onFieldsChange={(_, allFields) => {
@@ -165,7 +200,7 @@ const FormOrder = (): JSX.Element => {
             _[0]["name"][0] == "ShippingAmount" ||
             _[0]["name"][0] == "ReducedAmount" ||
             _[0]["name"][0] == "Quantity" ||
-            _[0]["name"][0] == "ProductPrice"
+            _[0]["name"][0] == "ProductId"
           ) {
             const total =
               allFields[5]["value"] * allFields[4]["value"] -
@@ -178,7 +213,7 @@ const FormOrder = (): JSX.Element => {
         <div className="w-full flex flex-row justify-around items-center">
           <Form.Item<CreateOrderType>
             label="Tên khách hàng"
-            name="CustomerName"
+            name="Name"
             rules={[
               {
                 required: true,
@@ -191,7 +226,7 @@ const FormOrder = (): JSX.Element => {
           </Form.Item>
           <Form.Item
             label="Số điện thoại"
-            name="CustomerPhone"
+            name="Phone"
             rules={[
               {
                 required: true,
@@ -207,7 +242,7 @@ const FormOrder = (): JSX.Element => {
         </div>
         <Form.Item<CreateOrderType>
           label="Địa chỉ"
-          name="CustomerAddress"
+          name="Address"
           rules={[
             {
               required: true,
@@ -243,12 +278,18 @@ const FormOrder = (): JSX.Element => {
           </Form.Item>
           <Form.Item<CreateOrderType>
             label="Giá sản phẩm"
-            name="ProductPrice"
+            name="Price"
             className="pl-4 w-4/12"
           >
             <InputNumber
               disabled
               addonBefore={<IoPricetagsOutline className="text-gray-600" />}
+              formatter={(value) => {
+                return `${onNumericInputChange(value)}`.replace(
+                  /\B(?=(\d{3})+(?!\d))/g,
+                  ","
+                );
+              }}
             />
           </Form.Item>
           <Form.Item<CreateOrderType>
@@ -439,7 +480,14 @@ export default function ProductPage(): JSX.Element {
       {contextHolder}
       <section className="w-full flex justify-center pb-10 ">
         <ModalPopUp open={modalVisible} onClose={onChangeModal}>
-          <FormOrder />
+          <ProductProvider>
+            {modalVisible && (
+              <FormOrder
+                onCloseModal={onChangeModal}
+                notification={apiNotification}
+              />
+            )}
+          </ProductProvider>
         </ModalPopUp>
         <div className="w-10/12 max-lg:w-full">
           <div className="w-full mt-10 md:flex md:flex-row-reverse md:items-center">

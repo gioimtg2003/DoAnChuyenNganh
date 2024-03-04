@@ -144,13 +144,13 @@ export interface Product {
 export type CreateOrderType = {
   ProductId: string;
   Quantity: number;
-  CustomerName: string;
-  CustomerPhone: string;
-  CustomerAddress: string;
+  Name: string;
+  Phone: string;
+  Address: string;
   ShippingAmount: number;
   ReducedAmount: number;
   PaymentMethod: string;
-  ProductPrice: number;
+  Price: number;
   TotalAmount: number;
   Description: string;
 };
