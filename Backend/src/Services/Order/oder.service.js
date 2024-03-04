@@ -1,7 +1,7 @@
-const { Mongoose } = require("mongoose");
 const { SchemaOrder } = require("../../Models/Order");
 const { CheckStore } = require("../../Utils/checkStore");
 const { logError, logInfo } = require("../../Utils/logger");
+const { mongoose } = require("../../db/Connect.Mongo");
 
 async function CreateOrderService(data, callback) {
     try {
@@ -24,9 +24,9 @@ async function CreateOrderService(data, callback) {
 
 }
 
-async function ReadOrderService(idUser, callback) {
+async function ReadOrderService(data, callback) {
     try {
-        let check = CheckStore(idUser);
+        let check = CheckStore(data.idUser);
         if (!check) {
             logError(new Date(), "Store not found", "ReadOrderService");
             return callback("Store not found", null);
@@ -35,7 +35,13 @@ async function ReadOrderService(idUser, callback) {
         let orders = await SchemaOrder.aggregate(
             [
                 {
-                    $match: { 'idUser': new Mongoose.Types.ObjectId(idUser) }
+                    $match: { 'idUser': new mongoose.Types.ObjectId(data.idUser) }
+                },
+                {
+                    $match: data.filter === "All" ? {} : { Status: data.filter }
+                },
+                {
+                    $sort: { "Date.OrderDate": -1 }
                 },
                 {
                     $lookup: {
@@ -46,20 +52,41 @@ async function ReadOrderService(idUser, callback) {
                     }
                 },
                 {
-                    $project: {
-                        _id: 1,
-                        Customer: "$Customer.Name",
-                        AmountTotal: 1,
-                        Status: 1,
-                        PaymentMethod: 1,
-                        OrderDate: "$Date.OrderDate",
-                        ProductName: "$ProductId.Name",
+                    $unwind: "$ProductId"
+                },
+
+                {
+                    $facet: {
+                        "items": [
+                            {
+                                $project: {
+                                    _id: 1,
+                                    Customer: "$Customer.Name",
+                                    AmountTotal: 1,
+                                    Status: 1,
+                                    PaymentMethod: 1,
+                                    OrderDate: "$Date.OrderDate",
+                                    ProductName: "$ProductId.Name",
+                                },
+                            },
+                            {
+                                $skip: Number((data.page - 1) * data.limit)
+                            },
+                            {
+                                $limit: Number(data.limit)
+                            }
+
+                        ],
+                        "total": [
+                            { $count: "total" }
+                        ]
                     }
                 }
 
+
             ]
         );
-        logInfo(new Date(), "success", "Read order successfully", "ReadOrderService");
+        logInfo(new Date(), "success", "GET order successfully", "ReadOrderService");
         return callback(null, orders);
 
     } catch (err) {
