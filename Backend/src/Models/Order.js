@@ -62,7 +62,7 @@ let Order = new mongoose.Schema({
     Date: {
         DeliveryDate: {
             type: Date,
-            required: true
+            default: null
         },
         OrderDate: {
             type: Date,

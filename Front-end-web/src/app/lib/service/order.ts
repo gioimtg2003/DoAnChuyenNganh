@@ -7,7 +7,7 @@ export const createOrder = (order: CreateOrderType): Promise<string> => {
     axiosInstance()
       .post("/order", order)
       .then((res) => {
-        if (res.status === 200) {
+        if (res.status === 201) {
           resolve(res?.data?.message);
         } else {
           reject(new Error("Error"));
@@ -21,10 +21,14 @@ export const createOrder = (order: CreateOrderType): Promise<string> => {
   });
 };
 
-export const getALlOrder = (): Promise<Order[]> => {
+export const getALlOrder = (
+  filter: string,
+  page: number | undefined,
+  limit: number | undefined
+): Promise<any[]> => {
   return new Promise((resolve, reject) => {
     axiosInstance()
-      .get("/order")
+      .get(`/order?filter=${filter}&page=${page}&limit=${limit}`)
       .then((res) => {
         resolve(res?.data?.data);
       })

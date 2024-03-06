@@ -11,23 +11,22 @@ export const ReducerProduct = (
         isInitialized: true,
       };
     case ProductActionType.SET_PRODUCT:
-      console.log(action.payload);
       return {
         ...state,
-        items: action.payload?.items || null,
-        total: action.payload?.total || 0,
-        categories: action.payload?.categories || null,
+        items: action.payload?.items ?? null,
+        total: action.payload?.total ?? 0,
+        categories: action.payload?.categories ?? null,
         reload: false,
       };
     case ProductActionType.SEARCH_PRODUCT:
       return {
         ...state,
-        search: action.payload?.search || null,
+        search: action.payload?.search ?? null,
       };
     case ProductActionType.FILTER:
       return {
         ...state,
-        filter: action.payload?.filter || null,
+        filter: action.payload?.filter ?? null,
       };
     case ProductActionType.RELOAD:
       return {

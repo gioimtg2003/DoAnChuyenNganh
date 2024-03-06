@@ -34,25 +34,25 @@ export const EmployeeStatus = (status: string): JSX.Element => {
 
 export const OrderStatus = (status: string): JSX.Element => {
   switch (status) {
-    case "pending":
+    case "Pending":
       return (
         <Tag icon={<SyncOutlined spin />} color="processing">
           Đang xử lý
         </Tag>
       );
-    case "delivery":
+    case "Delivery":
       return (
         <Tag icon={<CarOutlined />} color="lime">
           Đang vận chuyển
         </Tag>
       );
-    case "cancel":
+    case "Cancel":
       return (
         <Tag icon={<CloseCircleOutlined />} color="error">
           Đã hủy
         </Tag>
       );
-    case "success":
+    case "Success":
       return (
         <Tag icon={<CheckCircleOutlined />} color="success">
           Thành công

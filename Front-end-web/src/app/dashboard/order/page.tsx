@@ -7,7 +7,15 @@ import { NotificationContext } from "@/app/lib/context/NotificationContext";
 import { selectedPage } from "@/app/lib/util/selectedPage";
 import { DataGridView } from "@/app/ui/components/dataGridView/DataGridView";
 import { ModalPopUp } from "@/app/ui/components/modal/ModalPopUp";
-import { Button, ConfigProvider, Form, Input, InputNumber, Select } from "antd";
+import {
+  Button,
+  ConfigProvider,
+  Form,
+  Input,
+  InputNumber,
+  Select,
+  Tooltip,
+} from "antd";
 import { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import {
   FaFilterCircleDollar,
@@ -17,7 +25,7 @@ import {
 import { FiMinus, FiPlus, FiPlusCircle, FiUserCheck } from "react-icons/fi";
 import { VscListSelection } from "react-icons/vsc";
 import { AiOutlineExport } from "react-icons/ai";
-import { StatusOptions, optionsFilter } from "@/app/lib/constant/options";
+import { SortOptions, StatusOptions } from "@/app/lib/constant/options";
 import { styleVertical } from "@/app/lib/constant/styleFrom";
 import { IoPricetagsOutline } from "react-icons/io5";
 import { onNumericInputChange } from "@/app/lib/util/handleNumber";
@@ -29,6 +37,9 @@ import {
 import { FaSortAmountDownAlt } from "react-icons/fa";
 import { ProductProvider, useProduct } from "@/app/lib/context/product/Context";
 import { createOrder } from "@/app/lib/service/order";
+import { useOrder } from "@/app/lib/context/order/Context";
+import { Order } from "@/app/lib/context/order/type";
+import { OrderStatus } from "@/app/ui/components/Tag";
 
 const options: OptionsDatagridView = {
   gridType: "order",
@@ -92,10 +103,6 @@ const onSearch = (value: string) => {
   console.log("search:", value);
 };
 
-const onChangePrice = (value: string) => {
-  console.log("price:", value);
-};
-
 const filterOption = (
   input: string,
   option?: { label: string; value: string }
@@ -113,6 +120,7 @@ const FormOrder = ({
   const [totalAmount, setTotalAmount] = useState<number>(0);
   const [valuePrice, setValuePrice] = useState<number>(0);
   const { ProductState } = useProduct();
+  const { reload } = useOrder();
 
   const ProductOptions = useMemo(
     () =>
@@ -139,6 +147,7 @@ const FormOrder = ({
       });
       form.resetFields();
       onCloseModal();
+      reload();
     } catch (err: any) {
       notification.error({
         message: "Error",
@@ -463,6 +472,10 @@ export default function ProductPage(): JSX.Element {
   const { stateLink, dispatchLink } = useContext(NavLinkContext);
   const { apiNotification, contextHolder } = useContext(NotificationContext);
   const [modalVisible, setModalVisible] = useState(false);
+  const { OrderState, sortItems } = useOrder();
+  const onChangeSort = (value: string) => {
+    sortItems(value);
+  };
 
   const onChangeModal = useCallback(() => {
     setModalVisible(!modalVisible);
@@ -470,11 +483,27 @@ export default function ProductPage(): JSX.Element {
 
   useEffect(() => {
     document.title = "Order";
-    console.log("Order page");
-    console.log(document.title);
     selectedPage(dispatchLink, 3);
   }, []);
-
+  const handleDataSources = useMemo(
+    () =>
+      OrderState?.map((item: Order, key: number) => ({
+        Customer: item.Customer,
+        ProductName: item.ProductName,
+        OrderDate: item.OrderDate,
+        AmountTotal: item.AmountTotal,
+        Status: item.Status,
+        PaymentMethod: item.PaymentMethod,
+        Action: (
+          <div className="w-full flex flex-row justify-center items-center">
+            <Tooltip title="Chi tiết" color={"blue"}>
+              <AiOutlineExport className="hover:cursor-pointer" />
+            </Tooltip>
+          </div>
+        ),
+      })),
+    [OrderState]
+  );
   return (
     <>
       {contextHolder}
@@ -525,8 +554,8 @@ export default function ProductPage(): JSX.Element {
                 <span className="text-gray-500 w-4/12">Giá tiền:</span>
                 <Select
                   placeholder="Sắp xếp theo giá"
-                  onChange={onChangePrice}
-                  options={optionsFilter}
+                  onChange={onChangeSort}
+                  options={SortOptions}
                   suffixIcon={<FaFilterCircleDollar />}
                   className="w-8/12"
                 />
@@ -542,7 +571,7 @@ export default function ProductPage(): JSX.Element {
             <DataGridView
               options={options}
               columns={columnsOrder}
-              dataSources={data}
+              dataSources={handleDataSources}
             />
           </div>
         </div>

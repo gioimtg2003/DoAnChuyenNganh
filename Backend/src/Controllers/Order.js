@@ -49,7 +49,7 @@ function ReadOrder(req, res) {
         idUser: id,
         filter: filter ?? 'all',
         page: page ?? 1,
-        limit: limit ?? 10
+        limit: limit ?? 100
     };
 
     ReadOrderService(data, (err, data) => {

@@ -1,6 +1,6 @@
 const { GrantAccessToken, Login } = require("../Controllers/Auth");
 const { CreateCategory } = require("../Controllers/Category");
-const { CreateOrder } = require("../Controllers/Order");
+const { CreateOrder, ReadOrder } = require("../Controllers/Order");
 const { CreateProduct, ReadAllProduct, DeleteProduct } = require("../Controllers/Product");
 const { CreateShipper } = require("../Controllers/User/CURDShipper");
 const { CreateShop, UpdateShop, ReadShop } = require("../Controllers/User/CURDShop");
@@ -46,7 +46,7 @@ route.delete("/category");
 
 //-----Route for order service-----//
 /**************************/
-route.get("/order");
+route.get("/order", ShopPermission, ReadOrder);
 route.post("/order", ShopPermission, CreateOrder);
 route.put("/order");
 route.delete("/order");
