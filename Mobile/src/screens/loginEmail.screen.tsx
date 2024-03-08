@@ -1,6 +1,11 @@
-import { CommonActions, useNavigation } from "@react-navigation/native";
+import {
+  CommonActions,
+  useFocusEffect,
+  useNavigation,
+} from "@react-navigation/native";
 import {
   ActivityIndicator,
+  BackHandler,
   Image,
   KeyboardAvoidingView,
   Modal,
@@ -11,7 +16,7 @@ import {
   View,
 } from "react-native";
 import { PRIMARY_COLOR } from "../lib/Constant";
-import { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import axios from "axios";
 import { MaterialIcons } from "@expo/vector-icons";
 
@@ -22,8 +27,16 @@ const LoginEmailScreen = (): JSX.Element => {
   const [isVisibleModal, setIsVisibleModal] = useState<boolean>(false);
   const navigation = useNavigation();
 
+  useEffect(() => {
+    navigation.addListener("focus", () => {
+      setEmail("");
+      setIsLoad(false);
+    });
+  }, []);
+
   const closeModal = useCallback(() => {
     setIsVisibleModal(false);
+    setIsLoad(false);
   }, []);
 
   const sendEmail = async () => {
@@ -35,10 +48,10 @@ const LoginEmailScreen = (): JSX.Element => {
       },
     });
     try {
+      setIsLoad(true);
       let send = await axiosInit.post("/email", {
         email: email,
       });
-      setIsLoad(true);
       if (send.status == 200 && send.data?.code == 200) {
         navigation.dispatch(CommonActions.navigate("LoginOtp", { email }));
       }
