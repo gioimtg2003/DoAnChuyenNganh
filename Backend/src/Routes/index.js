@@ -2,10 +2,12 @@ const { GrantAccessToken, Login } = require("../Controllers/Auth");
 const { CreateCategory } = require("../Controllers/Category");
 const { CreateOrder, ReadOrder } = require("../Controllers/Order");
 const { CreateProduct, ReadAllProduct, DeleteProduct } = require("../Controllers/Product");
+const { SendEmail } = require("../Controllers/SendEmail");
 const { CreateShipper } = require("../Controllers/User/CURDShipper");
 const { CreateShop, UpdateShop, ReadShop } = require("../Controllers/User/CURDShop");
 const { GetAllEmployee, AddEmployee } = require("../Controllers/User/ShopStaff");
-const { VerifyCode, SendCode } = require("../Controllers/User/Verify");
+const { SendCode } = require("../Controllers/User/Verify");
+const { VerifyCode } = require("../Controllers/Verify");
 const { ShopPermission } = require("../MiddleWare/CheckPermission");
 const express = require("express");
 const route = express.Router();
@@ -51,16 +53,14 @@ route.post("/order", ShopPermission, CreateOrder);
 route.put("/order");
 route.delete("/order");
 /**************************/
-route.post("/order/shipper");
-route.put("/order/shipper");
-route.delete("/order/shipper");
-/**************************/
 route.put("/order/status");
 
 /**************************/
 route.post("/order/payment");
 
-//-----Route for test-----//
+//-----Route for Mobile-----//
+route.post("/shipper/email", SendEmail);
+route.post("/shipper/verify", VerifyCode);
 
 
 
