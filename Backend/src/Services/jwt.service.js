@@ -43,8 +43,27 @@ let HandleToken = token => {
     });
 }
 
+/**
+ * hàm này tạo token và trả về token mới gồm access token và refresh token
+ * @param {*} user user data
+ * @returns 
+ */
+let CreateToken = async (user, timeAccessToken, timeRefreshToken) => {
+
+    // let timeAccessToken = 60 * 30;
+    // let timeRefreshToken = 60 * 60 * 24;
+    let accessToken = await SignToken(payload(user, false), timeAccessToken);
+    let refreshToken = await SignToken(payload(user, true), timeRefreshToken);
+    return {
+        accessToken: accessToken,
+        refreshToken: refreshToken,
+        exp: Math.floor(Date.now() + timeAccessToken * 1000 - 4000),
+    }
+}
+
 module.exports = {
     payload,
     SignToken,
-    HandleToken
+    HandleToken,
+    CreateToken
 }
