@@ -1,5 +1,5 @@
-import { useNavigation } from "@react-navigation/native";
-import { Image, StyleSheet, Text, View } from "react-native";
+import { CommonActions, useNavigation } from "@react-navigation/native";
+import { ActivityIndicator, Image, StyleSheet, Text, View } from "react-native";
 import KeyBoard from "../components/KeyBoard";
 import { useCallback, useEffect, useState } from "react";
 import { PRIMARY_COLOR } from "../lib/Constant";
@@ -12,13 +12,15 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import Otp from "../components/Otp";
-
+import { VerifyService } from "../lib/services/verify.service";
 const IconVerify = require("../../assets/VerifyIcon.png");
 
 const LoginOtpScreen = (): JSX.Element => {
   const navigation = useNavigation();
   const [otp, setOtp] = useState<string[]>([]);
   const scale = useSharedValue(1);
+  const [isLoad, setIsLoad] = useState<boolean>(false);
+  const [error, setError] = useState<string>("");
 
   useEffect(() => {
     scale.value = withRepeat(
@@ -49,11 +51,31 @@ const LoginOtpScreen = (): JSX.Element => {
     setOtp(otp.slice(0, -1));
   }, [otp]);
 
+  const senOtp = useCallback(
+    async (otp: any) => {
+      const params: object | undefined =
+        navigation.getState()?.routes[2]?.params;
+      if (otp.length === 5) {
+        setError("");
+        setIsLoad(true);
+        try {
+          let verify = await VerifyService(otp.join(""), params?.email);
+          if (verify) {
+            navigation.dispatch(CommonActions.navigate("Home"));
+          } else {
+            console.log("Verify fail");
+          }
+        } catch (err) {
+          setIsLoad(false);
+          setError("Mã OTP không đúng");
+        }
+      }
+    },
+    [otp]
+  );
+
   useEffect(() => {
-    const email = navigation.getState();
-    if (otp.length === 5) {
-    }
-    console.log(email);
+    senOtp(otp);
   }, [otp]);
   return (
     <View style={styles.container}>
@@ -71,6 +93,25 @@ const LoginOtpScreen = (): JSX.Element => {
         <View style={styles.containerOtp}>
           <Otp otp={otp} />
         </View>
+      </View>
+      <View
+        style={{
+          position: "absolute",
+        }}
+      >
+        {error ? (
+          <Text
+            style={{
+              color: "red",
+              fontSize: 16,
+              fontWeight: "bold",
+            }}
+          >
+            {error}
+          </Text>
+        ) : (
+          isLoad && <ActivityIndicator size="small" color={PRIMARY_COLOR} />
+        )}
       </View>
       <View style={styles.containerKeyboard}>
         <View style={styles.keyboardInner}>

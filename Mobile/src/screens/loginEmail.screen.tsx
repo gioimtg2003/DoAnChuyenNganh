@@ -19,6 +19,7 @@ import { PRIMARY_COLOR } from "../lib/Constant";
 import React, { useCallback, useEffect, useState } from "react";
 import axios from "axios";
 import { MaterialIcons } from "@expo/vector-icons";
+import { axiosInstance } from "../lib/configs/axios";
 
 const LoginEmailScreen = (): JSX.Element => {
   const [email, setEmail] = useState<string>("");
@@ -40,16 +41,10 @@ const LoginEmailScreen = (): JSX.Element => {
   }, []);
 
   const sendEmail = async () => {
-    let axiosInit = axios.create({
-      baseURL: "http://10.0.2.2:3000/api",
-      timeout: 10000,
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    console.log(process.env.API_URI);
     try {
       setIsLoad(true);
-      let send = await axiosInit.post("/email", {
+      let send = await axiosInstance.post("/api/shipper/email", {
         email: email,
       });
       if (send.status == 200 && send.data?.code == 200) {
