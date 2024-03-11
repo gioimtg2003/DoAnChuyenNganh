@@ -14,19 +14,22 @@ import Color from '../../Utils/Color';
 import { useWarmUpBrowser } from '../../hooks/useWarmUpBrowser';
 import { isValidCheckEmail} from '../../Utils/Validation';
 import { handleLoginApp } from '../../Services/loginService';
+import { useAuth } from '../../Utils/AuthContext';
 WebBrowser.maybeCompleteAuthSession();
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
 export default function Login() {
     useWarmUpBrowser();
+    const {login} = useAuth();
     const [email, onChangeEmial] = React.useState('');
     const [errorEmail, setErrorEmail] = React.useState('');
     const navigation = useNavigation(); // Get navigation object
     const handleLogin = async () => {
         let respone = await handleLoginApp(email);
         if( respone.data.Success === true) {
-            navigation.navigate('OTPInput', {OTP: respone.data.OTP}); 
+            login(email);
+            navigation.navigate('OTPInput', {OTP: respone.data.OTP , Email: email}); 
             // setErrorEmail(respone.data.OTP)
         } else {
             setErrorEmail(respone.data.Mess);
@@ -51,7 +54,6 @@ export default function Login() {
 
                         placeholder="Email"
                     />
-                
                 <Text style={{color: 'red'}}>{errorEmail}</Text>
                 <TouchableOpacity
                     onPress={() => {
@@ -61,10 +63,8 @@ export default function Login() {
                     style={styles.btnLogin}
                     title="Login in"> 
                     <Text style={{color: Color.WHITE}}> Login</Text>
-
                 </TouchableOpacity>
             </View>
-            
         </View>
     )
 }

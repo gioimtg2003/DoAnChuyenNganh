@@ -9,6 +9,14 @@ const handleLoginApp = async (Email) => {
     return response.data;
 }
 
+const updateStatusOnline = async (Email , Status) => {
+    let response = await axios.put(`${baseURL}/update/status/online/${Email}` ,{
+        Status
+    });
+    return response.data;
+}   
+
 export {
     handleLoginApp,
+    updateStatusOnline
 }

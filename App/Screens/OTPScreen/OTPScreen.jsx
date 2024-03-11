@@ -4,16 +4,18 @@ import Color from '../../Utils/Color'; // Đảm bảo điều chỉnh đường
 import { isValidCheckOTP } from '../../Utils/Validation';
 import { useRoute } from '@react-navigation/native';
 import { useNavigation } from '@react-navigation/native';
-
+import { updateStatusOnline } from '../../Services/loginService';  
 export default function OTPInput() {
     const route = useRoute(); // Get route object
     const navigation = useNavigation(); // Get navigation object
 
-    const { OTP } = route.params; // Nhận dữ liệu email từ route.params
+    const { OTP, Email} = route.params; // Nhận dữ liệu email từ route.params
     const [otp, setOTP] = useState('');
-    const [errorOTP, setErrorOTP] = useState(OTP);
-    const handleVerifyOTP = () => {
+    const [errorOTP, setErrorOTP] = useState(Email);
+    const handleVerifyOTP = async () => {
         if(otp == OTP){
+            let respone = await updateStatusOnline(Email, true);
+            
             navigation.reset({
                 index: 0,
                 routes: [{ name: 'Home' }],
