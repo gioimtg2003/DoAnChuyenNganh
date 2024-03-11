@@ -23,10 +23,10 @@ export default function App() {
               <Stack.Screen name="OTPInput" component={OTPInput} />
               <Stack.Screen name="Home" component={MainScreen} options={{ headerShown: false }}/>
             </Stack.Navigator>
+            <AppStateHandler />
           </NavigationContainer>
           <StatusBar style="auto" />
         </View>
-        <AppStateHandler />
       </AuthProvider>
     </ClerkProvider>
   );

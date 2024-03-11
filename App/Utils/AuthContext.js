@@ -4,7 +4,7 @@ const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [userEmail, setUserEmail] = useState(null);
-
+  console.log("UserEmail: ", userEmail);
   const login = (email) => {
     setUserEmail(email);
   };
