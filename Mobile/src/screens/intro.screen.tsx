@@ -1,13 +1,13 @@
 import { ActivityIndicator, Image, StyleSheet, Text, View } from "react-native";
 import IntroIcon from "../components/IntroIcon";
 import { CommonActions, useNavigation } from "@react-navigation/native";
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 
 export default function IntroScreen(): JSX.Element {
   const navigation = useNavigation();
   useEffect(() => {
     setTimeout(() => {
-      navigation.dispatch(CommonActions.navigate("Login"));
+      navigation.dispatch(CommonActions.navigate("HomeTab"));
     }, 1500);
   }, []);
 

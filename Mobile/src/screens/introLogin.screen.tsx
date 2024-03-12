@@ -12,18 +12,20 @@ import {
   StyleSheet,
   Text,
   View,
+  NativeModules,
 } from "react-native";
 import { PRIMARY_COLOR } from "../lib/Constant";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useEffect } from "react";
 const img = require("../../assets/LogoLogin.png");
+const { CalendarModule } = NativeModules;
+
 const IntroLoginScreen = ({
   route,
 }: {
   route: Partial<Route<string>>;
 }): JSX.Element => {
   const navigation = useNavigation();
-
   // useEffect(() => {
   //   navigation.addListener("focus", (e) => {
   //     console.log(navigation.getState());

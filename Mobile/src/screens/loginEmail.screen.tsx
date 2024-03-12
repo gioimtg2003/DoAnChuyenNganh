@@ -44,7 +44,7 @@ const LoginEmailScreen = (): JSX.Element => {
     console.log(process.env.API_URI);
     try {
       setIsLoad(true);
-      let send = await axiosInstance.post("/api/shipper/email", {
+      let send = await axiosInstance.post("/shipper/email", {
         email: email,
       });
       if (send.status == 200 && send.data?.code == 200) {

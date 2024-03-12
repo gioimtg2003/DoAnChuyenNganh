@@ -1,6 +1,9 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import IntroScreen from "../screens/intro.screen";
-import StackAuthNavigator from "./StackAuthNavigator";
+import AuthScreen from "./StackAuthNavigator";
+import React from "react";
+import TabHomeNavigator from "./TabHomeNavigator";
+import OrderDetailScreen from "../screens/Home/Order/OrderDetail.screen";
 
 const Stack = createNativeStackNavigator();
 
@@ -14,8 +17,18 @@ const StackNavigator = (): JSX.Element => {
       />
       <Stack.Screen
         name="Login"
-        component={StackAuthNavigator}
+        component={AuthScreen}
         options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="HomeTab"
+        component={TabHomeNavigator}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="OrderDetails"
+        component={OrderDetailScreen}
+        options={{ headerShown: true, title: "Đơn hàng của bạn" }}
       />
     </Stack.Navigator>
   );

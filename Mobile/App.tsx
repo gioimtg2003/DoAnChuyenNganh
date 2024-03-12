@@ -1,22 +1,11 @@
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, View } from "react-native";
-import Button from "./src/components/Button";
 import * as ImagePicker from "expo-image-picker";
-import { useCallback, useRef, useState } from "react";
-import ImageViewer from "./src/components/ImageView";
-import CircleButton from "./src/components/CircleButton";
-import IconButton from "./src/components/IconButton";
-import EmojiPicker from "./src/components/EmojiPicker";
-import EmojiList from "./src/components/EmojiList";
-import EmojiSticker from "./src/components/EmojiSticker";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
-import * as MediaLibrary from "expo-media-library";
-import { captureRef } from "react-native-view-shot";
-import IntroScreen from "./src/screens/intro.screen";
+import React, { useCallback, useRef, useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import LoginScreen from "./src/screens/introLogin.screen";
 import StackNavigator from "./src/navigations/StackNavigator";
+import { AuthProvider } from "./src/lib/context/Auth/AuthContext";
 
 const Stack = createNativeStackNavigator();
 
@@ -27,47 +16,49 @@ export default function App() {
   );
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const [pickEmoji, setPickEmoji] = useState<any>(null);
-  const [status, requestsPermission] = MediaLibrary.usePermissions();
   const imageRef = useRef(null);
-  if (status === null) {
-    requestsPermission();
-  }
-  const handleModal = useCallback(() => {
-    setIsModalVisible(!isModalVisible);
-  }, [isModalVisible]);
+  // if (status === null) {
+  //   requestsPermission();
+  // }
+  // const handleModal = useCallback(() => {
+  //   setIsModalVisible(!isModalVisible);
+  // }, [isModalVisible]);
 
-  const pickImageAsync = useCallback(async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      allowsEditing: true,
-      quality: 0.2,
-    });
-    if (!result.canceled) {
-      setSelectedImage(result["assets"][0]["uri"]);
-      setShowAppOptions(true);
-    } else {
-      alert("You cancelled the image picker.");
-    }
-  }, []);
+  // const pickImageAsync = useCallback(async () => {
+  //   let result = await ImagePicker.launchImageLibraryAsync({
+  //     allowsEditing: true,
+  //     quality: 0.2,
+  //   });
+  //   if (!result.canceled) {
+  //     setSelectedImage(result["assets"][0]["uri"]);
+  //     setShowAppOptions(true);
+  //   } else {
+  //     alert("You cancelled the image picker.");
+  //   }
+  // }, []);
 
-  const onSaveImageAsync = useCallback(async () => {
-    try {
-      const localUri = await captureRef(imageRef, {
-        width: 440,
-        quality: 0.9,
-      });
-      await MediaLibrary.saveToLibraryAsync(localUri);
+  // const onSaveImageAsync = useCallback(async () => {
+  //   try {
+  //     const localUri = await captureRef(imageRef, {
+  //       width: 440,
+  //       quality: 0.9,
+  //     });
+  //     await MediaLibrary.saveToLibraryAsync(localUri);
 
-      if (localUri) {
-        alert("Image saved successfully");
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  }, []);
+  //     if (localUri) {
+  //       alert("Image saved successfully");
+  //     }
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // }, []);
 
   return (
     <NavigationContainer independent={true}>
-      <StackNavigator />
+      <AuthProvider>
+        <StackNavigator />
+        <StatusBar style="auto" />
+      </AuthProvider>
     </NavigationContainer>
     // <IntroScreen />
   );

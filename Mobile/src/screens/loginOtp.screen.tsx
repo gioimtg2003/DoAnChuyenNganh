@@ -1,7 +1,7 @@
 import { CommonActions, useNavigation } from "@react-navigation/native";
 import { ActivityIndicator, Image, StyleSheet, Text, View } from "react-native";
 import KeyBoard from "../components/KeyBoard";
-import { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { PRIMARY_COLOR } from "../lib/Constant";
 import Animated, {
   Easing,
@@ -13,6 +13,7 @@ import Animated, {
 } from "react-native-reanimated";
 import Otp from "../components/Otp";
 import { VerifyService } from "../lib/services/verify.service";
+import { useAuth } from "../lib/context/Auth/AuthContext";
 const IconVerify = require("../../assets/VerifyIcon.png");
 
 const LoginOtpScreen = (): JSX.Element => {
@@ -21,7 +22,7 @@ const LoginOtpScreen = (): JSX.Element => {
   const scale = useSharedValue(1);
   const [isLoad, setIsLoad] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
-
+  const { handleLogin } = useAuth();
   useEffect(() => {
     scale.value = withRepeat(
       withSequence(
@@ -61,7 +62,12 @@ const LoginOtpScreen = (): JSX.Element => {
         try {
           let verify = await VerifyService(otp.join(""), params?.email);
           if (verify) {
-            navigation.dispatch(CommonActions.navigate("Home"));
+            handleLogin(verify);
+            navigation.dispatch(
+              CommonActions.navigate({
+                name: "HomeTab",
+              })
+            );
           } else {
             console.log("Verify fail");
           }

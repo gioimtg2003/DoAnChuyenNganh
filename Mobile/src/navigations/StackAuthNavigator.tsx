@@ -1,25 +1,39 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import IntroLoginScreen from "../screens/introLogin.screen";
-import LoginScreen from "../screens/login.screen";
+import LoginOtpScreen from "../screens/loginOtp.screen";
+import LoginEmailScreen from "../screens/loginEmail.screen";
+import { MaterialIcons } from "@expo/vector-icons";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { NavigationContainer } from "@react-navigation/native";
+import { Alert, BackHandler } from "react-native";
+import React, { useEffect } from "react";
+import { StackActions, useNavigation } from "@react-navigation/native";
 
-const Tab = createBottomTabNavigator();
-const StackAuthNavigator = (): JSX.Element => {
+const AuthStack = createNativeStackNavigator();
+const AuthScreen = (): JSX.Element => {
   return (
-    <Tab.Navigator
+    <AuthStack.Navigator
       screenOptions={{
         headerShown: false,
-        tabBarStyle: {
-          display: "none",
-        },
       }}
     >
-      <Tab.Screen name="IntroLogin" component={IntroLoginScreen} />
-      <Tab.Screen name="LoginEmal" component={LoginScreen} />
-      <Tab.Screen name="HandleLogin" component={LoginScreen} />
-    </Tab.Navigator>
+      <AuthStack.Screen
+        name="IntroLogin"
+        component={IntroLoginScreen}
+        key={"IntroLogin"}
+      />
+      <AuthStack.Screen
+        name="LoginEmail"
+        component={LoginEmailScreen}
+        key={"LoginEmail"}
+      />
+      <AuthStack.Screen
+        name="LoginOtp"
+        component={LoginOtpScreen}
+        key={"LoginOtp"}
+      />
+      {/* <AuthStack.Screen name="HandleLogin" component={LoginHandle} /> */}
+    </AuthStack.Navigator>
   );
 };
 
-export default StackAuthNavigator;
+export default AuthScreen;

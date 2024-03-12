@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import { StyleSheet, Image } from "react-native";
+import React from "react";
 
 export default function ImageViewer({
   placeholderImageSource,
