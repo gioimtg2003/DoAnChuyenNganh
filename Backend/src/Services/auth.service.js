@@ -3,6 +3,7 @@ const { logError, logInfo } = require("../Utils/logger");
 const bcrypt = require('bcryptjs');
 const { SchemaShopUser } = require("../Models/Users/ShopModel");
 const { SignToken, HandleToken, CreateToken } = require("./jwt.service");
+const { getSocketIo } = require("../socket");
 
 let CheckEmailAuth = email => {
     return new Promise((resolve, reject) => {
@@ -47,6 +48,11 @@ async function HandleLogin(data, callback) {
                 let timeAccessToken = 60 * 30;
                 let timeRefreshToken = 60 * 60 * 24;
                 let _data = await CreateToken(user, timeAccessToken, timeRefreshToken);
+                let socket = getSocketIo();
+                socket.on("connection", (socket) => {
+                    console.log("shop join room")
+                    socket.join("status-room1");
+                });
 
                 logInfo(new Date(), "success", "Login Success", "Handle Login");
                 callback(null, _data, true);
@@ -105,7 +111,10 @@ async function ServiceOauthLogin(data, callback) {
     try {
         let user = await CheckEmailStore(data.Email);
         if (user) {
-            let token = await CreateToken(user);
+            let timeAccessToken = 60 * 30;
+            let timeRefreshToken = 60 * 60 * 24;
+
+            let token = await CreateToken(user, timeAccessToken, timeRefreshToken);
             logInfo(new Date, "Success", `User existed: ${user._id}`, "Login Oauth");
             return callback(null, token);
         } else {

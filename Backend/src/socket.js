@@ -6,20 +6,35 @@ const initSocket = (httpServer) => {
     socketIo = new Server(httpServer, {
         cors: {
             origin: "*",
-            methods: ["GET", "POST"]
-        }
+            methods: ["GET", "POST"],
+            credentials: false
+        },
+
+    })
+    socketIo.on("connection", (socket) => {
+        console.log(socket.rooms)
     })
     socketIo.on("error", (err) => {
         console.error(err)
     })
-    socketIo.on("connection", (socket) => {
-        console.log("New client connected")
-        socket.join("order-user-2")
-        console.log(socket.id)
-        socket.on("disconnect", () => {
-            console.log("Client disconnected")
-        })
-    })
+
+    // socketIo.on("connection", (socket) => {
+    //     console.log(socket.handshake.auth);
+    //     socket.join("user")
+    //     console.log(socket.rooms)
+    //     socket.on("disconnect", () => {
+    //         console.log("User disconnected")
+    //         socket.on("offline", (data) => {
+    //             console.log(data)
+    //         })
+    //         console.log(socket.rooms)
+    //         console.log(socket.handshake.auth)
+    //     })
+    //     socket.on("offline", (data) => {
+    //         console.log(data)
+    //     })
+    // })
+
     return socketIo
 }
 
