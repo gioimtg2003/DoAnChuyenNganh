@@ -31,6 +31,7 @@ function useProductSource() {
     ReducerProduct,
     initState
   );
+
   useEffect(() => {
     axiosInstance()
       .get("/product")
@@ -41,6 +42,7 @@ function useProductSource() {
         });
       });
   }, [state.reload]);
+
   const reload = useCallback(() => {
     dispatch({
       type: ProductActionType.RELOAD,
@@ -55,6 +57,7 @@ function useProductSource() {
           value: value,
         },
       };
+
       dispatch({
         type: ProductActionType.FILTER,
         payload: payload,
@@ -77,6 +80,7 @@ function useProductSource() {
         ? state.items?.sort((a, b) => b.Price - a.Price)
         : state.items?.sort((a, b) => a.Price - b.Price);
     }
+
     return state.items;
   }, [state.items, state.filter]);
 

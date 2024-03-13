@@ -2,7 +2,8 @@ const { SchemaAuth } = require("../Models/Auth");
 const { logError, logInfo } = require("../Utils/logger");
 const bcrypt = require('bcryptjs');
 const { SchemaShopUser } = require("../Models/Users/ShopModel");
-const { SignToken, payload, HandleToken } = require("./jwt.service");
+const { SignToken, HandleToken, CreateToken } = require("./jwt.service");
+const { getSocketIo } = require("../socket");
 
 let CheckEmailAuth = email => {
     return new Promise((resolve, reject) => {
@@ -36,23 +37,7 @@ let CheckEmailStore = email => {
     });
 }
 
-/**
- * hàm này tạo token và trả về token mới gồm access token và refresh token
- * @param {*} user user data
- * @returns 
- */
-let CreateToken = async (user) => {
 
-    let timeAccessToken = 60 * 30;
-    let timeRefreshToken = 60 * 60 * 24;
-    let accessToken = await SignToken(payload(user, false), timeAccessToken);
-    let refreshToken = await SignToken(payload(user, true), timeRefreshToken);
-    return {
-        accessToken: accessToken,
-        refreshToken: refreshToken,
-        exp: Math.floor(Date.now() + timeAccessToken * 1000 - 4000),
-    }
-}
 
 async function HandleLogin(data, callback) {
     try {
@@ -60,8 +45,15 @@ async function HandleLogin(data, callback) {
         if (user) {
             let check = await bcrypt.compareSync(data.password, user.Password);
             if (check) {
+                let timeAccessToken = 60 * 30;
+                let timeRefreshToken = 60 * 60 * 24;
+                let _data = await CreateToken(user, timeAccessToken, timeRefreshToken);
+                let socket = getSocketIo();
+                socket.on("connection", (socket) => {
+                    console.log("shop join room")
+                    socket.join("status-room1");
+                });
 
-                let _data = await CreateToken(user);
                 logInfo(new Date(), "success", "Login Success", "Handle Login");
                 callback(null, _data, true);
             } else {
@@ -119,7 +111,10 @@ async function ServiceOauthLogin(data, callback) {
     try {
         let user = await CheckEmailStore(data.Email);
         if (user) {
-            let token = await CreateToken(user);
+            let timeAccessToken = 60 * 30;
+            let timeRefreshToken = 60 * 60 * 24;
+
+            let token = await CreateToken(user, timeAccessToken, timeRefreshToken);
             logInfo(new Date, "Success", `User existed: ${user._id}`, "Login Oauth");
             return callback(null, token);
         } else {

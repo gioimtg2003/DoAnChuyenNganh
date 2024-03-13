@@ -8,28 +8,34 @@ import { LoginProvider } from "../lib/context/LoginContext";
 import { UserProvider } from "../lib/context/UserContext";
 import { AuthProvider } from "../lib/context/auth/authContext";
 import { ProtectProvider } from "../lib/context/Protect";
+import { NotificationOrderProvider } from "../lib/context/NotificationEventContext";
+import { WrapperContextProvider } from "../lib/context/wrapper/WrapperContext";
 
 export default function AuthLayout({
-  children,
+    children,
 }: Readonly<{
-  children: React.ReactNode;
+    children: React.ReactNode;
 }>): JSX.Element | void {
-  useEffect((): void => {}, []);
+    useEffect((): void => {}, []);
 
-  return (
-    <NavLinkProvider>
-      <AuthProvider>
-        <ProtectProvider>
-          <LoginProvider>
-            <UserProvider>
-              <NotificationProvider>
-                <NavWeb />
-                <div className="pt-20">{children}</div>
-              </NotificationProvider>
-            </UserProvider>
-          </LoginProvider>
-        </ProtectProvider>
-      </AuthProvider>
-    </NavLinkProvider>
-  );
+    return (
+        <NavLinkProvider>
+            <AuthProvider>
+                <ProtectProvider>
+                    <LoginProvider>
+                        <UserProvider>
+                            <WrapperContextProvider>
+                                <NotificationOrderProvider>
+                                    <NotificationProvider>
+                                        <NavWeb />
+                                        <div className="pt-20">{children}</div>
+                                    </NotificationProvider>
+                                </NotificationOrderProvider>
+                            </WrapperContextProvider>
+                        </UserProvider>
+                    </LoginProvider>
+                </ProtectProvider>
+            </AuthProvider>
+        </NavLinkProvider>
+    );
 }

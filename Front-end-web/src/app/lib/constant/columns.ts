@@ -8,8 +8,8 @@ export const columnsOrder: DatagridViewColumn[] = [
   },
   {
     title: "Sản phẩm",
-    dataIndex: "Product",
-    key: "Product",
+    dataIndex: "ProductName",
+    key: "ProductName",
   },
   {
     title: "Thời gian",
@@ -18,8 +18,8 @@ export const columnsOrder: DatagridViewColumn[] = [
   },
   {
     title: "Tổng tiền",
-    dataIndex: "PriceTotal",
-    key: "PriceTotal",
+    dataIndex: "AmountTotal",
+    key: "AmountTotal",
   },
   {
     title: "Trạng thái",

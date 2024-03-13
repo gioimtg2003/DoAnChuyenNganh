@@ -124,4 +124,19 @@ async function ReadAllProductService(data, callback) {
     }
 }
 
-module.exports = { CreateProductService, ReadAllProductService }
+async function DeleteProductService(data, callback) {
+    try {
+        let check = await CheckStore(data.idUser);
+        if (!check) {
+            return callback("You don't have any store", null);
+        }
+        let result = await SchemaProduct.deleteOne({ _id: data.idProduct });
+        return callback(null, result);
+    } catch (err) {
+        logError(new Date(), err, "DeleteProductService");
+        return callback(err, null);
+    }
+
+}
+
+module.exports = { CreateProductService, ReadAllProductService, DeleteProductService }

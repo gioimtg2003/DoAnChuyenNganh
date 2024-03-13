@@ -1,7 +1,20 @@
 const nodemailer = require('nodemailer');
 const { EMAIL_PORT, EMAIL_USER, EMAIL_PASSWORD } = require('../Configs/email.config');
 const { logInfo, logError } = require('../Utils/logger');
-async function SendEmail(email, code) {
+const { SchemaShipper } = require('../Models/Users/ShipperModel');
+async function SendEmailService(data, callback) {
+    if (data.type === "shipper") {
+        let user = await SchemaShipper.findOne({ Email: data.email });
+        if (!user) {
+            return callback("Email not found", null);
+        } else {
+            let time = Date.now() + 15 * 60 * 1000;
+            user.CodeVerify = data.code;
+            user.ExpVerify = time;
+            await user.save();
+        }
+    }
+
     const transporter = nodemailer.createTransport({
         host: "smtp.gmail.com",
         port: EMAIL_PORT,
@@ -16,7 +29,7 @@ async function SendEmail(email, code) {
     });
     let mailOptions = {
         from: "Gioidz",
-        to: email,
+        to: data.email,
         subject: "[OTP] Mã xác nhận tài khoản của bạn",
         html: `<table style="height:100%;border-style:none;width:100%;border-spacing:0;padding:0;background-color:#f8f8f8">
     <tbody style="height:100%">
@@ -77,7 +90,7 @@ Vì mục đích bảo mật, bạn phải nhập mã dưới đây để xác m
                         <td style="color:#333333;font-family:'Segoe UI',Arial,sans-serif;font-size:14px;padding:8px 16px 0px 16px" bgcolor="#FFF4CE">Mã xác minh tài khoản:</td>
                     </tr>
                     <tr>
-                        <td style="color:#333333;font-family:'Segoe UI',Arial,sans-serif;font-size:18px;padding:0px 16px 8px 16px" bgcolor="#FFF4CE"><strong>${code}</strong></td>
+                        <td style="color:#333333;font-family:'Segoe UI',Arial,sans-serif;font-size:18px;padding:0px 16px 8px 16px" bgcolor="#FFF4CE"><strong>${data.code}</strong></td>
                     </tr>
                 </tbody>
             </table>
@@ -109,13 +122,15 @@ Vì mục đích bảo mật, bạn phải nhập mã dưới đây để xác m
     };
     await transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
-            logError(new Date(), `Send to email: ${email} error`, "Send Email")
+            logError(new Date(), `Send to email: ${data.email} error`, "Send Email");
+            callback(error, null);
         } else {
-            logInfo(new Date(), "Success", `Send to email: ${email} successfully + ${info.response}`)
+            logInfo(new Date(), "Success", `Send to email: ${data.email} successfully + ${info.response}`)
+            callback(null, true);
         }
     })
 }
 module.exports =
 {
-    SendEmail
+    SendEmailService
 }

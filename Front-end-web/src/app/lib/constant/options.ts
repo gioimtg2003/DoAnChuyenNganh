@@ -5,7 +5,7 @@ export const StatusOptions = [
   { label: "Hoàn thành", value: "success" },
 ];
 
-export const optionsFilter = [
+export const SortOptions = [
   { label: "Giá tăng dần", value: "asc" },
   { label: "Giá giảm dần", value: "desc" },
 ];

@@ -29,7 +29,7 @@ let Order = new mongoose.Schema({
         type: Number,
         required: true
     },
-    AmountReduced: {
+    ReducedAmount: {
         type: Number,
         required: true
     },
@@ -62,7 +62,7 @@ let Order = new mongoose.Schema({
     Date: {
         DeliveryDate: {
             type: Date,
-            required: true
+            default: null
         },
         OrderDate: {
             type: Date,
