@@ -3,7 +3,6 @@ import { AppState } from 'react-native';
 import { useAuth } from './AuthContext'; // Import AuthContext để truy cập userEmail
 import { updateStatusOnline } from '../Services/loginService';
 import { useNavigation, StackActions } from '@react-navigation/native'; // Import để sử dụng hàm chuyển trang
-import { resetApp } from './ResetApp';
 
 const AppStateHandler = () => {
   const { userEmail } = useAuth(); // Lấy thông tin userEmail từ AuthContext
@@ -25,15 +24,16 @@ const AppStateHandler = () => {
       console.log("Trạng thái ứng dụng:", nextAppState);
       if (nextAppState === 'background') {
         if (userEmail !== null) {
+          await updateStatusOnline(userEmail, false);
           setIsInBackground(true); // Đặt biến flag thành true khi ứng dụng vào trạng thái background
           // Bắt đầu đếm thời gian ở background
           backgroundTimer = setTimeout(() => {
-            setShouldResetApp(true); // Nếu quá 5 phút, set biến để reset app
+            navigation.navigate('Home');
           }, 30 * 1000); // 5 phút
-        } else {
-          return;
-        }
+        } 
       } else if (nextAppState === 'active') {
+        await updateStatusOnline(userEmail, true);
+
         setIsInBackground(false); // Đặt biến flag thành false khi ứng dụng vào trạng thái active
         // Nếu quay lại trạng thái active trong vòng 5 phút, hủy timer để ngăn reset app
         if (shouldResetApp) {
@@ -54,15 +54,7 @@ const AppStateHandler = () => {
   }, [userEmail, login, navigation, shouldResetApp]);
 
   // Kiểm tra nếu cần reset app
-  useEffect(() => {
-    if (shouldResetApp) {
-      // Thực hiện reset app
-      updateStatusOnline(userEmail, false).then(() => {
-        login(null);
-        resetApp(navigation);
-      });
-    }
-  }, [shouldResetApp, userEmail, login, navigation]);
+ 
 
   return null;
 };
