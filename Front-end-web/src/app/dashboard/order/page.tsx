@@ -40,6 +40,7 @@ import { createOrder } from "@/app/lib/service/order";
 import { useOrder } from "@/app/lib/context/order/Context";
 import { Order } from "@/app/lib/context/order/type";
 import { OrderStatus } from "@/app/ui/components/Tag";
+import { dateFormat } from "@/app/lib/util/dateFormat";
 
 const options: OptionsDatagridView = {
   gridType: "order",
@@ -47,53 +48,6 @@ const options: OptionsDatagridView = {
     pageSize: 10,
   },
 };
-
-const data = [
-  {
-    Customer: "Nguyễn Văn A",
-    Product: "Iphone 12",
-    OrderDate: "2021-10-10",
-    PriceTotal: "10,000,000",
-    Status: "pending",
-    PaymentMethod: "Cash",
-    Action: <AiOutlineExport />,
-  },
-  {
-    Customer: "Nguyễn Văn A",
-    Product: "Iphone 12",
-    OrderDate: "2021-10-10",
-    PriceTotal: "10000000",
-    Status: "delivery",
-    PaymentMethod: "Cash",
-    Action: <AiOutlineExport />,
-  },
-  {
-    Customer: "Nguyễn Văn A",
-    Product: "Iphone 12",
-    OrderDate: "2021-10-10",
-    PriceTotal: "10000000",
-    Status: "cancel",
-    PaymentMethod: "Cash",
-    Action: (
-      <div className="w-full flex justify-center items-center" title="chi tiết">
-        <AiOutlineExport />
-      </div>
-    ),
-  },
-  {
-    Customer: "Nguyễn Văn A",
-    Product: "Iphone 12",
-    OrderDate: "2021-10-10",
-    PriceTotal: "10000000",
-    Status: "success",
-    PaymentMethod: "Cash",
-    Action: (
-      <div className="" title="chi tiết">
-        <button>Detail</button>
-      </div>
-    ),
-  },
-];
 
 const onChangeOrderStatus = (value: string) => {
   //setFilter("category", value);
@@ -490,7 +444,7 @@ export default function ProductPage(): JSX.Element {
       OrderState?.map((item: Order, key: number) => ({
         Customer: item.Customer,
         ProductName: item.ProductName,
-        OrderDate: item.OrderDate,
+        OrderDate: dateFormat(item.OrderDate),
         AmountTotal: item.AmountTotal,
         Status: item.Status,
         PaymentMethod: item.PaymentMethod,

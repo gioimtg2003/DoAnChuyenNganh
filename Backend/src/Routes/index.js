@@ -10,6 +10,7 @@ const { SendCode } = require("../Controllers/User/Verify");
 const { VerifyCode } = require("../Controllers/Verify");
 const { ShopPermission } = require("../MiddleWare/CheckPermission");
 const express = require("express");
+const { getSocketIo } = require("../socket");
 const route = express.Router();
 
 //-----Route for user service-----//
@@ -62,7 +63,11 @@ route.post("/order/payment");
 route.post("/shipper/email", SendEmail);
 route.post("/shipper/verify", VerifyCode);
 
-
+route.post("/test", (req, res) => {
+    let socketIO = getSocketIo();
+    socketIO.to("order-user-1").emit("OrderCreate", { data: "test" });
+    return res.json({ ok: true });
+})
 
 route.get("/test", ShopPermission, (req, res) => {
     console.log(req.user);

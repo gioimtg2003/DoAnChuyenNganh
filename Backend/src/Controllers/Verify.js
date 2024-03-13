@@ -8,7 +8,7 @@ function VerifyCode(req, res) {
         let api = API(BAD_REQUEST, "failed", "Missing the fields", {}, new Date());
         return res.status(BAD_REQUEST).json(api);
     }
-    Service.VerifyAccount(req.body, (err, data, verify) => {
+    Service.VerifyAccount(req.body, (err, data) => {
 
         if (err) {
             let api = API(INTERNAL_ERROR, "error", err, {}, new Date());

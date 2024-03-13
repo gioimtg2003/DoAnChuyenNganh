@@ -15,15 +15,23 @@ const PopUpConfirm: React.FC<props> = ({
   const popupRef = useRef<HTMLDivElement>(null);
   const [initialLoad, setInitialLoad] = useState<boolean>(true);
 
+  /**
+   * hàm này để đóng popup
+   */
   const onClose = useCallback(() => {
     setOpen(!open);
   }, [open]);
-
+  /**
+   * hàm này để Open popup
+   */
   const onOpen = useCallback(() => {
     setInitialLoad(false);
     setOpen(true);
   }, []);
 
+  /**
+   * hàm này để thực hiện hành động và đóng popup
+   */
   const onConfirmAndClose = useCallback(() => {
     if (data && onConfirm) {
       onConfirm(data);
@@ -31,8 +39,12 @@ const PopUpConfirm: React.FC<props> = ({
     onClose();
   }, [onConfirm, onClose, data]);
 
+  /**
+   * hàm này để đóng popup khi click ra ngoài
+   */
   const handleClickOutside = useCallback(
     (e: MouseEvent) => {
+      // code này để kiểm tra xem click có phải là click ra ngoài popup hay không
       if (popupRef.current && !popupRef.current.contains(e.target as Node)) {
         onClose();
       }
@@ -41,10 +53,9 @@ const PopUpConfirm: React.FC<props> = ({
   );
 
   useEffect(() => {
+    // nếu popup mở thì lắng nghe sự kiện click ra ngoài
     if (open) {
       document.addEventListener("click", handleClickOutside);
-    } else {
-      document.removeEventListener("click", handleClickOutside);
     }
   }, [open, handleClickOutside]);
 

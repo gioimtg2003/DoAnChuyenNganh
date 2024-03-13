@@ -16,7 +16,7 @@ import {
 } from "react-native";
 import { PRIMARY_COLOR } from "../lib/Constant";
 import { MaterialIcons } from "@expo/vector-icons";
-import { useEffect } from "react";
+import React from "react";
 const img = require("../../assets/LogoLogin.png");
 const { CalendarModule } = NativeModules;
 

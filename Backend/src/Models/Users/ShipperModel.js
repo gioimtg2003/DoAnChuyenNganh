@@ -40,9 +40,6 @@ let Shipper = new mongoose.Schema({
     CodeVerify: {
         type: Number,
     },
-    URIVerify: {
-        type: String,
-    },
     ExpVerify: {
         type: Number,
     },
@@ -57,6 +54,17 @@ let Shipper = new mongoose.Schema({
     CreateAt: {
         type: Date,
         default: Date.now
+    },
+    Online: {
+        type: Boolean,
+        default: false
+    },
+    OnlineRecent: {
+        type: Number,
+    },
+    OnlineTotal: {
+        type: Number,
+        default: 0
     }
 });
 

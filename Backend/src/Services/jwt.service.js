@@ -10,7 +10,7 @@ let payload = (user, refresh) => ({
 let SignToken = (payload, time) => {
     return new Promise((resolve, reject) => {
         try {
-            let token = jwt.sign(payload, SECRET_KEY, { algorithm: "HS256", expiresIn: time });
+            let token = jwt.sign(payload, SECRET_KEY, { algorithm: "HS256", expiresIn: Number(time) });
             resolve(token);
         } catch (err) {
             reject(err);
@@ -52,8 +52,8 @@ let CreateToken = async (user, timeAccessToken, timeRefreshToken) => {
 
     // let timeAccessToken = 60 * 30;
     // let timeRefreshToken = 60 * 60 * 24;
-    let accessToken = await SignToken(payload(user, false), timeAccessToken);
-    let refreshToken = await SignToken(payload(user, true), timeRefreshToken);
+    let accessToken = await SignToken(payload(user, false), Number(timeAccessToken));
+    let refreshToken = await SignToken(payload(user, true), Number(timeRefreshToken));
     return {
         accessToken: accessToken,
         refreshToken: refreshToken,

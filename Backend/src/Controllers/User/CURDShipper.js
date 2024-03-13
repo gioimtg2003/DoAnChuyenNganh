@@ -10,6 +10,7 @@ function CreateShipper(req, res) {
     const { ShopId, Email, Password, Name, Phone, Address } = body;
     const isValidEmail = InputValidate("Email", Email);
     const isValidPhone = InputValidate("Phone", Phone);
+
     if (!(isValidPhone)) {
         let api = API(BAD_REQUEST, "failed", `Input valid fields: ${!isValidEmail ? "Email " : ""}${!isValidPhone ? "Phone " : ""}Invalid Input`, {}, new Date());
         return res.status(BAD_REQUEST).json(api);

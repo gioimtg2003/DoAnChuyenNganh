@@ -16,10 +16,10 @@ export const SideBar = ({
 
   return (
     <div
-      className={`absolute top-0 left-0 z-50 w-full h-screen bg-black/15 ${!open && style.AnimationSideBarClose} `}
+      className={`absolute top-0 left-0 z-50 w-full h-screen bg-black/15 ${!open && style.AnimationSideBarClose}`}
     >
       <div
-        className={`relative w-4/5 bg-white h-screen ${open && style.AnimationSideBarOpen} ${!open && style.AnimationSideBarClose}`}
+        className={`relative w-4/5 bg-white h-screen ${open && style.AnimationSideBarOpen} `}
       >
         <div className="flex w-full justify-end items-center">
           <div className="p-2">
