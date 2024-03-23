@@ -4,12 +4,12 @@ const morgan = require('morgan');
 const session = require('express-session');
 const passport = require('passport');
 const { VerifyToken } = require('./MiddleWare/VerifyToken');
-const { routerOauth } = require('./Routes/oauth');
+const { routerOauth } = require('./Routes/OAuth');
 const { route } = require('./Routes');
 
 
 const initApp = (app) => {
-    app.use(cors({ origin: '*' }));
+    app.use(cors({ origin: ['localhost:8080', 'shippy.nguyenconggioi.me'] }));
     app.use(
         session({
             secret: "my-secret-key",

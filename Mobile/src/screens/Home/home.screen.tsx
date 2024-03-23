@@ -1,7 +1,7 @@
 import { Modal, ScrollView, StyleSheet, Text, View } from "react-native";
 import React, { useEffect, useMemo } from "react";
 import { Entypo } from "@expo/vector-icons";
-import { PRIMARY_COLOR } from "../../lib/Constant";
+import { PRIMARY_COLOR, STORAGE_KEY } from "../../lib/Constant";
 import AvatarImage from "../../components/AvatarImage";
 import Animated, {
     useAnimatedStyle,
@@ -9,18 +9,69 @@ import Animated, {
     withTiming,
 } from "react-native-reanimated";
 import OrderItem from "../../components/OrderItem";
-import { initSocket } from "../../lib/services/socket";
+import {
+    ClientToServerEvents,
+    ServerToClientEvents,
+    initSocket,
+} from "../../lib/services/socket";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useToken } from "../../lib/hooks/useToken";
+import * as Location from "expo-location";
+import { Socket } from "socket.io-client";
+
 const HomeScreen = (): JSX.Element => {
     const translateX = useSharedValue(-100);
-
+    const sockIO = useMemo(initSocket, []);
+    const { getAccessToken } = useToken();
+    const [local, setLocal] =
+        React.useState<Location.LocationObjectCoords | null>(null);
     useEffect(() => {
         translateX.value = withTiming(0, { duration: 500 });
-        const sockIO = initSocket("1233333");
         console.log(sockIO);
-        sockIO?.on("connect", () => {
+        sockIO.on("required_token", async () => {
+            try {
+                const accessToken = await getAccessToken();
+                sockIO.auth = { token: accessToken };
+                sockIO.connect();
+            } catch (error) {
+                console.error(error);
+            }
+        });
+        sockIO.on("connect", () => {
             console.log();
         });
     }, []);
+
+    useEffect(() => {
+        const sendLocation = async () => {
+            let location = await Location.getCurrentPositionAsync({});
+            sockIO.emit("update_location", location.coords);
+        };
+
+        (async () => {
+            let { status } = await Location.requestForegroundPermissionsAsync();
+            if (status !== "granted") {
+                console.log("Non Permission");
+                return;
+            }
+            let { status: backgroundStatus } =
+                await Location.requestBackgroundPermissionsAsync();
+            if (backgroundStatus !== "granted") {
+                console.log("Non Permission");
+                return;
+            }
+            let location = await Location.getCurrentPositionAsync({});
+            setLocal(location.coords);
+        })();
+
+        // const interval = setInterval(() => {
+        //     sendLocation();
+        // }, 5000);
+
+        // return () => clearInterval(interval);
+    }, []);
+
+    console.log(JSON.stringify(local));
 
     const styleAnimted = useAnimatedStyle(() => {
         return {

@@ -1,7 +1,6 @@
 const { SchemaShopUser } = require("../../../Models/Users/ShopModel");
 const { SchemaAuth } = require("../../../Models/Auth");
 const { logInfo, logError } = require("../../../Utils/logger");
-const { getSocketIo } = require("../../../socket");
 
 async function ServiceCreateShop(data, callback) {
     try {
@@ -52,12 +51,6 @@ async function ServiceUpdateShop(data, callback) {
 async function ServiceReadShop(data, callback) {
     try {
         let user = await SchemaShopUser.findById(data).select({ Password: 0, __v: 0, Delete: 0, Role: 0, Verify: 0, CodeVerify: 0, URIVerify: 0, ExpVerify: 0, Scope: 0 });
-        const socketIO = getSocketIo();
-        socketIO.on("connection", (socket) => {
-            socket.join(String(user._id));
-            console.log(`Join room ${user._id}`)
-
-        });
         if (user) {
             logInfo(new Date, "Success", `Get Profile: ${user._id}`, "Get User");
             callback(null, user);

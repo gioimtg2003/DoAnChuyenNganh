@@ -1,4 +1,4 @@
-const { BAD_REQUEST, INTERNAL_ERROR, OK, CREATED } = require("../Configs/HTTPCode");
+const { BAD_REQUEST, INTERNAL_ERROR, OK, CREATED } = require("../Configs/httpCode");
 const { ParseFile } = require("../MiddleWare/ParseFile");
 const { CreateProductService, ReadAllProductService, DeleteProductService } = require("../Services/product.service");
 const { API } = require("../Utils/formatApi");

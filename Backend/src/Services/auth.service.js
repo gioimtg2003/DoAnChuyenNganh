@@ -2,8 +2,7 @@ const { SchemaAuth } = require("../Models/Auth");
 const { logError, logInfo } = require("../Utils/logger");
 const bcrypt = require('bcryptjs');
 const { SchemaShopUser } = require("../Models/Users/ShopModel");
-const { SignToken, HandleToken, CreateToken } = require("./jwt.service");
-const { getSocketIo } = require("../socket");
+const { SignToken, HandleRefreshToken, CreateToken } = require("./jwt.service");
 
 let CheckEmailAuth = email => {
     return new Promise((resolve, reject) => {
@@ -48,12 +47,6 @@ async function HandleLogin(data, callback) {
                 let timeAccessToken = 60 * 30;
                 let timeRefreshToken = 60 * 60 * 24;
                 let _data = await CreateToken(user, timeAccessToken, timeRefreshToken);
-                let socket = getSocketIo();
-                socket.on("connection", (socket) => {
-                    console.log("shop join room")
-                    socket.join("status-room1");
-                });
-
                 logInfo(new Date(), "success", "Login Success", "Handle Login");
                 callback(null, _data, true);
             } else {
@@ -76,7 +69,7 @@ async function HandleLogin(data, callback) {
  */
 async function GrantAccessToken(data, callback) {
     try {
-        let check = await HandleToken(data);
+        let check = await HandleRefreshToken(data);
         if (check.err) {
             logInfo(new Date(), "failed", check.msg, "Grant Access Token");
             callback(null, check.msg, false);

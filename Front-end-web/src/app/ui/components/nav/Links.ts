@@ -6,36 +6,36 @@ import { LuBarChart3 } from "react-icons/lu";
 import { RiDashboardLine } from "react-icons/ri";
 
 export type Link = {
-  icon: IconType;
-  name: string;
-  url: string;
-  selected?: boolean | undefined;
+    icon: IconType;
+    name: string;
+    url: string;
+    selected?: boolean | undefined;
 };
 
 export const Links: Link[] = [
-  {
-    icon: RiDashboardLine,
-    name: "Dashboard",
-    url: "/dashboard",
-  },
-  {
-    icon: FaPeopleGroup,
-    name: "Employee",
-    url: "/dashboard/employee",
-  },
-  {
-    icon: FiCodesandbox,
-    name: "Product",
-    url: "/dashboard/product",
-  },
-  {
-    icon: TbFileInvoice,
-    name: "Order",
-    url: "/dashboard/order",
-  },
-  {
-    icon: LuBarChart3,
-    name: "Report",
-    url: "/dashboard/report",
-  },
+    {
+        icon: RiDashboardLine,
+        name: "Dashboard",
+        url: "/dashboard",
+    },
+    {
+        icon: FaPeopleGroup,
+        name: "Employee",
+        url: "/dashboard/employee",
+    },
+    {
+        icon: FiCodesandbox,
+        name: "Product",
+        url: "/dashboard/product",
+    },
+    {
+        icon: TbFileInvoice,
+        name: "Order",
+        url: "/dashboard/order",
+    },
+    {
+        icon: LuBarChart3,
+        name: "Theo dõi",
+        url: "/dashboard/tracking",
+    },
 ];

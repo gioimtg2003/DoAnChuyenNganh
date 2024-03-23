@@ -40,7 +40,6 @@ const ParseFile = async (req) => {
                         callback(null, chunk)
                     }
                 });
-
                 this._writeStream.on('error', e => {
                     form.emit('error', e)
                 });

@@ -65,7 +65,7 @@ router.get("/oauth/google/callback", passport.authenticate("google", {
 }));
 router.get("/oauth/login/success", (req, res) => {
     const { accessToken, refreshToken, exp } = req.user;
-    return res.redirect(`http://localhost:8080/oauth?accessToken=${accessToken}&refreshToken=${refreshToken}&exp=${exp}`);
+    return res.redirect(`${process.env.GOOGLE_SUCCESS_REDIRECT_URL}/oauth?accessToken=${accessToken}&refreshToken=${refreshToken}&exp=${exp}`);
 });
 
 module.exports = { routerOauth: router };
