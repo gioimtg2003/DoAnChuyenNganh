@@ -7,7 +7,6 @@ export const LocationProvider = ({ children }) => {
   const [location, setLocation] = useState(null);
   const subscriptionRef = useRef(null)
   const { userEmail } = useAuth(); // Lấy thông tin người dùng từ AuthContext
-
   useEffect(() => {
     const getLocation = async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();

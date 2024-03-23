@@ -28,15 +28,14 @@ export default function Login() {
     const handleLogin = async () => {
         let respone = await handleLoginApp(email);
         if( respone.data.Success === true) {
-            login(email);
-            navigation.navigate('OTPInput', {OTP: respone.data.OTP , Email: email}); 
+            login(email, respone.data.AT);
+            navigation.navigate('OTPInput', {OTP: respone.data.OTP , Email: email, AT: respone.data.AT}); 
             // setErrorEmail(respone.data.OTP)
         } else {
             setErrorEmail(respone.data.Mess);
         }
     }
     return (
-        
         <View style={styles.container}>
             <Image
                 style={styles.img_login}

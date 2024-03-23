@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Text, TextInput, TouchableOpacity  } from 'react-native';
+import { StyleSheet, View, Text, TextInput, TouchableOpacity} from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import Color from '../../Utils/Color'; // Đảm bảo điều chỉnh đường dẫn đến tệp màu sắc của bạn
 import { isValidCheckOTP } from '../../Utils/Validation';
 import { useRoute } from '@react-navigation/native';
@@ -9,21 +10,31 @@ export default function OTPInput() {
     const route = useRoute(); // Get route object
     const navigation = useNavigation(); // Get navigation object
 
-    const { OTP, Email} = route.params; // Nhận dữ liệu email từ route.params
+    const { OTP, Email, AT} = route.params; // Nhận dữ liệu email từ route.params
     const [otp, setOTP] = useState('');
     const [errorOTP, setErrorOTP] = useState(Email);
+
     const handleVerifyOTP = async () => {
-        if(otp == OTP){
-            let respone = await updateStatusOnline(Email, true);
-            
+        try {
+            if(otp == OTP){
+                await updateStatusOnline(Email, true);
+                await AsyncStorage.setItem('jwt', AT);
+                navigation.reset({
+                    index: 0,
+                    routes: [{ name: 'Home' }],
+                });
+    
+            } else {
+                setErrorOTP("OTP không đúng");
+            }
+        } catch (error) {
+            console.log(error);
             navigation.reset({
                 index: 0,
-                routes: [{ name: 'Home' }],
+                routes: [{ name: 'Login' }],
             });
-
-        } else {
-            setErrorOTP("OTP không đúng");
         }
+        
     };
 
     return (
@@ -37,7 +48,7 @@ export default function OTPInput() {
                 maxLength={6} // Giả sử mã OTP có 6 ký tự
                 placeholder="Nhập mã OTP"
             />
-            <Text style={{color: 'red' , marginBottom: 8}}>{errorOTP}</Text>
+            <Text style={{color: 'red' , marginBottom: 8}}>{OTP}</Text>
             <TouchableOpacity style={styles.verifyButton} 
                 onPress={() => {
                     let validateOTP = isValidCheckOTP(otp);
