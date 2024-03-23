@@ -1,6 +1,6 @@
 const hashPassword = require("../../Utils/hashPassword");
 const { InputValidate } = require("../../Utils/validateInput");
-const { OK, INTERNAL_ERROR, BAD_REQUEST, REQUEST_REJECT } = require("../../Configs/HTTPCode");
+const { OK, INTERNAL_ERROR, BAD_REQUEST, REQUEST_REJECT } = require("../../Configs/httpCode");
 const { API } = require("../../Utils/formatApi");
 const { ServiceCreateShipper } = require("../../Services/User/CURDShipper");
 

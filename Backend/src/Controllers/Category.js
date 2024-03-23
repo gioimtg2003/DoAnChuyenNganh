@@ -1,4 +1,4 @@
-const { BAD_REQUEST, INTERNAL_ERROR, CREATED } = require("../Configs/HTTPCode");
+const { BAD_REQUEST, INTERNAL_ERROR, CREATED } = require("../Configs/httpCode");
 const { CreateCategoryService, UpdateCategoryService } = require("../Services/category.service");
 const { API } = require("../Utils/formatApi");
 

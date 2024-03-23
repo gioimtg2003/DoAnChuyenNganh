@@ -1,4 +1,4 @@
-const { OK, INTERNAL_ERROR, BAD_REQUEST, REQUEST_REJECT, UNAUTHORIZED } = require("../../Configs/HTTPCode");
+const { OK, INTERNAL_ERROR, BAD_REQUEST, REQUEST_REJECT, UNAUTHORIZED } = require("../../Configs/httpCode");
 const { API } = require("../../Utils/formatApi");
 const Service = require("../../Services/User/Verify")
 function SendCode(req, res) {

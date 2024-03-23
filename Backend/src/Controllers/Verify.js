@@ -1,4 +1,4 @@
-const { BAD_REQUEST, INTERNAL_ERROR, UNAUTHORIZED, OK } = require("../Configs/HTTPCode");
+const { BAD_REQUEST, INTERNAL_ERROR, UNAUTHORIZED, OK } = require("../Configs/httpCode");
 const { API } = require("../Utils/formatApi");
 const Service = require("../Services/shipper.service")
 
