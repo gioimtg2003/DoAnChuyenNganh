@@ -8,8 +8,8 @@ import { LoginProvider } from "../lib/context/LoginContext";
 import { UserProvider } from "../lib/context/UserContext";
 import { AuthProvider } from "../lib/context/auth/authContext";
 import { ProtectProvider } from "../lib/context/Protect";
-import { NotificationOrderProvider } from "../lib/context/NotificationEventContext";
-import { WrapperContextProvider } from "../lib/context/wrapper/WrapperContext";
+import EventProvider from "../lib/context/event/EventProvider";
+import Socket from "../lib/context/Socket";
 
 export default function AuthLayout({
     children,
@@ -23,16 +23,15 @@ export default function AuthLayout({
             <AuthProvider>
                 <ProtectProvider>
                     <LoginProvider>
-                        <UserProvider>
-                            <WrapperContextProvider>
-                                <NotificationOrderProvider>
-                                    <NotificationProvider>
-                                        <NavWeb />
-                                        <div className="pt-20">{children}</div>
-                                    </NotificationProvider>
-                                </NotificationOrderProvider>
-                            </WrapperContextProvider>
-                        </UserProvider>
+                        <EventProvider>
+                            <Socket />
+                            <UserProvider>
+                                <NotificationProvider>
+                                    <NavWeb />
+                                    <div className="pt-20">{children}</div>
+                                </NotificationProvider>
+                            </UserProvider>
+                        </EventProvider>
                     </LoginProvider>
                 </ProtectProvider>
             </AuthProvider>

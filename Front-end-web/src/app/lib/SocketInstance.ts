@@ -49,7 +49,7 @@ export class SocketInstance {
         // eslint-disable-next-line react-hooks/rules-of-hooks
         const { accessToken } = useToken();
         if (!SocketInstance.instance) {
-            SocketInstance.instance = io("http://localhost:3000", {
+            SocketInstance.instance = io("http://apishippy.nguyenconggioi.me", {
                 auth: { token: accessToken },
             });
         }

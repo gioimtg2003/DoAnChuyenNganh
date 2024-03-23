@@ -5,7 +5,6 @@ import { useCallback, useContext, useEffect, useState } from "react";
 import { NavLinkContext } from "@/app/lib/context/LinkContext";
 import { NotificationContext } from "@/app/lib/context/NotificationContext";
 import { DataGridView } from "@/components/dataGridView/DataGridView";
-import { columns } from "@/app/lib/data";
 import { ModalPopUp } from "@/app/ui/components/modal/ModalPopUp";
 import { Button, Form, Input, Select } from "antd";
 import { Option } from "antd/es/mentions";
@@ -13,7 +12,8 @@ import type { AddEmployeeFieldType, Employee } from "@/app/lib/Types";
 import { useStaff } from "@/app/lib/context/StaffContext";
 import { AddEmployee } from "@/app/lib/service/user";
 import { useFetch } from "@/app/lib/hook/fetch";
-import { useWrapperContext } from "@/app/lib/context/wrapper/WrapperContext";
+import { EventContext } from "@/app/lib/context/event/EventProvider";
+import { columnsEmployee } from "@/app/lib/constant/columns";
 
 const optionDataGridView = {
     gridType: "employee",
@@ -34,7 +34,8 @@ export default function EmployeePage(): JSX.Element {
     );
     const { stateLink, dispatchLink } = useContext(NavLinkContext);
     const [form] = Form.useForm();
-    const { state: StateEvent } = useWrapperContext();
+    const { state: StateEvent } = useContext(EventContext);
+    // const { state: StateEvent } = useWrapperContext();
     useEffect(() => {
         window.document.title = "Employee";
         selectedPage(dispatchLink, 1);
@@ -42,16 +43,29 @@ export default function EmployeePage(): JSX.Element {
     }, [employeeSource, dispatchLink, GetEmployee]);
 
     useEffect(() => {
-        if (StateEvent.events.statusShipper) {
+        console.log(StateEvent);
+        if (StateEvent.statusShipper) {
             let data = [
                 {
-                    Id: StateEvent.events.statusShipper.id,
-                    Status: StateEvent.events.statusShipper.status,
+                    Id: StateEvent.statusShipper.id,
+                    Status: StateEvent.statusShipper.status,
                 },
             ];
             UpdateStatus(data);
         }
-    }, [StateEvent.events.statusShipper, UpdateStatus]);
+    }, [StateEvent.statusShipper, UpdateStatus]);
+
+    // useEffect(() => {
+    //     if (StateEvent.events.statusShipper) {
+    //         let data = [
+    //             {
+    //                 Id: StateEvent.events.statusShipper.id,
+    //                 Status: StateEvent.events.statusShipper.status,
+    //             },
+    //         ];
+    //         UpdateStatus(data);
+    //     }
+    // }, [StateEvent.events.statusShipper, UpdateStatus]);
 
     const onFinish = async (values: AddEmployeeFieldType) => {
         try {
@@ -211,7 +225,7 @@ export default function EmployeePage(): JSX.Element {
                             </div>
                         </div>
                         <DataGridView
-                            columns={columns}
+                            columns={columnsEmployee}
                             dataSources={state}
                             options={optionDataGridView}
                         />
