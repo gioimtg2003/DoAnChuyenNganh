@@ -1,0 +1,25 @@
+version: "3.4"
+services:
+    frontend:
+        build:
+            context: ./Front-end-web
+            dockerfile: Dockerfile
+        networks:
+            - doanchuyennganh-network-frontend
+
+    nginx-frontend:
+        build:
+            context: ./nginx
+            dockerfile: Dockerfile.frontend
+        depends_on:
+            - frontend
+        networks:
+            - doanchuyennganh-network-frontend
+        ports:
+            - "80:80"
+            - "443:443"
+        command: nginx -g "daemon off;"
+
+networks:
+    doanchuyennganh-network-frontend:
+        driver: bridge

@@ -1,6 +1,6 @@
-version: "3.3"
+version: "3.4"
 services:
-    mongodb:
+    mongoserveice:
         image: mongo
         restart: always
         environment:
@@ -8,73 +8,33 @@ services:
             - MONGO_INITDB_ROOT_PASSWORD=conggioi123
         volumes:
             - ./db:/data/db
-        ports:
-            - "27017:27017"
         networks:
             - doanchuyennganh-network
     backend:
         build:
-            context: ./Backend
+            context: ./backend
             dockerfile: Dockerfile
+        depends_on:
+            - mongoserveice
         networks:
             - doanchuyennganh-network
         restart: always
         environment:
-            - MONGO_URI=mongodb://root:conggioi123@mongodb:27017
+            - MONGO_URI=mongodb://mongoserveice/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+2.1.1
+            - GOOGLE_CALLBACK_URL=https://apishippy.nguyenconggioi.me/oauth/google/callback
+
+    nginx-backend:
+        build:
+            context: ./nginx
+            dockerfile: Dockerfile.backend
         depends_on:
-            - mongodb
-    # rabbitmq:
-    #   image: rabbitmq:3-management
-    #   networks:
-    #     - doanchuyennganh-network
-    #   ports:
-    #     - "8080:15672"
-    #     - "5672:5672"
-    #   depends_on:
-    #     - mongodb
-    #     - kong-gateway
-    # kong-gateway:
-    #   container_name: Kong-gateway
-    #   image: kong/kong-gateway:3.5.0.2
-    #   networks:
-    #     - doanchuyennganh-network
-    #   volumes:
-    #     - ./KongGateway:/kong/declarative/
-    #   environment:
-    #     - KONG_DATABASE=off
-    #     - KONG_DECLARATIVE_CONFIG=/kong/declarative/kong.yml
-    #     - KONG_PROXY_ACCESS_LOG=/dev/stdout
-    #     - KONG_ADMIN_ACCESS_LOG=/dev/stdout
-    #     - KONG_PROXY_ERROR_LOG=/dev/stderr
-    #     - KONG_ADMIN_ERROR_LOG=/dev/stderr
-    #     - KONG_ADMIN_LISTEN=0.0.0.0:8001
-    #     - KONG_ADMIN_GUI_URL=http://localhost:8002
-    #     - KONG_LICENSE_DATA
-    #   ports:
-    #     - 8000:8000
-    #     - 8443:8443
-    #     - 8001:8001
-    #     - 8444:8444
-    #     - 8002:8002
-    #     - 8445:8445
-    #     - 8003:8003
-    #     - 8004:8004
-    # sendmail-services:
-    #   build:
-    #     context: ./Backend/SendMailService
-    #     dockerfile: Dockerfile
-    #   networks:
-    #     - doanchuyennganh-network
-    #   restart: always
-    #   environment:
-    #     - USER_EMAIL=conggioi.dev@gmail.com
-    #     - PASSWORD=ebcxkhuuhuvgbdoj
-    #     - PORT=587
-    #     - RABBITMQ_URI=amqp://rabbitmq
-    #     - SEND_TYPE=topic
-    #     - EXCHANGE=send_mail
-    #   depends_on:
-    #     - rabbitmq
+            - backend
+        networks:
+            - doanchuyennganh-network
+        ports:
+            - "80:80"
+            - "443:443"
+        command: nginx -g "daemon off;"
 
 networks:
     doanchuyennganh-network:
