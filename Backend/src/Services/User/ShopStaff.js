@@ -1,3 +1,5 @@
+const { mongoose } = require("../../db/Connect.Mongo");
+const { SchemaOrder } = require("../../Models/Order");
 const { SchemaShipper } = require("../../Models/Users/ShipperModel");
 const { SchemaShopUser } = require("../../Models/Users/ShopModel");
 const { CheckStore } = require("../../Utils/checkStore");
@@ -65,4 +67,43 @@ async function AddEmployee(data, callback) {
     }
 }
 
-module.exports = { GetAllEmployee, AddEmployee };
+async function ServiceEmployeeDetails(data, callback) {
+    let { id, idEmployee } = data;
+    console.log(data)
+    try {
+        let dataDetails = await SchemaOrder.aggregate([
+            {
+                $match: {
+                    idShipper: new mongoose.Types.ObjectId(idEmployee),
+                    idUser: new mongoose.Types.ObjectId(id),
+                    Status: { $in: ['Canceled', 'Completed'] }
+                }
+            },
+            {
+                $group: {
+                    _id: null,
+                    totalCancel: { $sum: { $cond: [{ $eq: ['$Status', 'Canceled'] }, 1, 0] } },
+                    totalCompleted: { $sum: { $cond: [{ $eq: ['$Status', 'Completed'] }, 1, 0] } },
+                },
+            },
+            {
+                $project: {
+                    _id: 0,
+                    totalCancel: 1,
+                    totalCompleted: 1
+                }
+            }
+        ]);
+
+        if (dataDetails.length === 0) {
+            dataDetails.push({ totalCancel: 0, totalCompleted: 0 });
+        }
+        logInfo(new Date(), "success", "Get employee successfully", "Service Employee Details");
+        callback(null, dataDetails[0]);
+    } catch (err) {
+        logError(new Date(), err, "Service Employee Details");
+        callback(err, null);
+    }
+}
+
+module.exports = { GetAllEmployee, AddEmployee, ServiceEmployeeDetails };

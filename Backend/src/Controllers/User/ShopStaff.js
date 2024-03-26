@@ -1,6 +1,6 @@
 const { OK, INTERNAL_ERROR, REQUEST_REJECT, BAD_REQUEST, CREATED } = require("../../Configs/httpCode");
 const { API } = require("../../Utils/formatApi");
-const { GetAllEmployee: ServiceGetAllEmployee, AddEmployee: ServiceAddEmployee } = require("../../Services/User/ShopStaff");
+const { GetAllEmployee: ServiceGetAllEmployee, AddEmployee: ServiceAddEmployee, ServiceEmployeeDetails } = require("../../Services/User/ShopStaff");
 function GetAllEmployee(req, res) {
     const { id } = req.user;
     ServiceGetAllEmployee(id, (err, data, message) => {
@@ -66,4 +66,35 @@ function AddEmployee(req, res) {
     });
 }
 
-module.exports = { GetAllEmployee, AddEmployee };
+function EmployeeDetails(req, res) {
+    const { id: idEmployee } = req.params;
+    const { id } = req.user;
+    if (!idEmployee) {
+        let api = API(BAD_REQUEST, "failed", `Missing field`, {}, new Date())
+        return res.status(BAD_REQUEST).json(
+            api
+        );
+    }
+    let data = {
+        id,
+        idEmployee
+    }
+    ServiceEmployeeDetails(data, (err, data) => {
+        if (err) {
+            let api = API(INTERNAL_ERROR, "error", `${err}`, {}, new Date())
+            return res.status(INTERNAL_ERROR).json(
+                api
+            );
+        }
+        if (!data) {
+            let api = API(REQUEST_REJECT, "failed", ``, {}, new Date())
+            return res.status(REQUEST_REJECT).json(
+                api
+            );
+        }
+        let api = API(OK, "success", `Get employee successfully`, data, new Date())
+        return res.status(OK).json(api);
+    });
+}
+
+module.exports = { GetAllEmployee, AddEmployee, EmployeeDetails };
