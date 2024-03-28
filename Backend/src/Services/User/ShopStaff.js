@@ -4,6 +4,7 @@ const { SchemaShipper } = require("../../Models/Users/ShipperModel");
 const { SchemaShopUser } = require("../../Models/Users/ShopModel");
 const { CheckStore } = require("../../Utils/checkStore");
 const { logInfo, logError } = require("../../Utils/logger");
+const msToTime = require("../../Utils/msToTime");
 
 function CheckEmail(email) {
     return new Promise((res, rej) => {
@@ -69,8 +70,8 @@ async function AddEmployee(data, callback) {
 
 async function ServiceEmployeeDetails(data, callback) {
     let { id, idEmployee } = data;
-    console.log(data)
     try {
+        let findShipper = await SchemaShipper.findById(idEmployee);
         let dataDetails = await SchemaOrder.aggregate([
             {
                 $match: {
@@ -82,23 +83,30 @@ async function ServiceEmployeeDetails(data, callback) {
             {
                 $group: {
                     _id: null,
-                    totalCancel: { $sum: { $cond: [{ $eq: ['$Status', 'Canceled'] }, 1, 0] } },
-                    totalCompleted: { $sum: { $cond: [{ $eq: ['$Status', 'Completed'] }, 1, 0] } },
-                },
-            },
-            {
-                $project: {
-                    _id: 0,
-                    totalCancel: 1,
-                    totalCompleted: 1
+                    totalCancel: {
+                        $sum: {
+                            $cond: [{ $eq: ["$Status", "Canceled"] }, 1, 0]
+                        }
+                    },
+                    totalCompleted: {
+                        $sum: {
+                            $cond: [{ $eq: ["$Status", "Completed"] }, 1, 0]
+                        }
+                    }
                 }
             }
         ]);
-
+        console.log(dataDetails)
+        // fix if dataDetails is empty return Name, Email, Phone, Address and count Status
         if (dataDetails.length === 0) {
             dataDetails.push({ totalCancel: 0, totalCompleted: 0 });
         }
         logInfo(new Date(), "success", "Get employee successfully", "Service Employee Details");
+        // add data employee to dataDetails
+        dataDetails[0].Name = findShipper.Name;
+        dataDetails[0].Email = findShipper.Email;
+        dataDetails[0].Phone = findShipper.Phone;
+        dataDetails[0].OnlineTotal = msToTime(findShipper.OnlineTotal);
         callback(null, dataDetails[0]);
     } catch (err) {
         logError(new Date(), err, "Service Employee Details");

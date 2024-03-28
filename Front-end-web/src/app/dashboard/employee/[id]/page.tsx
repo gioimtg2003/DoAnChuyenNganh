@@ -3,20 +3,39 @@ import Card from "@/app/ui/components/Cart";
 import { SupervisedUserCircleOutlined } from "@mui/icons-material";
 import { Avatar } from "antd";
 import { usePathname } from "next/navigation";
-import { useMemo } from "react";
-import { FaRegWindowClose, FaStar } from "react-icons/fa";
+import { useEffect, useMemo, useState } from "react";
+import { FaRegClock, FaRegWindowClose, FaStar } from "react-icons/fa";
 import { FaHeadphonesSimple } from "react-icons/fa6";
 import { GoLocation } from "react-icons/go";
 import { BsBoxSeam } from "react-icons/bs";
 import { NumberToPrice } from "@/app/lib/util/numberToPrice";
 import { IoPricetagsOutline } from "react-icons/io5";
-
+import { axiosInstance } from "@/app/lib/util/axios";
+interface Data {
+    totalCancel: number;
+    totalCompleted: number;
+    Name: string;
+    Phone: string;
+    Email: string;
+    OnlineTotal: string;
+}
 export default function PageDetails() {
     const router = usePathname();
+    const [metric, setMetric] = useState<Data>({} as Data);
+
     const idShipper = useMemo(
         () => router.split("/").slice(3, 4).join(""),
         [router]
     );
+    useEffect(() => {
+        (async (id) => {
+            const getData = await axiosInstance().get(
+                `/user/shop/employee/details/${id}`
+            );
+            setMetric(getData.data.data);
+            console.log(getData.data.data);
+        })(idShipper);
+    }, []);
     return (
         <div className="w-full grid grid-cols-3 grid-rows-2 gap-5 mt-8 px-5">
             <Card className={"bg-[#D2E0FB] col-span-1 row-span-2 w-full"}>
@@ -28,7 +47,7 @@ export default function PageDetails() {
                     />
                     <div className="w-4/6 flex flex-col justify-center items-start pl-3">
                         <p className="text-start text-2xl font-bold text-[#19385D] mb-2">
-                            Nguyen Cong Gioi
+                            {metric.Name}
                         </p>
                         <div className="w-4/5 flex flex-row items-center">
                             <FaStar className="text-primary-1-color mr-2" />
@@ -49,7 +68,7 @@ export default function PageDetails() {
                         </div>
                         <div className="w-4/5">
                             <p className="text-[#19385D] text-lg font-medium">
-                                0123456789
+                                {metric.Phone}
                             </p>
                         </div>
                     </div>
@@ -59,7 +78,7 @@ export default function PageDetails() {
                         </div>
                         <div className="w-4/5">
                             <p className="text-[#19385D] text-lg font-medium">
-                                1B Cộng Hòa, p15, Tân Bình
+                                {metric.Email}
                             </p>
                         </div>
                     </div>
@@ -72,7 +91,9 @@ export default function PageDetails() {
                     </p>
                 </div>
                 <div className="flex flex-row w-full justify-center items-center mt-2">
-                    <p className="text-3xl font-semibold text-[#756AB6]">30</p>
+                    <p className="text-3xl font-semibold text-[#756AB6]">
+                        {metric.totalCompleted}
+                    </p>
                     <BsBoxSeam
                         size={32}
                         className="text-primary-1-color text-center ml-3"
@@ -102,7 +123,9 @@ export default function PageDetails() {
                     </p>
                 </div>
                 <div className="flex flex-row w-full justify-center items-center mt-2">
-                    <p className="text-3xl font-semibold text-[#D37676]">30</p>
+                    <p className="text-3xl font-semibold text-[#D37676]">
+                        {metric.totalCancel}
+                    </p>
                     <FaRegWindowClose
                         size={32}
                         className="text-[#FF8080] text-center ml-3"
@@ -114,6 +137,15 @@ export default function PageDetails() {
                     <p className="text-xl font-semibold text-[#19385D]">
                         Tổng thời gian hoạt động
                     </p>
+                </div>
+                <div className="flex flex-row w-full justify-center items-center mt-2">
+                    <p className="text-xl font-medium text-primary-2-color">
+                        {metric.OnlineTotal}
+                    </p>
+                    <FaRegClock
+                        size={32}
+                        className="text-primary-1-color text-center ml-3"
+                    />
                 </div>
             </Card>
         </div>
