@@ -97,4 +97,24 @@ async function ReadOrderService(data, callback) {
     }
 }
 
-module.exports = { CreateOrderService, ReadOrderService }
+async function getOrderDetails(data, callback) {
+    try {
+        let check = await CheckStore(data.idUser);
+        if (!check) {
+            logError(new Date(), "Store not found", "getOrderDetails");
+            return callback("Store not found", null);
+        }
+        let order = await SchemaOrder.findOne({ _id: new mongoose.Types.ObjectId(data.orderId), idUser: new mongoose.Types.ObjectId(data.idUser) });
+
+        logInfo(new Date(), "success", "GET order details successfully", "getOrderDetails");
+        return callback(null, order);
+
+    } catch (err) {
+        logError(new Date(), err, "getOrderDetails");
+        return callback(err);
+
+    }
+
+}
+
+module.exports = { CreateOrderService, ReadOrderService, getOrderDetails }

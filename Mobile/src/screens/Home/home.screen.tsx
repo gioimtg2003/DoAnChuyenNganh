@@ -65,11 +65,11 @@ const HomeScreen = (): JSX.Element => {
             setLocal(location.coords);
         })();
 
-        // const interval = setInterval(() => {
-        //     sendLocation();
-        // }, 5000);
+        const interval = setInterval(() => {
+            sendLocation();
+        }, 5000);
 
-        // return () => clearInterval(interval);
+        return () => clearInterval(interval);
     }, []);
 
     const styleAnimted = useAnimatedStyle(() => {

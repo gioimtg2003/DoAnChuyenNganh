@@ -1,6 +1,6 @@
 const { GrantAccessToken, Login } = require("../Controllers/Auth");
 const { CreateCategory } = require("../Controllers/Category");
-const { CreateOrder, ReadOrder } = require("../Controllers/Order");
+const { CreateOrder, ReadOrder, OrderDetails } = require("../Controllers/Order");
 const { CreateProduct, ReadAllProduct, DeleteProduct } = require("../Controllers/Product");
 const { SendEmail } = require("../Controllers/SendEmail");
 const { CreateShipper } = require("../Controllers/User/CURDShipper");
@@ -25,7 +25,7 @@ route.get("/user/shop/employee/details/:id", ShopPermission, EmployeeDetails);
 route.get("/user/shop/employee/all", ShopPermission, GetAllEmployee);
 route.post("/user/shop/employee", ShopPermission, AddEmployee);
 //Shipper
-route.get("/user/shipper");
+route.get("/user/shipper/:id", ShopPermission, EmployeeDetails);
 route.post("/user/shipper", ShopPermission, CreateShipper);
 route.put("/user/shipper");
 route.delete("/user/shipper");
@@ -55,6 +55,7 @@ route.get("/order", ShopPermission, ReadOrder);
 route.post("/order", ShopPermission, CreateOrder);
 route.put("/order");
 route.delete("/order");
+route.get("/order/:orderId", ShopPermission, OrderDetails);
 /**************************/
 route.put("/order/status");
 

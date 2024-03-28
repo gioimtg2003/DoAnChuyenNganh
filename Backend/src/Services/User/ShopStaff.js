@@ -113,5 +113,18 @@ async function ServiceEmployeeDetails(data, callback) {
         callback(err, null);
     }
 }
-
-module.exports = { GetAllEmployee, AddEmployee, ServiceEmployeeDetails };
+async function GetShipperDetail(data, callback) {
+    try {
+        let shipper = await SchemaShipper.findOne({ _id: new mongoose.Types.ObjectId(data.id), ShopId: new mongoose.Types.ObjectId(data.shopId) });
+        if (!shipper) {
+            logInfo(new Date(), "failed", "Shipper not found", "Get Shipper Detail");
+            return callback(null, false, "Shipper not found");
+        }
+        logInfo(new Date(), "success", "Get Shipper successfully", "Get Shipper Detail");
+        callback(null, shipper, null);
+    } catch (err) {
+        logError(new Date(), err, "Get Shipper Detail");
+        callback(err, null);
+    }
+}
+module.exports = { GetAllEmployee, AddEmployee, ServiceEmployeeDetails, GetShipperDetail };

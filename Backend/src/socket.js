@@ -38,6 +38,12 @@ const handleConnect = async (socket) => {
 
         socket.on("update_location", (data) => {
             console.log(data)
+            socketIo.to(parserToken.shopId).emit("shipper_location", {
+                id: parserToken.id,
+                lat: data.latitude,
+                lng: data.longitude
+            })
+
         })
 
     } else if (parserToken.role === 2) {

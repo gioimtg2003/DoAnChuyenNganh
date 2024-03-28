@@ -45,7 +45,7 @@ let ServicePickupOrder = async (data, callback) => {
             $set: {
                 "Status": "Delivery",
                 "idShipper": new mongoose.Types.ObjectId(data.shipperId),
-                "Date.PickupDate": Date.now(),
+                "Date.DeliveryDate": Date.now(),
             }
         }).exec()
 
@@ -149,7 +149,8 @@ let serviceOrderCancel = async (data, callback) => {
             Status: "Delivery"
         }, {
             $set: {
-                "Status": "Canceled"
+                "Status": "Canceled",
+                "Date.CancelDate": Date.now(),
             }
         }).exec()
 
@@ -180,7 +181,8 @@ let serviceOrderComplete = async (data, callback) => {
             Status: "Delivery"
         }, {
             $set: {
-                "Status": "Completed"
+                "Status": "Completed",
+                "Date.CompletedDate": Date.now(),
             }
         }).exec()
 

@@ -76,7 +76,7 @@ let Order = new mongoose.Schema({
     },
     Date: {
         DeliveryDate: {
-            type: Number,
+            type: Date,
             default: null
         },
         OrderDate: {
@@ -84,11 +84,11 @@ let Order = new mongoose.Schema({
             default: Date.now
         },
         CompletedDate: {
-            type: Number,
+            type: Date,
             default: null
         },
         CancelDate: {
-            type: Number,
+            type: Date,
             default: null
         },
     }
