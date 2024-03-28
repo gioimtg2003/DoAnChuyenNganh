@@ -28,7 +28,7 @@ export default function EmployeePage(): JSX.Element {
     const { state, GetEmployee, UpdateStatus } = useStaff();
     const [reLoad, setReLoad] = useState<boolean | null>(null);
     const { data: employeeSource } = useFetch(
-        "/user/shop/employee",
+        "/user/shop/employee/all",
         {},
         reLoad
     );
@@ -48,7 +48,7 @@ export default function EmployeePage(): JSX.Element {
             let data = [
                 {
                     Id: StateEvent.statusShipper.id,
-                    Status: StateEvent.statusShipper.status,
+                    Online: StateEvent.statusShipper.status,
                 },
             ];
             UpdateStatus(data);

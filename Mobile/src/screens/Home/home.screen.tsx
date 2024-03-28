@@ -1,23 +1,20 @@
-import { Modal, ScrollView, StyleSheet, Text, View } from "react-native";
-import React, { useEffect, useMemo } from "react";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
+import React, { useEffect, useMemo, useState } from "react";
 import { Entypo } from "@expo/vector-icons";
-import { PRIMARY_COLOR, STORAGE_KEY } from "../../lib/Constant";
+import { PRIMARY_COLOR } from "../../lib/Constant";
 import AvatarImage from "../../components/AvatarImage";
 import Animated, {
     useAnimatedStyle,
     useSharedValue,
     withTiming,
 } from "react-native-reanimated";
-import OrderItem from "../../components/OrderItem";
-import {
-    ClientToServerEvents,
-    ServerToClientEvents,
-    initSocket,
-} from "../../lib/services/socket";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { initSocket } from "../../lib/services/socket";
 import { useToken } from "../../lib/hooks/useToken";
 import * as Location from "expo-location";
-import { Socket } from "socket.io-client";
+import GetOrder from "../../lib/services/GetOrder";
+import { IOrderItem } from "../../lib/types/OrderItem";
+import ListOrderPickup from "../../components/ListOrderPickup";
+import { useNavigation } from "@react-navigation/native";
 
 const HomeScreen = (): JSX.Element => {
     const translateX = useSharedValue(-100);
@@ -25,6 +22,10 @@ const HomeScreen = (): JSX.Element => {
     const { getAccessToken } = useToken();
     const [local, setLocal] =
         React.useState<Location.LocationObjectCoords | null>(null);
+    const [orders, setOrders] = useState<IOrderItem[] | undefined>([]);
+    const [reload, setReload] = useState<boolean>(true);
+    const navigation = useNavigation();
+    console.log(navigation);
     useEffect(() => {
         translateX.value = withTiming(0, { duration: 500 });
         console.log(sockIO);
@@ -70,8 +71,6 @@ const HomeScreen = (): JSX.Element => {
 
         // return () => clearInterval(interval);
     }, []);
-
-    console.log(JSON.stringify(local));
 
     const styleAnimted = useAnimatedStyle(() => {
         return {
@@ -136,49 +135,7 @@ const HomeScreen = (): JSX.Element => {
                 >
                     Lấy đơn ngay
                 </Text>
-
-                <OrderItem
-                    name="Quần sọc tay ngắn"
-                    address="200 Duong Dinh Hoi, Phuong Phuoc Long B, TP HCM"
-                    price={200000}
-                    pickUp={true}
-                    url="https://do-an-chuyen-nganh.s3.ap-southeast-1.amazonaws.com/1709563860803-z5206859198076_7f29ec13eaeb6ae5a7df21ba1f654b87.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT2IO5ARCS26EK5KP%2F20240312%2Fap-southeast-1%2Fs3%2Faws4_request&X-Amz-Date=20240312T090245Z&X-Amz-Expires=1800&X-Amz-Signature=07186f106c1988b742440f38b2b946e2576cefd097e4e7deb9dfefbcc65a4cc6&X-Amz-SignedHeaders=host&x-id=GetObject"
-                />
-                <OrderItem
-                    name="Quần sọc tay ngắn"
-                    address="200 Duong Dinh Hoi, Phuong Phuoc Long B, TP HCM"
-                    price={200000}
-                    pickUp={true}
-                    url="https://do-an-chuyen-nganh.s3.ap-southeast-1.amazonaws.com/1709563860803-z5206859198076_7f29ec13eaeb6ae5a7df21ba1f654b87.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT2IO5ARCS26EK5KP%2F20240312%2Fap-southeast-1%2Fs3%2Faws4_request&X-Amz-Date=20240312T090245Z&X-Amz-Expires=1800&X-Amz-Signature=07186f106c1988b742440f38b2b946e2576cefd097e4e7deb9dfefbcc65a4cc6&X-Amz-SignedHeaders=host&x-id=GetObject"
-                />
-                <OrderItem
-                    name="Quần sọc tay ngắn"
-                    address="200 Duong Dinh Hoi, Phuong Phuoc Long B, TP HCM"
-                    price={200000}
-                    pickUp={true}
-                    url="https://do-an-chuyen-nganh.s3.ap-southeast-1.amazonaws.com/1709563860803-z5206859198076_7f29ec13eaeb6ae5a7df21ba1f654b87.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT2IO5ARCS26EK5KP%2F20240312%2Fap-southeast-1%2Fs3%2Faws4_request&X-Amz-Date=20240312T090245Z&X-Amz-Expires=1800&X-Amz-Signature=07186f106c1988b742440f38b2b946e2576cefd097e4e7deb9dfefbcc65a4cc6&X-Amz-SignedHeaders=host&x-id=GetObject"
-                />
-                <OrderItem
-                    name="Quần sọc tay ngắn"
-                    address="200 Duong Dinh Hoi, Phuong Phuoc Long B, TP HCM"
-                    price={200000}
-                    pickUp={true}
-                    url="https://do-an-chuyen-nganh.s3.ap-southeast-1.amazonaws.com/1709563860803-z5206859198076_7f29ec13eaeb6ae5a7df21ba1f654b87.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT2IO5ARCS26EK5KP%2F20240312%2Fap-southeast-1%2Fs3%2Faws4_request&X-Amz-Date=20240312T090245Z&X-Amz-Expires=1800&X-Amz-Signature=07186f106c1988b742440f38b2b946e2576cefd097e4e7deb9dfefbcc65a4cc6&X-Amz-SignedHeaders=host&x-id=GetObject"
-                />
-                <OrderItem
-                    name="Quần sọc tay ngắn"
-                    address="200 Duong Dinh Hoi, Phuong Phuoc Long B, TP HCM"
-                    price={200000}
-                    pickUp={true}
-                    url="https://do-an-chuyen-nganh.s3.ap-southeast-1.amazonaws.com/1709563860803-z5206859198076_7f29ec13eaeb6ae5a7df21ba1f654b87.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT2IO5ARCS26EK5KP%2F20240312%2Fap-southeast-1%2Fs3%2Faws4_request&X-Amz-Date=20240312T090245Z&X-Amz-Expires=1800&X-Amz-Signature=07186f106c1988b742440f38b2b946e2576cefd097e4e7deb9dfefbcc65a4cc6&X-Amz-SignedHeaders=host&x-id=GetObject"
-                />
-                <OrderItem
-                    name="Quần sọc tay ngắn"
-                    address="200 Duong Dinh Hoi, Phuong Phuoc Long B, TP HCM"
-                    price={200000}
-                    pickUp={true}
-                    url="https://do-an-chuyen-nganh.s3.ap-southeast-1.amazonaws.com/1709563860803-z5206859198076_7f29ec13eaeb6ae5a7df21ba1f654b87.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT2IO5ARCS26EK5KP%2F20240312%2Fap-southeast-1%2Fs3%2Faws4_request&X-Amz-Date=20240312T090245Z&X-Amz-Expires=1800&X-Amz-Signature=07186f106c1988b742440f38b2b946e2576cefd097e4e7deb9dfefbcc65a4cc6&X-Amz-SignedHeaders=host&x-id=GetObject"
-                />
+                <ListOrderPickup />
             </View>
         </ScrollView>
     );

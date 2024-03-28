@@ -46,13 +46,13 @@ export const OrderStatus = (status: string): JSX.Element => {
                     Đang vận chuyển
                 </Tag>
             );
-        case "Cancel":
+        case "Canceled":
             return (
                 <Tag icon={<CloseCircleOutlined />} color="error">
                     Đã hủy
                 </Tag>
             );
-        case "Success":
+        case "Completed":
             return (
                 <Tag icon={<CheckCircleOutlined />} color="success">
                     Thành công

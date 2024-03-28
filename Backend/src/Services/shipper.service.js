@@ -73,7 +73,8 @@ const VerifyAccount = async (data, callback) => {
                     Online: true
                 }
                 let socketIO = getSocketIo();
-                await SchemaShipper.findOneAndUpdate({ _id: isShipper._id }, { Online: true, OnlineRecent: Date.now() })
+                await SchemaShipper.findOneAndUpdate({ _id: isShipper._id }, { Online: true, OnlineRecent: Date.now() }, { new: true });
+
                 socketIO.to(String(isShipper.ShopId)).emit("shipper_status", dataSocket);
                 // socketIO.on("connection", async (socket) => {
                 //     console.log(socketIO.sockets.adapter.rooms)

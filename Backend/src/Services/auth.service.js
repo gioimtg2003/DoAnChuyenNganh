@@ -103,17 +103,16 @@ async function GrantAccessToken(data, callback) {
 async function ServiceOauthLogin(data, callback) {
     try {
         let user = await CheckEmailStore(data.Email);
+        let timeAccessToken = 60 * 30;
+        let timeRefreshToken = 60 * 60 * 24;
         if (user) {
-            let timeAccessToken = 60 * 30;
-            let timeRefreshToken = 60 * 60 * 24;
-
             let token = await CreateToken(user, timeAccessToken, timeRefreshToken);
             logInfo(new Date, "Success", `User existed: ${user._id}`, "Login Oauth");
             return callback(null, token);
         } else {
             let newShopOwner = new SchemaShopUser(data)
             let user = await newShopOwner.save();
-            let token = await CreateToken(user);
+            let token = await CreateToken(user, timeAccessToken, timeRefreshToken);
             logInfo(new Date, "Success", `Create a user: ${user._id}`, "Login Oauth");
             return callback(null, token)
         }

@@ -1,4 +1,5 @@
 const { SchemaOrder } = require("../../Models/Order");
+const { SchemaProduct } = require("../../Models/Product");
 const { CheckStore } = require("../../Utils/checkStore");
 const { logError, logInfo } = require("../../Utils/logger");
 const { mongoose } = require("../../db/Connect.Mongo");
@@ -10,7 +11,16 @@ async function CreateOrderService(data, callback) {
             logError(new Date(), "Store not found", "CreateCategoryService");
             return callback("Store not found", null);
         }
-
+        // find product
+        let productData = await SchemaProduct.findById(data.ProductId);
+        delete data.ProductId;
+        // Add product to data
+        data.Product = {
+            id: productData._id,
+            Name: productData.Name,
+            ImageUrl: productData.ImageUrl,
+            Price: productData.Price
+        }
         let order = new SchemaOrder(data);
         let newOrder = await order.save();
         logInfo(new Date(), "success", "Create order successfully", "CreateOrderService");
@@ -43,17 +53,6 @@ async function ReadOrderService(data, callback) {
                 {
                     $sort: { "Date.OrderDate": -1 }
                 },
-                {
-                    $lookup: {
-                        from: "products",
-                        localField: "ProductId",
-                        foreignField: "_id",
-                        as: "ProductId"
-                    }
-                },
-                {
-                    $unwind: "$ProductId"
-                },
 
                 {
                     $facet: {
@@ -66,7 +65,9 @@ async function ReadOrderService(data, callback) {
                                     Status: 1,
                                     PaymentMethod: 1,
                                     OrderDate: "$Date.OrderDate",
-                                    ProductName: "$ProductId.Name",
+                                    ProductName: "$Product.Name",
+                                    ProductPrice: "$Product.Price",
+                                    ProductImageUrl: "$Product.ImageUrl",
                                 },
                             },
                             {

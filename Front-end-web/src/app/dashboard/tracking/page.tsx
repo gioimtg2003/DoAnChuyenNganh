@@ -9,8 +9,7 @@ import {
     Circle,
     InfoBox,
 } from "@react-google-maps/api";
-import { Loader } from "@googlemaps/js-api-loader";
-import image from "../../../../public/images/icon-google.png";
+import { getServerSideProps } from "@/app/lib/constant/config";
 
 const containerStyle = {
     width: "100%",
@@ -26,7 +25,7 @@ export default function TrackingPage(): JSX.Element {
     const { stateLink, dispatchLink } = useContext(NavLinkContext);
     const { isLoaded } = useJsApiLoader({
         id: "71b0e381f4935a43",
-        googleMapsApiKey: "AIzaSyCMnoe6sf7mbBzrHNHuLtJZC_VngryAM-c",
+        googleMapsApiKey: getServerSideProps().props.API_GOOGLE_MAPS as string,
     });
     const [map, setMap] = useState(null);
     const refMap = useRef(null);
@@ -63,7 +62,8 @@ export default function TrackingPage(): JSX.Element {
     }, []);
     useEffect(() => {
         window.document.title = "Theo dõi";
-        selectedPage(dispatchLink, 3);
+        selectedPage(dispatchLink, 4);
+        console.log(getServerSideProps().props.API_GOOGLE_MAPS);
     }, [dispatchLink]);
 
     const onUnmount = useCallback(function callback(map: any) {
@@ -75,6 +75,7 @@ export default function TrackingPage(): JSX.Element {
             <p>Diện tích: 120m2</p>
         </div>
     );
+
     return isLoaded ? (
         <div className="w-full h-screen relative ">
             <GoogleMap

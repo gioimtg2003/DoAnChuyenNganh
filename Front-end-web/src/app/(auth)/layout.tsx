@@ -5,15 +5,17 @@ import { ProtectLogin } from "../lib/context/Protect";
 import { AuthProvider } from "../lib/context/auth/authContext";
 
 export default function AuthLayout({
-  children,
+    children,
 }: {
-  children: React.ReactNode;
+    children: React.ReactNode;
 }): JSX.Element | void {
-  return (
-    <NotificationProvider>
-      <AuthProvider>
-        <ProtectLogin>{<HomeLayout>{children}</HomeLayout>}</ProtectLogin>
-      </AuthProvider>
-    </NotificationProvider>
-  );
+    return (
+        <NotificationProvider>
+            <AuthProvider>
+                <ProtectLogin>
+                    {<HomeLayout>{children}</HomeLayout>}
+                </ProtectLogin>
+            </AuthProvider>
+        </NotificationProvider>
+    );
 }

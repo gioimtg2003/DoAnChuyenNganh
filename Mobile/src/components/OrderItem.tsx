@@ -94,26 +94,31 @@ const styles = StyleSheet.create({
 });
 
 type Props = {
+    _id?: string;
     name: string;
     url: string;
     address: string;
     price: number;
     pickUp?: boolean;
-    onPressPickUp?: (_id: string) => void;
+    onPressPickUp?: () => void;
     onPressDetail?: (_id: string) => void;
 };
 
 export default function OrderItem({
+    _id,
     name,
     url,
     address,
     price,
     pickUp,
+    onPressPickUp,
 }: Readonly<Props>): JSX.Element {
     const [visibleModal, setVisibleModal] = useState<boolean>(false);
     const navigation = useNavigation();
     const RedirectScreen = useCallback((id?: string) => {
-        navigation.dispatch(CommonActions.navigate("OrderDetails"));
+        navigation.dispatch(
+            CommonActions.navigate("OrderDetails", { _id: id })
+        );
     }, []);
 
     return (
@@ -187,7 +192,7 @@ export default function OrderItem({
                     ) : (
                         <Pressable
                             onPress={() => {
-                                RedirectScreen();
+                                RedirectScreen(_id);
                             }}
                         >
                             <AntDesign name="eyeo" size={30} color="black" />
@@ -241,7 +246,10 @@ export default function OrderItem({
                         </Pressable>
                         <Pressable
                             onPress={() => {
-                                setVisibleModal(!visibleModal);
+                                if (onPressPickUp != undefined) {
+                                    setVisibleModal(!visibleModal);
+                                    onPressPickUp();
+                                }
                             }}
                             style={{
                                 backgroundColor: PRIMARY_COLOR,

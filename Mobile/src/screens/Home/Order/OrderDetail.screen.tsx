@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useCallback, useEffect, useMemo } from "react";
 import {
     Image,
     Pressable,
@@ -10,8 +10,11 @@ import {
 import Animated from "react-native-reanimated";
 import { customTransition } from "../../../lib/utils/ShareTransaction";
 import { parsePrice } from "../../../lib/utils/ParsePrice";
-import { TouchableHighlight } from "react-native";
 import { PRIMARY_COLOR } from "../../../lib/Constant";
+import { CommonActions, useNavigation } from "@react-navigation/native";
+import GetOrderDetails from "../../../lib/services/OrderDetails";
+import { IOrderItem } from "../../../lib/types/OrderItem";
+import UpdateStatusOrder from "../../../lib/services/UpdateStatusOrder";
 
 const styles = StyleSheet.create({
     containerImage: {
@@ -59,6 +62,41 @@ const styles = StyleSheet.create({
     },
 });
 export default function OrderDetailScreen(): JSX.Element {
+    const navigation = useNavigation();
+    const [orderDetails, setOrderDetails] = React.useState<
+        IOrderItem | undefined
+    >(undefined);
+    useEffect(() => {
+        (async () => {
+            let getOrderDetails = new GetOrderDetails(
+                (
+                    navigation.getState()?.routes[
+                        navigation.getState()?.index as number
+                    ].params as { _id?: string }
+                )?._id as string
+            );
+            await getOrderDetails.getOrder();
+            console.log(getOrderDetails.getOrderDetails());
+            setOrderDetails(getOrderDetails.getOrderDetails());
+        })();
+    }, []);
+
+    const handleSuccess = useCallback(async () => {
+        console.log(orderDetails?._id);
+        let complete = new UpdateStatusOrder("complete");
+        let update = await complete.updateOrder(orderDetails?._id as string);
+        if (update) {
+            navigation.dispatch(CommonActions.goBack());
+        }
+    }, [orderDetails]);
+    const handleCancel = useCallback(async () => {
+        console.log(orderDetails?._id);
+        let cancel = new UpdateStatusOrder("cancel");
+        let update = await cancel.updateOrder(orderDetails?._id as string);
+        if (update) {
+            navigation.dispatch(CommonActions.goBack());
+        }
+    }, [orderDetails]);
     return (
         <ScrollView
             style={{
@@ -70,7 +108,7 @@ export default function OrderDetailScreen(): JSX.Element {
             <View style={styles.containerImage}>
                 <Animated.Image
                     source={{
-                        uri: "https://do-an-chuyen-nganh.s3.ap-southeast-1.amazonaws.com/1709563860803-z5206859198076_7f29ec13eaeb6ae5a7df21ba1f654b87.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT2IO5ARCS26EK5KP%2F20240312%2Fap-southeast-1%2Fs3%2Faws4_request&X-Amz-Date=20240312T100432Z&X-Amz-Expires=1800&X-Amz-Signature=1f1c2df7404d8e3442df4c23c32ea6e18e449180bd31908a73b500adb2a6ab66&X-Amz-SignedHeaders=host&x-id=GetObject",
+                        uri: orderDetails?.Product.ImageUrl as string,
                     }}
                     width={300}
                     height={270}
@@ -90,7 +128,7 @@ export default function OrderDetailScreen(): JSX.Element {
                         textAlign: "left",
                     }}
                 >
-                    Chuột Bluetooth không dây máy tính và lap top
+                    {orderDetails?.Product.Name}
                 </Text>
             </View>
             <Text
@@ -102,10 +140,13 @@ export default function OrderDetailScreen(): JSX.Element {
                     marginLeft: 10,
                 }}
             >
-                {parsePrice("200000")}đ
+                {parsePrice(orderDetails?.AmountTotal.toString() ?? "")}đ
             </Text>
             <View style={styles.containerBtn}>
-                <Pressable style={[styles.Btn, styles.btnSuccess]}>
+                <Pressable
+                    style={[styles.Btn, styles.btnSuccess]}
+                    onPress={handleSuccess}
+                >
                     <Text
                         style={{
                             color: "white",
@@ -116,9 +157,7 @@ export default function OrderDetailScreen(): JSX.Element {
                     </Text>
                 </Pressable>
                 <Pressable
-                    onPress={() => {
-                        console.log("ee");
-                    }}
+                    onPress={handleCancel}
                     style={[styles.Btn, styles.btnCancel]}
                 >
                     <Text

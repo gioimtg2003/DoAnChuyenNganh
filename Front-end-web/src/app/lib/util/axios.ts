@@ -1,16 +1,12 @@
-import axios, {
-    AxiosInstance,
-    AxiosRequestConfig,
-    AxiosStatic,
-    InternalAxiosRequestConfig,
-} from "axios";
+import axios, { AxiosInstance } from "axios";
 import { useToken } from "../hook/useToken";
 import { useEffect } from "react";
+import { getServerSideProps } from "../constant/config";
 
 export class Axios {
     getInstance(file?: boolean): AxiosInstance {
         return axios.create({
-            baseURL: "http://apishippy.nguyenconggioi.me/api",
+            baseURL: getServerSideProps().props.API_URI,
             timeout: 10000,
             headers: {
                 "Content-Type": file

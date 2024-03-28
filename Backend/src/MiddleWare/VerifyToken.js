@@ -41,7 +41,8 @@ async function VerifyToken(req, res, next) {
         } else if (!check.err) {
             req.user = {
                 id: check.id,
-                role: check.role
+                role: check.role,
+                shopId: check.shopId ? check.shopId : null
             }
             next();
         }

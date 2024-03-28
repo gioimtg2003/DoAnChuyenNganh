@@ -5,11 +5,26 @@ let Order = new mongoose.Schema({
         type: mongoose.Types.ObjectId,
         required: true,
     },
-
-    ProductId: {
+    idShipper: {
         type: mongoose.Types.ObjectId,
-        required: true,
-        ref: 'products'
+    },
+    Product: {
+        id: {
+            type: mongoose.Types.ObjectId,
+            required: true
+        },
+        Name: {
+            type: String,
+            required: true
+        },
+        ImageUrl: {
+            type: String,
+            required: true
+        },
+        Price: {
+            type: Number,
+            required: true
+        }
     },
     Customer: {
         Name: {
@@ -61,7 +76,7 @@ let Order = new mongoose.Schema({
     },
     Date: {
         DeliveryDate: {
-            type: Date,
+            type: Number,
             default: null
         },
         OrderDate: {
@@ -69,11 +84,11 @@ let Order = new mongoose.Schema({
             default: Date.now
         },
         CompletedDate: {
-            type: Date,
+            type: Number,
             default: null
         },
         CancelDate: {
-            type: Date,
+            type: Number,
             default: null
         },
     }

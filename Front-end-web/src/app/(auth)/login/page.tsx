@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Login } from "@/app/lib/service/auth";
 import Image from "next/image";
+import { getServerSideProps } from "@/app/lib/constant/config";
 
 const onFinishFailed = (errorInfo: any) => {
     console.log("Failed:", errorInfo);
@@ -42,7 +43,7 @@ function LoginPage(): JSX.Element {
     };
 
     useEffect(() => {
-        document.title = "Login";
+        document.title = "Đăng nhập";
     }, []);
 
     return (
@@ -51,7 +52,7 @@ function LoginPage(): JSX.Element {
             <div className="content flex flex-row pt-40 pb-3 justify-center items-center">
                 <div className="w-7/12 lg:w-6/12 xl:w-5/12 text-center">
                     <h1 className="text-wrap text-4xl text-sky-700 font-bold">
-                        Login
+                        Đăng Nhập
                     </h1>
                     <p className="pt-4 text-slate-500">
                         Vui lòng nhập đầy đủ thông tin đăng nhập.
@@ -107,7 +108,7 @@ function LoginPage(): JSX.Element {
                             className="bg-blue-500 w-32 mr-2"
                             loading={isLoading}
                         >
-                            Submit
+                            Đăng nhập
                         </Button>
                     </div>
                 </Form.Item>
@@ -121,7 +122,7 @@ function LoginPage(): JSX.Element {
                 >
                     <div className="sm:flex w-full items-center justify-center">
                         <Link
-                            href="https://apishippy.nguyenconggioi.me/oauth/login/google"
+                            href={`${getServerSideProps().props.API_ROOT}/oauth/login/google`}
                             className="w-full flex justify-center items-center p-3 shadow-lg hover:cursor-pointer hover:text-gray-700 font-semibold border-2 border-gray-200 text-md"
                         >
                             <Image

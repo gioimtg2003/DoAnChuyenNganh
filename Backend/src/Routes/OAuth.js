@@ -1,6 +1,6 @@
 
 const passport = require("passport");
-const { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, GOOGLE_CALLBACK_URL } = require("../Configs/oauth.config");
+const { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, GOOGLE_CALLBACK_URL, GOOGLE_SUCCESS_REDIRECT_URL } = require("../Configs/oauth.config");
 const { ServiceOauthLogin } = require("../Services/auth.service");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const router = require("express").Router();
@@ -65,7 +65,7 @@ router.get("/oauth/google/callback", passport.authenticate("google", {
 }));
 router.get("/oauth/login/success", (req, res) => {
     const { accessToken, refreshToken, exp } = req.user;
-    return res.redirect(`${process.env.GOOGLE_SUCCESS_REDIRECT_URL}/oauth?accessToken=${accessToken}&refreshToken=${refreshToken}&exp=${exp}`);
+    return res.redirect(`${GOOGLE_SUCCESS_REDIRECT_URL}/oauth?accessToken=${accessToken}&refreshToken=${refreshToken}&exp=${exp}`);
 });
 
 module.exports = { routerOauth: router };

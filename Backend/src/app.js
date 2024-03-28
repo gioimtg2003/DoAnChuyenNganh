@@ -9,7 +9,7 @@ const { route } = require('./Routes');
 
 
 const initApp = (app) => {
-    app.use(cors({ origin: ['localhost:8080', 'shippy.nguyenconggioi.me'] }));
+    app.use(cors({ origin: ['http://localhost:8080', 'https://shippy.nguyenconggioi.me', 'http://localhost'] }));
     app.use(
         session({
             secret: "my-secret-key",

@@ -1,6 +1,7 @@
 import { Socket, io } from "socket.io-client";
 import { grantAccessToken } from "./util/axios";
 import { useToken } from "./hook/useToken";
+import { getServerSideProps } from "./constant/config";
 
 type statusShipper = "online" | "offline";
 
@@ -16,6 +17,14 @@ export interface DataEvent {
         lat: number;
         lng: number;
     };
+    pickup_order: {
+        message: string;
+        description: string;
+    };
+    status_order: {
+        message: string;
+        description: string;
+    };
 }
 
 export interface ServerToClientEvents {
@@ -23,6 +32,8 @@ export interface ServerToClientEvents {
     shipper_status: (data: DataEvent["status_shipper"]) => void;
     required_token: () => void;
     shipper_location: (data: DataEvent["location_shipper"]) => void;
+    pickup_order: (data: DataEvent["pickup_order"]) => void;
+    status_order: (data: DataEvent["status_order"]) => void;
 }
 
 export interface ClientToServerEvents {
@@ -49,9 +60,12 @@ export class SocketInstance {
         // eslint-disable-next-line react-hooks/rules-of-hooks
         const { accessToken } = useToken();
         if (!SocketInstance.instance) {
-            SocketInstance.instance = io("http://apishippy.nguyenconggioi.me", {
-                auth: { token: accessToken },
-            });
+            SocketInstance.instance = io(
+                getServerSideProps().props.API_ROOT as string,
+                {
+                    auth: { token: accessToken },
+                }
+            );
         }
         return SocketInstance.instance;
     }

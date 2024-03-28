@@ -4,23 +4,12 @@ const { SchemaShipper } = require('./Models/Users/ShipperModel');
 const { mongoose } = require('./db/Connect.Mongo');
 
 
-const UpdateOnlineTotal = (id, time) => new Promise((resolve, reject) => {
-    try {
-        SchemaShipper.findOneAndUpdate({ _id: id }, { $inc: { OnlineTotal: time } }, { new: true })
-            .then(data => resolve(data))
-            .catch(err => reject(err));
-    } catch (err) {
-        reject(err);
-    }
-});
-
-
 let socketIo = null;
 
 const initSocket = (httpServer) => {
     socketIo = new Server(httpServer, {
         cors: {
-            origin: "*",
+            origin: ['http://localhost:8080', 'https://shippy.nguyenconggioi.me', 'http://localhost'],
             methods: ["GET", "POST"],
         },
 
@@ -63,26 +52,22 @@ const handleConnect = async (socket) => {
         if (parserToken.role === 1 && parserToken.shopId) {
             try {
                 let updateOffline = await SchemaShipper.findOneAndUpdate({ _id: parserToken.id }, { Online: false }, { new: true })
-                let timeTotal = (Date.now() - updateOffline.OnlineRecent) + updateOffline.OnlineTotal;
-
-                let s = await SchemaShipper.aggregate([
+                let now = Date.now();
+                console.log(`Date now ${now} - OnlineRecent ${updateOffline.OnlineRecent} = ${Date.now() - updateOffline.OnlineRecent}, Total ${now - updateOffline.OnlineRecent + updateOffline.OnlineTotal}`)
+                console.log(updateOffline)
+                let timeTotal = (now - updateOffline.OnlineRecent) + updateOffline.OnlineTotal;
+                await SchemaShipper.updateOne(
                     {
-                        $match: {
-                            _id: new mongoose.Types.ObjectId(parserToken.id)
-                        }
+                        _id: new mongoose.Types.ObjectId(updateOffline._id)
                     },
                     {
                         $set: {
                             'OnlineTotal': timeTotal
                         }
-                    },
-                    {
-                        $unset: "OnlineRecent"
                     }
-                ]).exec();
-                await UpdateOnlineTotal(parserToken.id, timeTotal)
-                console.log(timeTotal)
-                console.log(s)
+                ).exec();
+
+                console.log(`OnlineTotal ${timeTotal}`)
                 socketIo.to(parserToken.shopId).emit("shipper_status", {
                     id: parserToken.id,
                     status: "offline",

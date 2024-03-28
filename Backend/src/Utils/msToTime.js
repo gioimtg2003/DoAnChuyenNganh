@@ -7,7 +7,7 @@ let msToTime = (duration) => {
     minutes = (minutes < 10) ? "0" + minutes : minutes;
     seconds = (seconds < 10) ? "0" + seconds : seconds;
 
-    return hours + " giờ" + minutes + " phút" + seconds + " giây";
+    return hours + " giờ" + minutes + " phút " + seconds + " giây";
 }
 
 module.exports = msToTime;

@@ -20,17 +20,17 @@ export const Links: Link[] = [
     },
     {
         icon: FaPeopleGroup,
-        name: "Employee",
+        name: "Nhân viên",
         url: "/dashboard/employee",
     },
     {
         icon: FiCodesandbox,
-        name: "Product",
+        name: "Sản phẩm",
         url: "/dashboard/product",
     },
     {
         icon: TbFileInvoice,
-        name: "Order",
+        name: "Đơn hàng",
         url: "/dashboard/order",
     },
     {
