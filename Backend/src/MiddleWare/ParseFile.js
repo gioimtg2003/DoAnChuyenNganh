@@ -34,7 +34,6 @@ const ParseFile = async (req) => {
         form.on("fileBegin", (formName, file) => {
             let key = `${Date.now()}-${file.originalFilename}`
             file.open = async function () {
-                //read the file
                 this._writeStream = new Transform({
                     transform(chunk, encoding, callback) {
                         callback(null, chunk)

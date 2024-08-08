@@ -49,7 +49,7 @@ const VerifyAccount = async (data, callback) => {
     let { email, code } = data;
     try {
         let isShipper = await SchemaShipper.findOne({ Email: email });
-        if (isShipper) {
+        if (isShipper && code === isShipper.CodeVerify) {
             let time = Date.now();
             if (isShipper.ExpVerify < time) {
                 callback(null, false);

@@ -17,9 +17,9 @@ const SocketProvider = (): JSX.Element => {
     const addSocketEvents = useCallback(
         (socket: Socket<ServerToClientEvents, ClientToServerEvents>) => {
             socket.on("connect", () => {
-                console.log("connected");
+                console.log("connected to socket");
                 socket.on("required_token", async () => {
-                    console.log("required_token");
+                    // console.log("required_token");
                     socket.auth = {
                         token: await grantAccessToken(),
                     };
@@ -36,7 +36,7 @@ const SocketProvider = (): JSX.Element => {
                     });
                 });
                 socket.on("shipper_status", (data) => {
-                    console.log("shipper_status", data);
+                    // console.log("shipper_status", data);
                     api[data.status === "offline" ? "warning" : "success"]({
                         message:
                             data.status[0].toUpperCase() + data.status.slice(1),

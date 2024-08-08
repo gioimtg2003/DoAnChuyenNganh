@@ -1,42 +1,27 @@
 version: "3.4"
 services:
-    mongoserveice:
-        image: mongo
-        restart: always
-        environment:
-            - MONGO_INITDB_ROOT_USERNAME=root
-            - MONGO_INITDB_ROOT_PASSWORD=conggioi123
-        volumes:
-            - ./db:/data/db
-        ports:
-            - "27017:27017"
+    backend:
+        build:
+            context: ./backend
+            dockerfile: Dockerfile
         networks:
             - doanchuyennganh-network
-    # backend:
-    #     build:
-    #         context: ./backend
-    #         dockerfile: Dockerfile
-    #     depends_on:
-    #         - mongoserveice
-    #     networks:
-    #         - doanchuyennganh-network
-    #     restart: always
-    #     environment:
-    #         - MONGO_URI=mongodb://mongoserveice/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+2.1.1
-    #         - NODE_ENV="development"
+        restart: always
+        environment:
+            - NODE_ENV="development"
 
-    # nginx-backend:
-    #     build:
-    #         context: ./nginx
-    #         dockerfile: Dockerfile.backend
-    #     depends_on:
-    #         - backend
-    #     networks:
-    #         - doanchuyennganh-network
-    #     ports:
-    #         - "80:80"
-    #         - "443:443"
-    #     command: nginx -g "daemon off;"
+    nginx-backend:
+        build:
+            context: ./nginx
+            dockerfile: Dockerfile.backend
+        depends_on:
+            - backend
+        networks:
+            - doanchuyennganh-network
+        ports:
+            - "80:80"
+            - "443:443"
+        command: nginx -g "daemon off;"
 
 networks:
     doanchuyennganh-network:

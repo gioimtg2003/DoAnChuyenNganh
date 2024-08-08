@@ -19,11 +19,11 @@ let serviceGetAllOrder = async (data, callback) => {
                 }
             }
         ]).exec();
-        // await Promise.all(orderData.map(async (order) => order.Product.ImageUrl = await GetSignedUrl(order.Product.ImageUrl)))
-        //     .catch((error) => {
-        //         logError(new Date(), error, "Error in GetSignedUrl");
-        //         throw error;
-        //     });
+        await Promise.all(orderData.map(async (order) => order.Product.ImageUrl = await GetSignedUrl(order.Product.ImageUrl)))
+            .catch((error) => {
+                logError(new Date(), error, "Error in GetSignedUrl");
+                throw error;
+            });
         logInfo(new Date(), "success", "Get all order successfully", "Get All Order for shipper");
         callback(null, orderData);
 
@@ -113,11 +113,11 @@ let serviceGetOrderDelivery = async (data, callback) => {
                 }
             }
         ]).exec();
-        // await Promise.all(orderData.map(async (order) => order.Product.ImageUrl = await GetSignedUrl(order.Product.ImageUrl)))
-        //     .catch((error) => {
-        //         logError(new Date(), error, "Error in GetSignedUrl");
-        //         throw error;
-        //     });
+        await Promise.all(orderData.map(async (order) => order.Product.ImageUrl = await GetSignedUrl(order.Product.ImageUrl)))
+            .catch((error) => {
+                logError(new Date(), error, "Error in GetSignedUrl");
+                throw error;
+            });
         logInfo(new Date(), "success", "Get all order successfully", "Get All Order for shipper");
         callback(null, orderData);
     } catch (e) {
@@ -132,7 +132,7 @@ let serviceGetOrderDetails = async (data, callback) => {
             _id: new mongoose.Types.ObjectId(data.orderId),
             idUser: new mongoose.Types.ObjectId(data.shopId)
         }).exec();
-        // orderData.Product.ImageUrl = await GetSignedUrl(orderData.Product.ImageUrl);
+        orderData.Product.ImageUrl = await GetSignedUrl(orderData.Product.ImageUrl);
         logInfo(new Date(), "success", "Get order details successfully", "Get Order Details for shop");
         callback(null, orderData);
     } catch (e) {

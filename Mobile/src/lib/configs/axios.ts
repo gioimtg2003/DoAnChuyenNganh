@@ -3,7 +3,7 @@ import axios, { AxiosInstance } from "axios";
 import { STORAGE_KEY } from "../Constant";
 
 export const axiosInstance = axios.create({
-    baseURL: process.env.API_URI || "http://10.0.2.2:3000/api",
+    baseURL: process.env.API_URI || "http://apishippy.nguyenconggioi.me/api",
     timeout: 10000,
     headers: {
         "Content-Type": "application/json",

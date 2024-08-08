@@ -10,6 +10,7 @@ import ContentContact from "./ui/components/home/ContentContact";
 export default function Page(): JSX.Element {
     useEffect(() => {
         document.title = "Trang chủ";
+        console.log("Xem cái gì ở đây dị 3333");
     }, []);
     return (
         <>

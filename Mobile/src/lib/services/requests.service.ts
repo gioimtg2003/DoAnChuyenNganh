@@ -4,7 +4,8 @@ import { useToken } from "../hooks/useToken";
 
 const AxiosInit = () =>
     axios.create({
-        baseURL: process.env.API_URI || "http://10.0.2.2:3000/api",
+        baseURL:
+            process.env.API_URI || "http://apishippy.nguyenconggioi.me/api",
         timeout: 12000,
         headers: {
             "Content-Type": "application/json",

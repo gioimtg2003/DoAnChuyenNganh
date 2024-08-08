@@ -24,7 +24,7 @@ const reducer = (
             return [...state, ...action.payload];
 
         case EmployeeActionType.UPDATE_STATUS:
-            console.log("UPDATE_STATUS in StaffContext");
+            // console.log("UPDATE_STATUS in StaffContext");
             console.log(action.payload);
             return state.map((item: Employee) => {
                 if (item.Id === action.payload[0].Id) {

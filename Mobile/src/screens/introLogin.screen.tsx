@@ -73,7 +73,7 @@ const IntroLoginScreen = ({
                         color: "white",
                     }}
                 >
-                    Welcom To Shippy
+                    Welcome To Shippy
                 </Text>
                 <View style={styles.containerImgAndText}>
                     <Image
