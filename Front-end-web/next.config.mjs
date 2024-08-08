@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    basePath: "/DoAnChuyenNganh",
+
     output: "export",
     reactStrictMode: true,
     images: {
@@ -12,6 +12,8 @@ const nextConfig = {
                 pathname: "/**",
             },
         ],
+        unoptimized: true
+
     },
 };
 
