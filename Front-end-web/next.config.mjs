@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+    basePath: "/DoAnChuyenNganh/Front-end-web",
     output: "export",
     reactStrictMode: true,
     images: {
