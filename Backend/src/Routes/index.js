@@ -1,16 +1,17 @@
 const { GrantAccessToken, Login } = require("../Controllers/Auth");
 const { CreateCategory } = require("../Controllers/Category");
-const { CreateOrder, ReadOrder } = require("../Controllers/Order");
+const { CreateOrder, ReadOrder, OrderDetails } = require("../Controllers/Order");
 const { CreateProduct, ReadAllProduct, DeleteProduct } = require("../Controllers/Product");
 const { SendEmail } = require("../Controllers/SendEmail");
 const { CreateShipper } = require("../Controllers/User/CURDShipper");
 const { CreateShop, UpdateShop, ReadShop } = require("../Controllers/User/CURDShop");
-const { GetAllEmployee, AddEmployee } = require("../Controllers/User/ShopStaff");
+const { GetAllEmployee, AddEmployee, EmployeeDetails } = require("../Controllers/User/ShopStaff");
 const { SendCode } = require("../Controllers/User/Verify");
 const { VerifyCode } = require("../Controllers/Verify");
-const { ShopPermission } = require("../MiddleWare/CheckPermission");
+const { ShopPermission, ShipperPermission } = require("../MiddleWare/CheckPermission");
 const express = require("express");
 const { getSocketIo } = require("../socket");
+const { shipperGetAllOrder, PickupOrder, getOrderDelivery, getOrderDetails, cancelOrder, completeOrder } = require("../Controllers/Shipper");
 const route = express.Router();
 
 //-----Route for user service-----//
@@ -20,10 +21,11 @@ route.post("/user/shop", CreateShop);
 route.put("/user/shop", ShopPermission, UpdateShop);
 route.delete("/user/shop");
 // Employee of Shop
-route.get("/user/shop/employee", ShopPermission, GetAllEmployee);
+route.get("/user/shop/employee/details/:id", ShopPermission, EmployeeDetails);
+route.get("/user/shop/employee/all", ShopPermission, GetAllEmployee);
 route.post("/user/shop/employee", ShopPermission, AddEmployee);
 //Shipper
-route.get("/user/shipper");
+route.get("/user/shipper/:id", ShopPermission, EmployeeDetails);
 route.post("/user/shipper", ShopPermission, CreateShipper);
 route.put("/user/shipper");
 route.delete("/user/shipper");
@@ -53,6 +55,7 @@ route.get("/order", ShopPermission, ReadOrder);
 route.post("/order", ShopPermission, CreateOrder);
 route.put("/order");
 route.delete("/order");
+route.get("/order/:orderId", ShopPermission, OrderDetails);
 /**************************/
 route.put("/order/status");
 
@@ -63,6 +66,12 @@ route.post("/order/payment");
 route.post("/shipper/email", SendEmail);
 route.post("/shipper/verify", VerifyCode);
 
+route.get("/shipper/order/all", ShipperPermission, shipperGetAllOrder);
+route.post("/shipper/order/pickup", ShipperPermission, PickupOrder);
+route.get("/shipper/order/pickup", ShipperPermission, getOrderDelivery);
+route.get("/shipper/order/:id", ShipperPermission, getOrderDetails);
+route.post("/shipper/order/cancel", ShipperPermission, cancelOrder);
+route.post("/shipper/order/complete", ShipperPermission, completeOrder);
 route.post("/test", (req, res) => {
     let socketIO = getSocketIo();
     socketIO.to("order-user-1").emit("OrderCreate", { data: "test" });

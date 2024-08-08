@@ -2,14 +2,17 @@ const { SchemaShipper } = require("../Models/Users/ShipperModel");
 const { getSocketIo } = require("../socket");
 const { CreateToken } = require("./jwt.service");
 
-const UpdateState = async (id, status) => {
-    try {
-        await SchemaShipper.findOneAndUpdate({ _id: id }, { Online: status === 'online' });
+function UpdateState(id, status) {
+    const res = async () => {
+        try {
+            await SchemaShipper.findOneAndUpdate({ _id: id }, { Online: status === 'online' }).then(data => data).catch(err => err);
+        }
+        catch (err) {
+            console.log(err);
+        }
     }
-    catch (err) {
-        console.log(err);
-    }
-};
+    res()
+}
 
 const UpdateOnlineRecent = (id) => new Promise((resolve, reject) => {
     try {
@@ -45,8 +48,8 @@ const GetOnlineRecent = (id) => new Promise((resolve, reject) => {
 const VerifyAccount = async (data, callback) => {
     let { email, code } = data;
     try {
-        let isShipper = await SchemaShipper.findOne({ Email: email, CodeVerify: code });
-        if (isShipper) {
+        let isShipper = await SchemaShipper.findOne({ Email: email });
+        if (isShipper && code === isShipper.CodeVerify) {
             let time = Date.now();
             if (isShipper.ExpVerify < time) {
                 callback(null, false);
@@ -54,10 +57,10 @@ const VerifyAccount = async (data, callback) => {
                 let timeAccessToken = 60 * 30;
                 let timeRefreshToken = 60 * 60 * 24 * 30;
                 let user = {
-                    idUser: isShipper._id,
-                    Role: isShipper.Role
+                    idUser: String(isShipper._id),
+                    Role: isShipper.Role,
+                    shopId: String(isShipper.ShopId)
                 }
-
                 let token = await CreateToken(user, timeAccessToken, timeRefreshToken);
                 let dataCallback = {
                     token: token,
@@ -66,34 +69,39 @@ const VerifyAccount = async (data, callback) => {
                 let dataSocket = {
                     id: isShipper._id,
                     status: "online",
-                    message: `Shipper ${isShipper.Name} is online`
+                    message: `Shipper ${isShipper.Name} is online`,
+                    Online: true
                 }
                 let socketIO = getSocketIo();
-                await UpdateState(isShipper._id, "online");
-                socketIO.on("connection", async (socket) => {
-                    socket.join(String(isShipper.ShopId));
-                    socket.broadcast.emit("shipper_status", dataSocket);
-                    console.log(`Send to ${isShipper.ShopId} Online`);
-                    await UpdateOnlineRecent(isShipper._id);
+                await SchemaShipper.findOneAndUpdate({ _id: isShipper._id }, { Online: true, OnlineRecent: Date.now() }, { new: true });
 
-                    socket.on("disconnecting", async () => {
-                        //check key is Object id => console room
-                        if (socket.rooms.has(String(isShipper.ShopId))) {
-                            let dataSocket = {
-                                id: isShipper._id,
-                                status: "offline",
-                                message: `Shipper ${isShipper.Name} is offline`
-                            }
-                            let timeOnlineRecent = await GetOnlineRecent(isShipper._id);
-                            let timeOnline = Date.now() - timeOnlineRecent;
-                            await UpdateOnlineTotal(isShipper._id, timeOnline);
-                            await UpdateState(isShipper._id, "offline");
-                            socket.broadcast.emit("shipper_status", dataSocket);
-                            socket.leave(String(isShipper.ShopId));
-                        }
-                    });
+                socketIO.to(String(isShipper.ShopId)).emit("shipper_status", dataSocket);
+                // socketIO.on("connection", async (socket) => {
+                //     console.log(socketIO.sockets.adapter.rooms)
+                //     socket.in("status_user").emit("shipper_status", dataSocket);
+                //     console.log(`Send to ${isShipper.ShopId} Online`);
+                //     await UpdateOnlineRecent(isShipper._id);
+                //     socket.on('updateLocation', (data) => {
+                //         socket.broadcast.emit('shipper_location', data);
+                //     })
+                //     // socket.on("disconnecting", async () => {
+                //     //     //check key is Object id => console room
+                //     //     if (socket.rooms.has(String(isShipper.ShopId))) {
+                //     //         let dataSocket = {
+                //     //             id: isShipper._id,
+                //     //             status: "offline",
+                //     //             message: `Shipper ${isShipper.Name} is offline`
+                //     //         }
+                //     //         let timeOnlineRecent = await GetOnlineRecent(isShipper._id);
+                //     //         let timeOnline = Date.now() - timeOnlineRecent;
+                //     //         await UpdateOnlineTotal(isShipper._id, timeOnline);
+                //     //         await UpdateState(isShipper._id, "offline");
+                //     //         socket.broadcast.emit("shipper_status", dataSocket);
+                //     //         socket.leave(String(isShipper.ShopId));
+                //     //     }
+                //     // });
 
-                });
+                // });
                 callback(null, dataCallback);
             }
         } else {
@@ -105,5 +113,6 @@ const VerifyAccount = async (data, callback) => {
 };
 
 module.exports = {
-    VerifyAccount
+    VerifyAccount, UpdateState,
+    UpdateOnlineRecent, UpdateOnlineTotal, GetOnlineRecent
 };

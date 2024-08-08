@@ -1,4 +1,5 @@
 const { SchemaOrder } = require("../../Models/Order");
+const { SchemaProduct } = require("../../Models/Product");
 const { CheckStore } = require("../../Utils/checkStore");
 const { logError, logInfo } = require("../../Utils/logger");
 const { mongoose } = require("../../db/Connect.Mongo");
@@ -10,7 +11,16 @@ async function CreateOrderService(data, callback) {
             logError(new Date(), "Store not found", "CreateCategoryService");
             return callback("Store not found", null);
         }
-
+        // find product
+        let productData = await SchemaProduct.findById(data.ProductId);
+        delete data.ProductId;
+        // Add product to data
+        data.Product = {
+            id: productData._id,
+            Name: productData.Name,
+            ImageUrl: productData.ImageUrl,
+            Price: productData.Price
+        }
         let order = new SchemaOrder(data);
         let newOrder = await order.save();
         logInfo(new Date(), "success", "Create order successfully", "CreateOrderService");
@@ -43,17 +53,6 @@ async function ReadOrderService(data, callback) {
                 {
                     $sort: { "Date.OrderDate": -1 }
                 },
-                {
-                    $lookup: {
-                        from: "products",
-                        localField: "ProductId",
-                        foreignField: "_id",
-                        as: "ProductId"
-                    }
-                },
-                {
-                    $unwind: "$ProductId"
-                },
 
                 {
                     $facet: {
@@ -66,7 +65,9 @@ async function ReadOrderService(data, callback) {
                                     Status: 1,
                                     PaymentMethod: 1,
                                     OrderDate: "$Date.OrderDate",
-                                    ProductName: "$ProductId.Name",
+                                    ProductName: "$Product.Name",
+                                    ProductPrice: "$Product.Price",
+                                    ProductImageUrl: "$Product.ImageUrl",
                                 },
                             },
                             {
@@ -96,4 +97,24 @@ async function ReadOrderService(data, callback) {
     }
 }
 
-module.exports = { CreateOrderService, ReadOrderService }
+async function getOrderDetails(data, callback) {
+    try {
+        let check = await CheckStore(data.idUser);
+        if (!check) {
+            logError(new Date(), "Store not found", "getOrderDetails");
+            return callback("Store not found", null);
+        }
+        let order = await SchemaOrder.findOne({ _id: new mongoose.Types.ObjectId(data.orderId), idUser: new mongoose.Types.ObjectId(data.idUser) });
+
+        logInfo(new Date(), "success", "GET order details successfully", "getOrderDetails");
+        return callback(null, order);
+
+    } catch (err) {
+        logError(new Date(), err, "getOrderDetails");
+        return callback(err);
+
+    }
+
+}
+
+module.exports = { CreateOrderService, ReadOrderService, getOrderDetails }

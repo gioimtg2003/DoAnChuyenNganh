@@ -120,15 +120,20 @@ Vì mục đích bảo mật, bạn phải nhập mã dưới đây để xác m
     </tbody>
 </table>`,
     };
-    await transporter.sendMail(mailOptions, (error, info) => {
-        if (error) {
-            logError(new Date(), `Send to email: ${data.email} error`, "Send Email");
-            callback(error, null);
-        } else {
-            logInfo(new Date(), "Success", `Send to email: ${data.email} successfully + ${info.response}`)
-            callback(null, true);
-        }
-    })
+    try {
+        await transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+                logError(new Date(), `Send to email: ${data.email} error`, "Send Email");
+            } else {
+                logInfo(new Date(), "Success", `Send to email: ${data.email} successfully + ${info.response}`)
+            }
+        })
+        callback(null, true);
+    } catch (error) {
+        callback(error, null);
+    }
+
+
 }
 module.exports =
 {

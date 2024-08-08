@@ -1,5 +1,5 @@
-const { BAD_REQUEST, INTERNAL_ERROR, CREATED, OK } = require("../Configs/HTTPCode");
-const { CreateOrderService, ReadOrderService } = require("../Services/Order/oder.service");
+const { BAD_REQUEST, INTERNAL_ERROR, CREATED, OK } = require("../Configs/httpCode");
+const { CreateOrderService, ReadOrderService, getOrderDetails } = require("../Services/Order/oder.service");
 const { API } = require("../Utils/formatApi");
 
 function CreateOrder(req, res) {
@@ -61,4 +61,23 @@ function ReadOrder(req, res) {
     })
 }
 
-module.exports = { CreateOrder, ReadOrder }
+function OrderDetails(req, res) {
+    const { id } = req.user;
+    const { orderId } = req.params;
+    if (!orderId) {
+        return res.status(BAD_REQUEST).json(API(BAD_REQUEST, "failed", "missing the fields", null, new Date()));
+    }
+    let data = {
+        idUser: id,
+        orderId
+    }
+    getOrderDetails(data, (err, data) => {
+        if (err) {
+            return res.status(INTERNAL_ERROR).json(API(INTERNAL_ERROR, "error", err, null, new Date()));
+        } else if (data) {
+            return res.status(OK).json(API(OK, "success", "Get Order successfully", data, new Date()));
+        }
+    })
+
+}
+module.exports = { CreateOrder, ReadOrder, OrderDetails }

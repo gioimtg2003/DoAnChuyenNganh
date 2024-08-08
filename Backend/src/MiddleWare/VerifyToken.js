@@ -1,9 +1,9 @@
-const { INTERNAL_ERROR, BAD_REQUEST, UNAUTHORIZED } = require('../Configs/HTTPCode');
+const { INTERNAL_ERROR, BAD_REQUEST, UNAUTHORIZED } = require('../Configs/httpCode');
 const { SECRET_KEY } = require('../Configs/security.config');
 const jwt = require("jsonwebtoken");
 const { API } = require('../Utils/formatApi');
 
-const HandleToken = token => {
+const HandleAccessToken = token => {
     return new Promise((resolve, reject) => {
         try {
             let data = {}
@@ -15,6 +15,7 @@ const HandleToken = token => {
                     data.err = false;
                     data.id = decoded.id;
                     data.role = decoded.role;
+                    data.shopId = decoded.role === 1 ? decoded.shopId : null;
                 }
                 resolve(data);
             });
@@ -34,13 +35,14 @@ async function VerifyToken(req, res, next) {
         return res.status(BAD_REQUEST).json(API(BAD_REQUEST, "failed", "Missing the token", null, new Date()));
     }
     try {
-        let check = await HandleToken(token);
+        let check = await HandleAccessToken(token);
         if (check.err) {
             return res.status(UNAUTHORIZED).json(API(UNAUTHORIZED, "failed", check.msg, null, new Date()));
         } else if (!check.err) {
             req.user = {
                 id: check.id,
-                role: check.role
+                role: check.role,
+                shopId: check.shopId ? check.shopId : null
             }
             next();
         }
@@ -49,4 +51,4 @@ async function VerifyToken(req, res, next) {
     }
 }
 
-module.exports = { VerifyToken }
+module.exports = { VerifyToken, HandleAccessToken }

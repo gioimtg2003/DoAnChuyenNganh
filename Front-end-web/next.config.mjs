@@ -1,6 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    output: 'standalone',
+    basePath: "/DoAnChuyenNganh",
+    output: "export",
+    reactStrictMode: true,
     images: {
         remotePatterns: [
             {

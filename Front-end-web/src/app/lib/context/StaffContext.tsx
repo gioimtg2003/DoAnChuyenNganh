@@ -7,6 +7,8 @@ import {
 } from "react";
 import { Employee, EmployeeActionType, ReducerAction } from "../Types";
 import { dateFormat } from "../util/dateFormat";
+import { TbEye } from "react-icons/tb";
+import Link from "next/link";
 
 const initState = (): Employee[] => [];
 
@@ -22,8 +24,9 @@ const reducer = (
             return [...state, ...action.payload];
 
         case EmployeeActionType.UPDATE_STATUS:
+            // console.log("UPDATE_STATUS in StaffContext");
             console.log(action.payload);
-            return state.map((item) => {
+            return state.map((item: Employee) => {
                 if (item.Id === action.payload[0].Id) {
                     return {
                         ...item,
@@ -55,6 +58,13 @@ const useStaffContext = (initState: Employee[]) => {
                 Status: item.Online ? "online" : "offline",
                 //Note: client::::CreatedAt | Server::::item.CreateAt,
                 CreatedAt: dateFormat(item.CreateAt),
+                Details: (
+                    <div className="w-full flex justify-center items-center  text-primary-2-color">
+                        <Link href={`./employee/${item._id}`}>
+                            <TbEye className="hover:cursor-pointer" />
+                        </Link>
+                    </div>
+                ),
             });
         });
         // console.log(staffTemp);

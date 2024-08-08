@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+    </head>
+    <body>
+        <style></style>
+        <div
+            class="container-content-email"
+            style="
+                display: flex;
+                justify-content: center;
+                align-items: start;
+                width: 100%;
+                background-color: #c5e3f0;
+                padding-top: 30px;
+                padding-bottom: 20px;
+            "
+        >
+            <div
+                class="body-content-email"
+                style="
+                    width: 50%;
+                    height: 50%;
+                    background-color: #f7f9fa;
+                    border-radius: 10px;
+                    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                    padding: 40px;
+                    margin: auto;
+                "
+            >
+                <div class="img-container">
+                    <img
+                        src="data:image/png;base64,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"
+                        alt="logo"
+                    />
+                </div>
+                <div style="margin-top: 10px">
+                    <p
+                        style="
+                            color: #333333;
+                            font-family: 'Segoe UI', Arial, sans-serif;
+                            font-size: 22px;
+                        "
+                    >
+                        Chào
+                        <span style="font-weight: bold; color: #55a7ff"
+                            >Nguyễn Công Giới</span
+                        >
+                    </p>
+                </div>
+                <div style="margin-top: 20px">
+                    <p
+                        style="
+                            color: #333333;
+                            font-family: 'Segoe UI', Arial, sans-serif;
+                            font-size: 20px;
+                        "
+                    >
+                        Shippy thông báo bạn vừa đăng ký tài khoản thành công
+                        vui lòng xác nhận tài khoản để sử dụng dịch vụ
+                    </p>
+                </div>
+                <div style="margin-top: 10px">
+                    <table
+                        border="0"
+                        cellpadding="0"
+                        cellspacing="0"
+                        role="presentation"
+                        width="100%"
+                    >
+                        <tbody>
+                            <tr>
+                                <td
+                                    align="left"
+                                    style="
+                                        font-size: 0px;
+                                        padding: 12px 16px;
+                                        word-break: break-word;
+                                    "
+                                >
+                                    <div
+                                        style="
+                                            font-family: Be Vietnam Pro 2022,
+                                                sans-serif;
+                                            font-size: 18px;
+                                            font-weight: bold;
+                                            line-height: 20px;
+                                            text-align: left;
+                                            color: #394860;
+                                        "
+                                    >
+                                        Thông tin tài khoản
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td
+                                    align="left"
+                                    style="
+                                        font-size: 0px;
+                                        padding: 0;
+                                        word-break: break-word;
+                                    "
+                                >
+                                    <table
+                                        cellpadding="0"
+                                        cellspacing="0"
+                                        width="100%"
+                                        border="0"
+                                        style="
+                                            color: #666f80;
+                                            font-family: Be Vietnam Pro 2022,
+                                                sans-serif;
+                                            font-size: 16px;
+                                            line-height: 20px;
+                                            table-layout: auto;
+                                            width: 100%;
+                                            border: none;
+                                        "
+                                    >
+                                        <tbody>
+                                            <tr
+                                                valign="top"
+                                                height="8px"
+                                                style="background: #ffffff"
+                                            >
+                                                <td
+                                                    style="
+                                                        border-top-left-radius: 12px;
+                                                    "
+                                                ></td>
+                                                <td></td>
+                                                <td></td>
+
+                                                <td width="1px"></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td
+                                                    style="
+                                                        border-top-right-radius: 12px;
+                                                    "
+                                                ></td>
+                                            </tr>
+                                            <tr>
+                                                <td
+                                                    style="
+                                                        width: 16px;
+                                                        background-color: #ffffff;
+                                                    "
+                                                ></td>
+                                                <td
+                                                    style="
+                                                        width: 30%;
+                                                        padding: 8px 0;
+                                                        background-color: #ffffff;
+                                                        border-bottom: 1px solid
+                                                            #f2f1f7;
+                                                    "
+                                                >
+                                                    Email
+                                                </td>
+
+                                                <td
+                                                    style="
+                                                        width: 16px;
+                                                        background-color: #ffffff;
+                                                    "
+                                                ></td>
+                                                <td width="1px"></td>
+
+                                                <td
+                                                    style="
+                                                        width: 16px;
+                                                        background-color: #ffffff;
+                                                    "
+                                                ></td>
+                                                <td
+                                                    style="
+                                                        padding: 8px 0;
+                                                        background-color: #ffffff;
+                                                        border-bottom: 1px solid
+                                                            #f2f1f7;
+                                                        color: #071a38;
+                                                    "
+                                                >
+                                                    conggioi.pro264@gmil.com
+                                                </td>
+                                                <td
+                                                    style="
+                                                        width: 16px;
+                                                        background-color: #ffffff;
+                                                    "
+                                                ></td>
+                                            </tr>
+                                            <tr>
+                                                <td
+                                                    style="
+                                                        width: 16px;
+                                                        background-color: #ffffff;
+                                                    "
+                                                ></td>
+                                                <td
+                                                    style="
+                                                        width: 30%;
+                                                        padding: 8px 0;
+                                                        background-color: #ffffff;
+                                                        border-bottom: 1px solid
+                                                            #f2f1f7;
+                                                    "
+                                                >
+                                                    Số điện thoại
+                                                </td>
+
+                                                <td
+                                                    style="
+                                                        width: 16px;
+                                                        background-color: #ffffff;
+                                                    "
+                                                ></td>
+                                                <td width="1px"></td>
+
+                                                <td
+                                                    style="
+                                                        width: 16px;
+                                                        background-color: #ffffff;
+                                                    "
+                                                ></td>
+                                                <td
+                                                    style="
+                                                        padding: 8px 0;
+                                                        background-color: #ffffff;
+                                                        border-bottom: 1px solid
+                                                            #f2f1f7;
+                                                        color: #071a38;
+                                                    "
+                                                >
+                                                    0367039349
+                                                </td>
+                                                <td
+                                                    style="
+                                                        width: 16px;
+                                                        background-color: #ffffff;
+                                                    "
+                                                ></td>
+                                            </tr>
+                                            <tr>
+                                                <td
+                                                    style="
+                                                        width: 16px;
+                                                        background-color: #ffffff;
+                                                    "
+                                                ></td>
+                                                <td
+                                                    style="
+                                                        width: 30%;
+                                                        padding: 8px 0;
+                                                        background-color: #ffffff;
+                                                        border-bottom: 1px solid
+                                                            #f2f1f7;
+                                                    "
+                                                >
+                                                    Tên khách hàng
+                                                </td>
+
+                                                <td
+                                                    style="
+                                                        width: 16px;
+                                                        background-color: #ffffff;
+                                                    "
+                                                ></td>
+                                                <td width="1px"></td>
+
+                                                <td
+                                                    style="
+                                                        width: 16px;
+                                                        background-color: #ffffff;
+                                                    "
+                                                ></td>
+                                                <td
+                                                    style="
+                                                        padding: 8px 0;
+                                                        background-color: #ffffff;
+                                                        border-bottom: 1px solid
+                                                            #f2f1f7;
+                                                        color: #071a38;
+                                                    "
+                                                >
+                                                    Nguyễn Công Giới
+                                                </td>
+                                                <td
+                                                    style="
+                                                        width: 16px;
+                                                        background-color: #ffffff;
+                                                    "
+                                                ></td>
+                                            </tr>
+                                            <tr>
+                                                <td
+                                                    style="
+                                                        width: 16px;
+                                                        background-color: #ffffff;
+                                                    "
+                                                ></td>
+                                                <td
+                                                    style="
+                                                        width: 30%;
+                                                        padding: 8px 0;
+                                                        background-color: #ffffff;
+                                                    "
+                                                >
+                                                    Tên cửa hàng
+                                                </td>
+
+                                                <td
+                                                    style="
+                                                        width: 16px;
+                                                        background-color: #ffffff;
+                                                    "
+                                                ></td>
+                                                <td width="1px"></td>
+
+                                                <td
+                                                    style="
+                                                        width: 16px;
+                                                        background-color: #ffffff;
+                                                    "
+                                                ></td>
+                                                <td
+                                                    style="
+                                                        padding: 8px 0;
+                                                        background-color: #ffffff;
+                                                        color: #071a38;
+                                                    "
+                                                >
+                                                    shop ABC
+                                                </td>
+                                                <td
+                                                    style="
+                                                        width: 16px;
+                                                        background-color: #ffffff;
+                                                    "
+                                                ></td>
+                                            </tr>
+
+                                            <tr
+                                                valign="top"
+                                                height="8px"
+                                                style="background: #ffffff"
+                                            >
+                                                <td
+                                                    style="
+                                                        border-bottom-left-radius: 12px;
+                                                    "
+                                                ></td>
+                                                <td></td>
+                                                <td></td>
+
+                                                <td width="1px"></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td
+                                                    style="
+                                                        border-bottom-right-radius: 12px;
+                                                    "
+                                                ></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div
+                    style="
+                        color: #333333;
+                        font-family: 'Segoe UI', Arial, sans-serif;
+                        font-size: 18px;
+                    "
+                >
+                    <p>
+                        Vui lòng CLick vào nút kích hoạt tài khoản bên dưới để
+                        kích hoạt tài khoản cho cửa hàng của bạn.
+                    </p>
+                </div>
+                <div style="margin-top: 50px; text-align: center">
+                    <a
+                        href="http://localhost"
+                        target="_blank"
+                        style="
+                            background-color: #55a7ff;
+                            color: #ffffff;
+                            padding: 15px 30px;
+                            border-radius: 5px;
+                            text-decoration: none;
+                            font-size: 20px;
+                            box-shadow: 0 0px 10px rgba(0, 0, 0, 0.3);
+                        "
+                    >
+                        Kích hoạt ngay
+                    </a>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

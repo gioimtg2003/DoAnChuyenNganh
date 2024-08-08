@@ -1,3 +1,4 @@
+"use client";
 import { Socket, io } from "socket.io-client";
 
 type statusShipper = "online" | "offline";
@@ -7,15 +8,23 @@ export interface DataEvent {
         id: string;
         status: statusShipper;
         message: string;
+        Online: boolean;
+    };
+    location_shipper: {
+        id: string;
+        lat: number;
+        lng: number;
     };
 }
 
-interface ServerToClientEvents {
+export interface ServerToClientEvents {
     NotificationOrder: (data: DataOrder) => void;
     shipper_status: (data: DataEvent["status_shipper"]) => void;
+    required_token: () => void;
+    shipper_location: (data: DataEvent["location_shipper"]) => void;
 }
 
-interface ClientToServerEvents {
+export interface ClientToServerEvents {
     cancelOrder: (data: DataOrder) => void;
     completeOrder: (data: DataOrder) => void;
     trackingOrder: (data: DataOrder) => void;
@@ -25,12 +34,4 @@ interface DataOrder {
     type: string;
     message: string;
     description: string;
-}
-
-const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(
-    "http://localhost:3000"
-);
-
-export function getSocket() {
-    return socket.connect();
 }

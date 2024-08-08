@@ -4,7 +4,8 @@ const jwt = require('jsonwebtoken');
 let payload = (user, refresh) => ({
     id: user.idUser ?? user._id,
     role: user.Role,
-    refresh: refresh ?? false
+    refresh: refresh ?? false,
+    shopId: user.shopId ?? null
 });
 
 let SignToken = (payload, time) => {
@@ -18,7 +19,7 @@ let SignToken = (payload, time) => {
     });
 }
 
-let HandleToken = token => {
+let HandleRefreshToken = token => {
     return new Promise((resolve, reject) => {
         try {
             let data = {}
@@ -26,10 +27,13 @@ let HandleToken = token => {
                 if (err) {
                     data.err = true;
                     data.msg = err.message;
+
                 } else if (decoded.refresh) {
                     data.err = false;
                     data.id = decoded.id;
                     data.role = decoded.role;
+                    data.shopId = decoded.role === 1 ? decoded.shopId : null;
+
                 } else if (!decoded.refresh) {
                     data.err = true;
                     data.msg = "signature invalid";
@@ -64,6 +68,6 @@ let CreateToken = async (user, timeAccessToken, timeRefreshToken) => {
 module.exports = {
     payload,
     SignToken,
-    HandleToken,
+    HandleRefreshToken,
     CreateToken
 }

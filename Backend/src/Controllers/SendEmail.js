@@ -1,4 +1,4 @@
-const { INTERNAL_ERROR, OK, BAD_REQUEST } = require("../Configs/HTTPCode");
+const { INTERNAL_ERROR, OK, BAD_REQUEST } = require("../Configs/httpCode");
 const { SendEmailService } = require("../Services/SendMail");
 const { API } = require("../Utils/formatApi");
 const { generateCode } = require("../Utils/generateCode");
