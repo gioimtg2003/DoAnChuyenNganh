@@ -48,7 +48,7 @@ const Header = (): JSX.Element => {
                         }}
                     >
                         <Image
-                            src="/images/LogoIntro.png"
+                            src="/DoAnChuyenNganh/images/LogoIntro.png"
                             alt="Logo"
                             width={100}
                             height={65}

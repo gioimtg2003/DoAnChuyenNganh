@@ -34,7 +34,6 @@ jobs:
 
             - name: Upload artifact 📡
               uses: actions/upload-pages-artifact@v3
-              run: cd Front-end-web && ls -al ./out
               with:
                   path: ./Front-end-web/out
 

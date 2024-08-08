@@ -119,7 +119,7 @@ const ContentHome = (): JSX.Element => {
                     <Image
                         width={550}
                         height={550}
-                        src="/images/background_car.png"
+                        src="/DoAnChuyenNganh/images/background_car.png"
                         alt="error"
                         className="object-cover "
                     />
@@ -151,7 +151,7 @@ const ContentHome = (): JSX.Element => {
                     <Image
                         width={380}
                         height={380}
-                        src="/images/car.png"
+                        src="/DoAnChuyenNganh/images/car.png"
                         alt="error"
                         className="object-cover  "
                     />
@@ -177,7 +177,7 @@ const ContentHome = (): JSX.Element => {
                     <Image
                         width={170}
                         height={170}
-                        src="/images/shipper_car.png"
+                        src="/DoAnChuyenNganh/images/shipper_car.png"
                         alt="error"
                         className="object-cover "
                     />
