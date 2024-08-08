@@ -30,8 +30,7 @@ jobs:
                   static_site_generator: next
 
             - name: Build with Next.js 🏗️
-              run: cd Front-end-web \
-                  npx next build
+              run: cd Front-end-web && npx run build
 
             - name: Upload artifact 📡
               uses: actions/upload-pages-artifact@v3
